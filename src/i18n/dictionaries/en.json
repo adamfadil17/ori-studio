@@ -1,0 +1,491 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "studio": "Studio",
+    "philosophy": "Philosophy",
+    "journal": "Journal",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Ori Studio",
+      "headline": "Architecture rooted in place, designed for life.",
+      "subheadline": "Timeless spaces that connect nature, memory and meaningful living.",
+      "cta": "Explore Our Work"
+    },
+    "about": {
+      "eyebrow": "Ori Studio Architect",
+      "headline": "We create timeless architecture that responds to place, people, and possibility.",
+      "body": "Based in Bali, we design residential, hospitality and commercial spaces that embrace climate, culture and craftsmanship.",
+      "cta": "Our Philosophy"
+    },
+    "services": {
+      "items": [
+        {
+          "title": "Architecture Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        },
+        {
+          "title": "Interior Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        },
+        {
+          "title": "Landscape Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        },
+        {
+          "title": "Project Management",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        }
+      ],
+      "cta": "Learn More"
+    },
+    "featuredProject": {
+      "eyebrow": "Featured Project",
+      "cta": "View Project"
+    },
+    "projects": {
+      "eyebrow": "Projects",
+      "cta": "View All Projects"
+    },
+    "approach": {
+      "headline": "Good architecture begins long before the first line is drawn.",
+      "body": "We listen, we observe and we design with intention, creating spaces that feel timeless today and for generations to come.",
+      "cta": "Our Approach",
+      "stats": [
+        { "value": "12+", "label": "Years of Practice" },
+        { "value": "60+", "label": "Projects Completed" },
+        { "value": "8", "label": "Countries & Regions" },
+        { "value": "5", "label": "Design Awards" }
+      ]
+    },
+    "journal": {
+      "eyebrow": "Journal",
+      "cta": "View All Journal",
+      "readMore": "Read More"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "About ORI",
+      "headline": "We design with intention, rooted in place.",
+      "subheadline": "We are an architecture studio creating timeless spaces that connect nature, culture, and meaningful living.",
+      "cta": "Explore Our Services"
+    },
+    "story": {
+      "eyebrow": "Our Story",
+      "headline": "Founded on the belief that architecture should belong to its place.",
+      "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London.",
+      "cta": "Read Our Philosophy"
+    },
+    "journey": {
+      "eyebrow": "Our Journey"
+    },
+    "values": {
+      "eyebrow": "Our Values and Principles",
+      "items": [
+        {
+          "number": "01",
+          "title": "Context First",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London."
+        },
+        {
+          "number": "02",
+          "title": "Honest Materials",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London."
+        },
+        {
+          "number": "03",
+          "title": "Timeless Over Trend",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London."
+        }
+      ]
+    },
+    "team": {
+      "eyebrow": "Our Team",
+      "members": [
+        { "name": "Ethan Carter", "role": "Principal Architect" },
+        { "name": "Sophia Bennett", "role": "Senior Architect" },
+        { "name": "Liam Anderson", "role": "Project Architect" },
+        { "name": "Olivia Hayes", "role": "Interior Designer" }
+      ]
+    }
+  },
+  "projects": {
+    "hero": {
+      "eyebrow": "Our Work",
+      "headline": "A collection of spaces shaped by place and purpose.",
+      "subheadline": "Explore a portfolio of residential, hospitality, and commercial projects, each thoughtfully designed in response to its unique context.",
+      "cta": "Explore Our Projects"
+    },
+    "featured": { "eyebrow": "Featured Project", "cta": "View Project" },
+    "filters": {
+      "location": "Location",
+      "sectors": "Sectors",
+      "services": "Services",
+      "all": "All",
+      "empty": "No projects match these filters."
+    },
+    "further": { "headline": "Further projects" }
+  },
+  "projectDetail": {
+    "keyInformation": "Key Information",
+    "labels": {
+      "year": "Year",
+      "sector": "Sector",
+      "status": "Status",
+      "client": "Client",
+      "siteArea": "Site Area",
+      "architect": "Architect",
+      "location": "Location",
+      "buildingArea": "Building Area",
+      "generalContractor": "General Contractor"
+    },
+    "relatedProjects": "Related Projects"
+  },
+  "studio": {
+    "hero": {
+      "eyebrow": "The Studio",
+      "headline": "How we work, and who we work with.",
+      "subheadline": "Behind every project is a collaborative process shaped by curiosity, expertise, and a shared commitment to thoughtful architecture. Discover how our team brings ideas to life from concept to completion.",
+      "cta": "Explore Our Studio"
+    },
+    "process": {
+      "eyebrow": "Design Process",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Discovery",
+          "description": "We begin by listening — understanding your vision, the site, and the story behind the project."
+        },
+        {
+          "number": "02",
+          "title": "Concept",
+          "description": "We translate ideas into early spatial concepts, exploring form, light, and material direction."
+        },
+        {
+          "number": "03",
+          "title": "Design",
+          "description": "Concepts are refined into detailed architectural and interior design documentation."
+        },
+        {
+          "number": "04",
+          "title": "Construction",
+          "description": "We collaborate closely with contractors and consultants, providing guidance throughout construction to ensure the design is faithfully realized."
+        },
+        {
+          "number": "05",
+          "title": "Deliver",
+          "description": "The finished space is handed over, ready to be lived in, worked in, and experienced."
+        }
+      ]
+    },
+    "services": {
+      "eyebrow": "Our Services",
+      "items": [
+        {
+          "title": "Architecture Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make a dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
+        },
+        {
+          "title": "Interior Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966."
+        },
+        {
+          "title": "Landscape Design",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966."
+        },
+        {
+          "title": "Project Management",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966."
+        }
+      ]
+    },
+    "culture": {
+      "eyebrow": "Studio Culture",
+      "headline": "A studio shaped by curiosity and craft.",
+      "body": "At ORI, collaboration is at the heart of everything we do. We foster an open studio culture where curiosity, craftsmanship, and diverse perspectives come together to create architecture that is thoughtful, enduring, and deeply connected to its place."
+    }
+  },
+  "philosophy": {
+    "hero": {
+      "eyebrow": "Our Philosophy",
+      "headline": "Good architecture begins long before the first line is drawn.",
+      "subheadline": "We believe meaningful architecture emerges from understanding people, place, and purpose—long before form begins to take shape.",
+      "cta": "Explore Our Philosophy"
+    },
+    "sectionEyebrow": "Our Philosophy",
+    "principles": [
+      {
+        "label": "1st Principle",
+        "title": "Rooted in Place",
+        "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets."
+      },
+      {
+        "label": "2nd Principle",
+        "title": "Material Honesty",
+        "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets."
+      },
+      {
+        "label": "3rd Principle",
+        "title": "Human-Centered Living",
+        "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets."
+      },
+      {
+        "label": "4th Principle",
+        "title": "Designing for Generations",
+        "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets."
+      }
+    ],
+    "quote": {
+      "text": "Architecture is not only about shaping buildings, but about creating places where people feel connected—to nature, to culture, and to one another.",
+      "name": "Ethan Carter",
+      "role": "Founder & Principal Architect"
+    }
+  },
+  "journal": {
+    "hero": {
+      "eyebrow": "Journal",
+      "headline": "Stories, notes, and reflections on architecture and living.",
+      "subheadline": "Insights and perspectives on architecture, design, materials, and the spaces that shape everyday life.",
+      "cta": "Explore Our Journal"
+    },
+    "featured": {
+      "eyebrow": "Featured Read",
+      "headline": "Start Here Our Most Essential Article"
+    },
+    "explore": {
+      "eyebrow": "Explore The Journal",
+      "headline": "Ideas That Shape Our Practice.",
+      "body": "Beyond completed projects, we share the thinking, observations, and experiences that influence how we design spaces rooted in place and crafted for life."
+    },
+    "filters": {
+      "all": "All",
+      "empty": "No articles match this filter."
+    }
+  },
+  "articleDetail": {
+    "labels": { "category": "Category", "publishedAt": "Published At" },
+    "cta": {
+      "heading": "Ready to start new project?",
+      "button": "Start a Conversation"
+    }
+  },
+  "workWithCta": {
+    "eyebrow": "Work With ORI",
+    "headline": "Let's Create Architecture That Endures.",
+    "subheadline": "We design thoughtful spaces rooted in place, crafted for longevity, and built to last.",
+    "cta": "Start Your Project"
+  },
+  "footer": {
+    "description": "We are an architecture studio creating timeless spaces that connect nature, culture, and meaningful living.",
+    "columns": {
+      "about": "About",
+      "philosophy": "Philosophy",
+      "services": "Services",
+      "contact": "Contact"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "headline": "Let's start\na conversation.",
+      "subheadline": "Whether you have a project in mind, a partnership to explore, or want to join our team — we'd love to hear from you.",
+      "linkInquiry": "Inquiry",
+      "linkPartnership": "Partnership",
+      "linkCareer": "Join Our Team"
+    },
+    "tabs": {
+      "inquiry": "Project Inquiry",
+      "partnership": "Partnership",
+      "career": "Career"
+    },
+    "sidebar": {
+      "eyebrow": "Stay Connect With ORI",
+      "headline": "Designing Places That Belong.",
+      "email": "hello@oristudio.com",
+      "phone": "+62 812 3266 7690",
+      "instagram": "ori_studio",
+      "pinterest": "ori_studio"
+    },
+    "inquiry": {
+      "eyebrow": "Project Inquiry Form",
+      "headline": "Thoughtful Design. Exceptional Spaces.",
+      "subheadline": "We are an architecture studio creating timeless spaces that connect nature, culture, and meaningful living.",
+      "contactInfo": "Contact Information",
+      "fields": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "serviceType": "Service Type",
+        "projectType": "Project Type",
+        "estimatedLocation": "Estimated Location",
+        "estimatedBudget": "Estimated Budget",
+        "vision": "Tell Us About Your Vision",
+        "visionHint": "Briefly describe your preferred setting, mood, style, or inspiration",
+        "otherPlaceholder": "Enter here..."
+      },
+      "serviceTypeOptions": {
+        "ARCHITECTURE_DESIGN": "Architecture Design",
+        "INTERIOR_DESIGN": "Interior Design",
+        "LANDSCAPE_DESIGN": "Landscape Design",
+        "PROJECT_MANAGEMENT": "Project Management",
+        "OTHER": "Other"
+      },
+      "projectTypeOptions": {
+        "RESIDENTIAL": "Residential",
+        "HOSPITALITY": "Hospitality",
+        "COMMERCIAL": "Commercial",
+        "LANDSCAPE": "Landscape",
+        "INTERIOR": "Interior",
+        "OTHER": "Other"
+      },
+      "budgetOptions": {
+        "UNDER_50K": "Under $50K",
+        "RANGE_50K_150K": "$50K–$150K",
+        "ABOVE_150K": "Above $150K",
+        "PREFER_NOT_TO_SAY": "Prefer not to say"
+      },
+      "submit": "Submit",
+      "successMessage": "Thank you — your inquiry has been sent. We'll be in touch soon."
+    },
+    "partnership": {
+      "eyebrow": "Partnership Form",
+      "headline": "Let's Build Something Together.",
+      "subheadline": "ORI Studio partners with professionals and organizations who value craftsmanship, sustainability, and design excellence. Let's create meaningful impact through collaboration.",
+      "fields": {
+        "companyName": "Company/Organization Name",
+        "role": "Your Role/Position",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "partnershipType": "Partnership Type",
+        "vision": "Tell Us About Your Vision",
+        "visionHint": "Briefly describe your collaboration idea, objectives, and how we can work together.",
+        "otherPlaceholder": "Enter here..."
+      },
+      "partnershipTypeOptions": {
+        "DEVELOPER_COLLABORATION": "Developer Collaboration",
+        "VENDOR_SUPPLIER": "Vendor & Supplier",
+        "MEDIA_PRESS": "Media & Press",
+        "CO_DESIGN_PROJECT": "Co-Design Project",
+        "OTHER": "Other"
+      },
+      "submit": "Submit",
+      "successMessage": "Thank you — your message has been sent. We'll be in touch soon."
+    },
+    "career": {
+      "eyebrow": "Career Form",
+      "headline": "Why Join ORI?",
+      "subheadline": "We're always looking for curious minds, creative thinkers, and dedicated professionals who want to shape meaningful spaces through thoughtful architecture.",
+      "contactInfo": "Contact Information",
+      "openPositionsLabel": "Open Positions",
+      "fields": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "positionOfInterest": "Position of Interest",
+        "portfolioLinkedin": "Portfolio/LinkedIn",
+        "portfolioUrl": "Portfolio URL",
+        "linkedinUrl": "LinkedIn URL",
+        "yearsOfExperience": "Years of Experience",
+        "uploadCv": "Upload CV (PDF, max 5MB)"
+      },
+      "experienceOptions": {
+        "YEARS_0_2": "0–2 Years",
+        "YEARS_3_5": "3–5 Years",
+        "YEARS_6_10": "6–10 Years",
+        "ABOVE_10_YEARS": "Above 10 Years"
+      },
+      "upload": "Upload",
+      "noFileChosen": "No file chosen",
+      "submit": "Submit",
+      "viewDetails": "View Details",
+      "applyForPosition": "Apply for This Position",
+      "closeModal": "Close",
+      "positionType": "Type",
+      "positionLevel": "Level",
+      "successMessage": "Thank you — your application has been sent. We'll be in touch soon."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "headline": "Frequently Asked Questions",
+      "inquiry": {
+        "subheadline": "Everything you need to know before starting your architectural journey with ORI Studio.",
+        "items": [
+          {
+            "question": "What types of projects does ORI Studio undertake?",
+            "answer": "We design residential, hospitality, and commercial spaces, creating architecture that responds thoughtfully to its context, climate, and the people who experience it."
+          },
+          {
+            "question": "What services do you provide?",
+            "answer": "We offer architecture design, interior design, landscape design, and project management, either as standalone services or combined into a full end-to-end package."
+          },
+          {
+            "question": "What is your minimum project size/budget?",
+            "answer": "We take on projects of varying scale, though most residential commissions start from a mid-range budget. Share your estimated budget in the inquiry form and we'll advise honestly on fit."
+          },
+          {
+            "question": "What is your design process?",
+            "answer": "Our process moves through five stages — Discovery, Concept, Design, Construction, and Deliver — with close collaboration at every step. You can read more on our Studio page."
+          },
+          {
+            "question": "How long does an architectural project take?",
+            "answer": "Timelines vary by scale and complexity, but most residential projects take 12–18 months from initial concept to completed construction."
+          }
+        ]
+      },
+      "partnership": {
+        "subheadline": "What to expect when exploring a partnership or collaboration with ORI Studio.",
+        "items": [
+          {
+            "question": "What kinds of partnerships is ORI Studio open to?",
+            "answer": "We welcome developer collaborations, vendor and supplier partnerships, media and press features, and co-design projects with other studios or consultants."
+          },
+          {
+            "question": "How long does it take to hear back on a partnership proposal?",
+            "answer": "We typically review and respond to partnership inquiries within 5–7 business days."
+          },
+          {
+            "question": "Do you work with international partners?",
+            "answer": "Yes — while our studio is based in Bali, we regularly collaborate with developers, vendors, and consultants based outside Indonesia."
+          },
+          {
+            "question": "What do you look for in a co-design collaboration?",
+            "answer": "Shared values around craftsmanship, context-driven design, and a genuine willingness to collaborate rather than simply divide scope."
+          },
+          {
+            "question": "Can vendors and suppliers pitch products directly?",
+            "answer": "Absolutely — select \"Vendor & Supplier\" in the partnership form and tell us about your product or material."
+          }
+        ]
+      },
+      "career": {
+        "subheadline": "Everything you need to know before applying to join the ORI Studio team.",
+        "items": [
+          {
+            "question": "How do I apply for an open position?",
+            "answer": "Select the position you're interested in from the list above, fill out the career form with your details, and upload your CV as a PDF (max 5MB)."
+          },
+          {
+            "question": "What should my portfolio include?",
+            "answer": "A link to a portfolio (PDF, website, or Behance/Instagram) that showcases your relevant work — the more context on your role in each project, the better."
+          },
+          {
+            "question": "How long does the hiring process take?",
+            "answer": "We aim to review applications within 2 weeks and will follow up directly if your background fits an open or upcoming role."
+          },
+          {
+            "question": "Do you offer remote or hybrid roles?",
+            "answer": "Most of our roles are based in our Bali studio, though we occasionally consider remote arrangements for senior positions."
+          },
+          {
+            "question": "Do you accept applications when no position is open?",
+            "answer": "Yes — feel free to submit your CV through the career form even if your ideal role isn't currently listed; we keep applications on file for future openings."
+          }
+        ]
+      }
+    }
+  }
+}

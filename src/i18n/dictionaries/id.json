@@ -1,0 +1,491 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "projects": "Proyek",
+    "studio": "Studio",
+    "philosophy": "Filosofi",
+    "journal": "Jurnal",
+    "contact": "Kontak"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Ori Studio",
+      "headline": "Arsitektur yang berakar pada tempat, dirancang untuk kehidupan.",
+      "subheadline": "Ruang abadi yang menghubungkan alam, kenangan, dan kehidupan yang bermakna.",
+      "cta": "Jelajahi Karya Kami"
+    },
+    "about": {
+      "eyebrow": "Ori Studio Architect",
+      "headline": "Kami menciptakan arsitektur abadi yang merespons tempat, manusia, dan kemungkinan.",
+      "body": "Berbasis di Bali, kami merancang ruang residensial, hospitality, dan komersial yang merangkul iklim, budaya, dan keahlian tangan.",
+      "cta": "Filosofi Kami"
+    },
+    "services": {
+      "items": [
+        {
+          "title": "Desain Arsitektur",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
+        },
+        {
+          "title": "Desain Interior",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
+        },
+        {
+          "title": "Desain Lansekap",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
+        },
+        {
+          "title": "Manajemen Proyek",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
+        }
+      ],
+      "cta": "Selengkapnya"
+    },
+    "featuredProject": {
+      "eyebrow": "Proyek Unggulan",
+      "cta": "Lihat Proyek"
+    },
+    "projects": {
+      "eyebrow": "Proyek",
+      "cta": "Lihat Semua Proyek"
+    },
+    "approach": {
+      "headline": "Arsitektur yang baik dimulai jauh sebelum garis pertama digambar.",
+      "body": "Kami mendengarkan, mengamati, dan merancang dengan intensi, menciptakan ruang yang terasa abadi hari ini dan untuk generasi mendatang.",
+      "cta": "Pendekatan Kami",
+      "stats": [
+        { "value": "12+", "label": "Tahun Praktik" },
+        { "value": "60+", "label": "Proyek Selesai" },
+        { "value": "8", "label": "Negara & Wilayah" },
+        { "value": "5", "label": "Penghargaan Desain" }
+      ]
+    },
+    "journal": {
+      "eyebrow": "Jurnal",
+      "cta": "Lihat Semua Jurnal",
+      "readMore": "Baca Selengkapnya"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Tentang ORI",
+      "headline": "Kami merancang dengan intensi, berakar pada tempat.",
+      "subheadline": "Kami adalah studio arsitektur yang menciptakan ruang abadi yang menghubungkan alam, budaya, dan kehidupan yang bermakna.",
+      "cta": "Jelajahi Layanan Kami"
+    },
+    "story": {
+      "eyebrow": "Kisah Kami",
+      "headline": "Didirikan atas keyakinan bahwa arsitektur harus menyatu dengan tempatnya.",
+      "body": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London.",
+      "cta": "Baca Filosofi Kami"
+    },
+    "journey": {
+      "eyebrow": "Perjalanan Kami"
+    },
+    "values": {
+      "eyebrow": "Nilai dan Prinsip Kami",
+      "items": [
+        {
+          "number": "01",
+          "title": "Konteks Lebih Dulu",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London."
+        },
+        {
+          "number": "02",
+          "title": "Material yang Jujur",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London."
+        },
+        {
+          "number": "03",
+          "title": "Abadi di Atas Tren",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London."
+        }
+      ]
+    },
+    "team": {
+      "eyebrow": "Tim Kami",
+      "members": [
+        { "name": "Ethan Carter", "role": "Principal Architect" },
+        { "name": "Sophia Bennett", "role": "Senior Architect" },
+        { "name": "Liam Anderson", "role": "Project Architect" },
+        { "name": "Olivia Hayes", "role": "Interior Designer" }
+      ]
+    }
+  },
+  "projects": {
+    "hero": {
+      "eyebrow": "Karya Kami",
+      "headline": "Kumpulan ruang yang dibentuk oleh tempat dan tujuan.",
+      "subheadline": "Jelajahi portofolio proyek residensial, hospitality, dan komersial, yang masing-masing dirancang dengan penuh pertimbangan sesuai konteksnya.",
+      "cta": "Jelajahi Proyek Kami"
+    },
+    "featured": { "eyebrow": "Proyek Unggulan", "cta": "Lihat Proyek" },
+    "filters": {
+      "location": "Lokasi",
+      "sectors": "Sektor",
+      "services": "Layanan",
+      "all": "Semua",
+      "empty": "Tidak ada proyek yang sesuai dengan filter ini."
+    },
+    "further": { "headline": "Proyek Lainnya" }
+  },
+  "projectDetail": {
+    "keyInformation": "Informasi Utama",
+    "labels": {
+      "year": "Tahun",
+      "sector": "Sektor",
+      "status": "Status",
+      "client": "Klien",
+      "siteArea": "Luas Tapak",
+      "architect": "Arsitek",
+      "location": "Lokasi",
+      "buildingArea": "Luas Bangunan",
+      "generalContractor": "Kontraktor Utama"
+    },
+    "relatedProjects": "Proyek Terkait"
+  },
+  "studio": {
+    "hero": {
+      "eyebrow": "Studio",
+      "headline": "Bagaimana kami bekerja, dan bersama siapa.",
+      "subheadline": "Di balik setiap proyek ada proses kolaboratif yang dibentuk oleh rasa ingin tahu, keahlian, dan komitmen bersama terhadap arsitektur yang penuh pertimbangan. Temukan bagaimana tim kami menghidupkan ide dari konsep hingga selesai.",
+      "cta": "Jelajahi Studio Kami"
+    },
+    "process": {
+      "eyebrow": "Proses Desain",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Discovery",
+          "description": "Kami memulai dengan mendengarkan — memahami visi, tapak, dan cerita di balik proyek Anda."
+        },
+        {
+          "number": "02",
+          "title": "Konsep",
+          "description": "Kami menerjemahkan ide menjadi konsep spasial awal, mengeksplorasi bentuk, cahaya, dan arah material."
+        },
+        {
+          "number": "03",
+          "title": "Desain",
+          "description": "Konsep disempurnakan menjadi dokumentasi desain arsitektur dan interior yang detail."
+        },
+        {
+          "number": "04",
+          "title": "Konstruksi",
+          "description": "Kami berkolaborasi erat dengan kontraktor dan konsultan, memberikan panduan selama konstruksi agar desain terealisasi sesuai rencana."
+        },
+        {
+          "number": "05",
+          "title": "Serah Terima",
+          "description": "Ruang yang telah selesai diserahkan, siap untuk dihuni, digunakan, dan dinikmati."
+        }
+      ]
+    },
+    "services": {
+      "eyebrow": "Layanan Kami",
+      "items": [
+        {
+          "title": "Desain Arsitektur",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London, mengambil terjemahan Cicero tahun 1914 dan mengacaknya menjadi teks dummy untuk lembar Body Type Letraset. Teks ini bertahan tidak hanya selama beberapa dekade, tetapi juga melewati era typesetting elektronik tanpa banyak perubahan."
+        },
+        {
+          "title": "Desain Interior",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf sejak tahun 1966."
+        },
+        {
+          "title": "Desain Lansekap",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf sejak tahun 1966."
+        },
+        {
+          "title": "Manajemen Proyek",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf sejak tahun 1966."
+        }
+      ]
+    },
+    "culture": {
+      "eyebrow": "Budaya Studio",
+      "headline": "Studio yang dibentuk oleh rasa ingin tahu dan keahlian.",
+      "body": "Di ORI, kolaborasi adalah inti dari semua yang kami lakukan. Kami membangun budaya studio yang terbuka, di mana rasa ingin tahu, keahlian, dan berbagai sudut pandang bertemu untuk menciptakan arsitektur yang penuh pertimbangan, abadi, dan terhubung erat dengan tempatnya."
+    }
+  },
+  "philosophy": {
+    "hero": {
+      "eyebrow": "Filosofi Kami",
+      "headline": "Arsitektur yang baik dimulai jauh sebelum garis pertama digambar.",
+      "subheadline": "Kami percaya arsitektur yang bermakna lahir dari pemahaman terhadap manusia, tempat, dan tujuan—jauh sebelum bentuknya mulai terbentuk.",
+      "cta": "Jelajahi Filosofi Kami"
+    },
+    "sectionEyebrow": "Filosofi Kami",
+    "principles": [
+      {
+        "label": "Prinsip ke-1",
+        "title": "Berakar pada Tempat",
+        "body": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London, mengambil terjemahan Cicero tahun 1914 dan mengacaknya menjadi teks dummy untuk lembar Body Type Letraset."
+      },
+      {
+        "label": "Prinsip ke-2",
+        "title": "Kejujuran Material",
+        "body": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London, mengambil terjemahan Cicero tahun 1914 dan mengacaknya menjadi teks dummy untuk lembar Body Type Letraset."
+      },
+      {
+        "label": "Prinsip ke-3",
+        "title": "Kehidupan yang Berpusat pada Manusia",
+        "body": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London, mengambil terjemahan Cicero tahun 1914 dan mengacaknya menjadi teks dummy untuk lembar Body Type Letraset."
+      },
+      {
+        "label": "Prinsip ke-4",
+        "title": "Merancang untuk Generasi Mendatang",
+        "body": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf. Lorem Ipsum telah menjadi teks dummy standar industri sejak tahun 1966, ketika desainer di Letraset dan James Mosley, pustakawan di St Bride Printing Library London, mengambil terjemahan Cicero tahun 1914 dan mengacaknya menjadi teks dummy untuk lembar Body Type Letraset."
+      }
+    ],
+    "quote": {
+      "text": "Arsitektur bukan hanya tentang membentuk bangunan, tetapi tentang menciptakan tempat di mana manusia merasa terhubung—dengan alam, dengan budaya, dan dengan satu sama lain.",
+      "name": "Ethan Carter",
+      "role": "Founder & Principal Architect"
+    }
+  },
+  "journal": {
+    "hero": {
+      "eyebrow": "Jurnal",
+      "headline": "Kisah, catatan, dan refleksi seputar arsitektur dan kehidupan.",
+      "subheadline": "Wawasan dan perspektif seputar arsitektur, desain, material, dan ruang-ruang yang membentuk kehidupan sehari-hari.",
+      "cta": "Jelajahi Jurnal Kami"
+    },
+    "featured": {
+      "eyebrow": "Bacaan Pilihan",
+      "headline": "Mulai dari Sini — Artikel Paling Penting"
+    },
+    "explore": {
+      "eyebrow": "Jelajahi Jurnal",
+      "headline": "Gagasan yang Membentuk Cara Kami Berkarya.",
+      "body": "Selain proyek yang telah selesai, kami juga berbagi pemikiran, pengamatan, dan pengalaman yang memengaruhi cara kami merancang ruang yang berakar pada tempat dan dibuat untuk kehidupan."
+    },
+    "filters": {
+      "all": "Semua",
+      "empty": "Tidak ada artikel yang sesuai dengan filter ini."
+    }
+  },
+  "articleDetail": {
+    "labels": { "category": "Kategori", "publishedAt": "Diterbitkan Pada" },
+    "cta": {
+      "heading": "Siap memulai proyek baru?",
+      "button": "Mulai Percakapan"
+    }
+  },
+  "workWithCta": {
+    "eyebrow": "Berkarya Bersama ORI",
+    "headline": "Mari Ciptakan Arsitektur yang Abadi.",
+    "subheadline": "Kami merancang ruang yang penuh pertimbangan, berakar pada tempat, dibuat untuk bertahan lama.",
+    "cta": "Mulai Proyek Anda"
+  },
+  "footer": {
+    "description": "Kami adalah studio arsitektur yang menciptakan ruang abadi yang menghubungkan alam, budaya, dan kehidupan yang bermakna.",
+    "columns": {
+      "about": "Tentang",
+      "philosophy": "Filosofi",
+      "services": "Layanan",
+      "contact": "Kontak"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Kontak",
+      "headline": "Mari mulai\nsebuah percakapan.",
+      "subheadline": "Baik Anda punya proyek yang direncanakan, kemitraan yang ingin dijajaki, atau ingin bergabung dengan tim kami — kami senang mendengarnya.",
+      "linkInquiry": "Inquiry",
+      "linkPartnership": "Kemitraan",
+      "linkCareer": "Gabung Tim Kami"
+    },
+    "tabs": {
+      "inquiry": "Project Inquiry",
+      "partnership": "Kemitraan",
+      "career": "Karier"
+    },
+    "sidebar": {
+      "eyebrow": "Terhubung dengan ORI",
+      "headline": "Merancang Tempat yang Berarti.",
+      "email": "hello@oristudio.com",
+      "phone": "+62 812 3266 7690",
+      "instagram": "ori_studio",
+      "pinterest": "ori_studio"
+    },
+    "inquiry": {
+      "eyebrow": "Formulir Project Inquiry",
+      "headline": "Desain yang Penuh Pertimbangan. Ruang yang Luar Biasa.",
+      "subheadline": "Kami adalah studio arsitektur yang menciptakan ruang abadi yang menghubungkan alam, budaya, dan kehidupan yang bermakna.",
+      "contactInfo": "Informasi Kontak",
+      "fields": {
+        "fullName": "Nama Lengkap",
+        "email": "Alamat Email",
+        "phone": "Nomor Telepon",
+        "serviceType": "Jenis Layanan",
+        "projectType": "Jenis Proyek",
+        "estimatedLocation": "Perkiraan Lokasi",
+        "estimatedBudget": "Perkiraan Anggaran",
+        "vision": "Ceritakan Visi Anda",
+        "visionHint": "Jelaskan secara singkat suasana, gaya, atau inspirasi yang Anda inginkan",
+        "otherPlaceholder": "Isi di sini..."
+      },
+      "serviceTypeOptions": {
+        "ARCHITECTURE_DESIGN": "Desain Arsitektur",
+        "INTERIOR_DESIGN": "Desain Interior",
+        "LANDSCAPE_DESIGN": "Desain Lansekap",
+        "PROJECT_MANAGEMENT": "Manajemen Proyek",
+        "OTHER": "Lainnya"
+      },
+      "projectTypeOptions": {
+        "RESIDENTIAL": "Residensial",
+        "HOSPITALITY": "Hospitality",
+        "COMMERCIAL": "Komersial",
+        "LANDSCAPE": "Lansekap",
+        "INTERIOR": "Interior",
+        "OTHER": "Lainnya"
+      },
+      "budgetOptions": {
+        "UNDER_50K": "Di bawah $50K",
+        "RANGE_50K_150K": "$50K–$150K",
+        "ABOVE_150K": "Di atas $150K",
+        "PREFER_NOT_TO_SAY": "Tidak ingin menyebutkan"
+      },
+      "submit": "Kirim",
+      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda."
+    },
+    "partnership": {
+      "eyebrow": "Formulir Kemitraan",
+      "headline": "Mari Membangun Sesuatu Bersama.",
+      "subheadline": "ORI Studio bermitra dengan profesional dan organisasi yang menjunjung keahlian, keberlanjutan, dan keunggulan desain. Mari ciptakan dampak yang bermakna melalui kolaborasi.",
+      "fields": {
+        "companyName": "Nama Perusahaan/Organisasi",
+        "role": "Peran/Jabatan Anda",
+        "email": "Alamat Email",
+        "phone": "Nomor Telepon",
+        "partnershipType": "Jenis Kemitraan",
+        "vision": "Ceritakan Visi Anda",
+        "visionHint": "Jelaskan secara singkat ide kolaborasi, tujuan, dan bagaimana kita bisa bekerja sama.",
+        "otherPlaceholder": "Isi di sini..."
+      },
+      "partnershipTypeOptions": {
+        "DEVELOPER_COLLABORATION": "Kolaborasi Developer",
+        "VENDOR_SUPPLIER": "Vendor & Pemasok",
+        "MEDIA_PRESS": "Media & Pers",
+        "CO_DESIGN_PROJECT": "Proyek Co-Design",
+        "OTHER": "Lainnya"
+      },
+      "submit": "Kirim",
+      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda."
+    },
+    "career": {
+      "eyebrow": "Formulir Karier",
+      "headline": "Mengapa Bergabung dengan ORI?",
+      "subheadline": "Kami selalu mencari individu yang penuh rasa ingin tahu, pemikir kreatif, dan profesional yang berdedikasi untuk membentuk ruang yang bermakna melalui arsitektur yang penuh pertimbangan.",
+      "contactInfo": "Informasi Kontak",
+      "openPositionsLabel": "Posisi Terbuka",
+      "fields": {
+        "fullName": "Nama Lengkap",
+        "email": "Alamat Email",
+        "phone": "Nomor Telepon",
+        "positionOfInterest": "Posisi yang Diminati",
+        "portfolioLinkedin": "Portofolio/LinkedIn",
+        "portfolioUrl": "URL Portofolio",
+        "linkedinUrl": "URL LinkedIn",
+        "yearsOfExperience": "Tahun Pengalaman",
+        "uploadCv": "Unggah CV (PDF, maks 5MB)"
+      },
+      "experienceOptions": {
+        "YEARS_0_2": "0–2 Tahun",
+        "YEARS_3_5": "3–5 Tahun",
+        "YEARS_6_10": "6–10 Tahun",
+        "ABOVE_10_YEARS": "Di atas 10 Tahun"
+      },
+      "upload": "Unggah",
+      "noFileChosen": "Belum ada file dipilih",
+      "submit": "Kirim",
+      "viewDetails": "Lihat Detail",
+      "applyForPosition": "Lamar Posisi Ini",
+      "closeModal": "Tutup",
+      "positionType": "Tipe",
+      "positionLevel": "Level",
+      "successMessage": "Terima kasih — lamaran Anda sudah terkirim. Kami akan segera menghubungi Anda."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "headline": "Pertanyaan yang Sering Diajukan",
+      "inquiry": {
+        "subheadline": "Semua yang perlu Anda ketahui sebelum memulai perjalanan arsitektur bersama ORI Studio.",
+        "items": [
+          {
+            "question": "Jenis proyek apa saja yang dikerjakan ORI Studio?",
+            "answer": "Kami merancang ruang residensial, hospitality, dan komersial, menciptakan arsitektur yang merespons secara penuh pertimbangan terhadap konteks, iklim, dan orang yang mengalaminya."
+          },
+          {
+            "question": "Layanan apa saja yang Anda sediakan?",
+            "answer": "Kami menawarkan desain arsitektur, desain interior, desain lansekap, dan manajemen proyek, baik sebagai layanan terpisah maupun paket end-to-end."
+          },
+          {
+            "question": "Berapa minimum ukuran proyek/anggaran Anda?",
+            "answer": "Kami menerima proyek dengan berbagai skala, meski sebagian besar proyek residensial dimulai dari anggaran menengah. Sertakan perkiraan anggaran Anda di formulir inquiry, kami akan memberi masukan yang jujur."
+          },
+          {
+            "question": "Bagaimana proses desain Anda?",
+            "answer": "Proses kami berjalan melalui lima tahap — Discovery, Konsep, Desain, Konstruksi, dan Serah Terima — dengan kolaborasi erat di setiap langkah. Baca lebih lanjut di halaman Studio kami."
+          },
+          {
+            "question": "Berapa lama sebuah proyek arsitektur berlangsung?",
+            "answer": "Durasinya bervariasi tergantung skala dan kompleksitas, namun sebagian besar proyek residensial memakan waktu 12–18 bulan dari konsep awal hingga konstruksi selesai."
+          }
+        ]
+      },
+      "partnership": {
+        "subheadline": "Yang perlu Anda ketahui saat menjajaki kemitraan atau kolaborasi dengan ORI Studio.",
+        "items": [
+          {
+            "question": "Jenis kemitraan apa yang terbuka bagi ORI Studio?",
+            "answer": "Kami terbuka untuk kolaborasi developer, kemitraan vendor dan pemasok, liputan media dan pers, serta proyek co-design dengan studio atau konsultan lain."
+          },
+          {
+            "question": "Berapa lama waktu untuk mendapat balasan proposal kemitraan?",
+            "answer": "Kami biasanya meninjau dan membalas inquiry kemitraan dalam 5–7 hari kerja."
+          },
+          {
+            "question": "Apakah Anda bekerja sama dengan mitra internasional?",
+            "answer": "Ya — meski studio kami berbasis di Bali, kami rutin berkolaborasi dengan developer, vendor, dan konsultan dari luar Indonesia."
+          },
+          {
+            "question": "Apa yang Anda cari dalam kolaborasi co-design?",
+            "answer": "Kesamaan nilai seputar keahlian, desain yang berbasis konteks, dan kemauan sungguh-sungguh untuk berkolaborasi, bukan sekadar membagi scope kerja."
+          },
+          {
+            "question": "Bisakah vendor dan pemasok mengajukan produk secara langsung?",
+            "answer": "Tentu — pilih \"Vendor & Pemasok\" di formulir kemitraan dan ceritakan produk atau material Anda."
+          }
+        ]
+      },
+      "career": {
+        "subheadline": "Semua yang perlu Anda ketahui sebelum melamar untuk bergabung dengan tim ORI Studio.",
+        "items": [
+          {
+            "question": "Bagaimana cara melamar posisi yang terbuka?",
+            "answer": "Pilih posisi yang Anda minati dari daftar di atas, isi formulir karier dengan data Anda, dan unggah CV dalam format PDF (maks 5MB)."
+          },
+          {
+            "question": "Apa saja yang harus ada di portofolio saya?",
+            "answer": "Tautan portofolio (PDF, website, atau Behance/Instagram) yang menampilkan karya relevan Anda — semakin jelas peran Anda di tiap proyek, semakin baik."
+          },
+          {
+            "question": "Berapa lama proses rekrutmennya?",
+            "answer": "Kami berusaha meninjau lamaran dalam 2 minggu dan akan menghubungi langsung jika latar belakang Anda sesuai dengan posisi yang terbuka atau akan datang."
+          },
+          {
+            "question": "Apakah ada posisi remote atau hybrid?",
+            "answer": "Sebagian besar posisi kami berbasis di studio Bali, meski kami sesekali mempertimbangkan pengaturan remote untuk posisi senior."
+          },
+          {
+            "question": "Bisakah saya melamar meski tidak ada posisi terbuka?",
+            "answer": "Bisa — silakan kirim CV Anda lewat formulir karier meski posisi impian Anda belum tercantum; kami menyimpan lamaran untuk peluang mendatang."
+          }
+        ]
+      }
+    }
+  }
+}
