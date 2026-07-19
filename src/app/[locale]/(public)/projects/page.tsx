@@ -132,8 +132,6 @@ export default async function ProjectsPage({
   if (!isValidLocale(locale)) notFound();
 
   const dict = await getDictionary(locale as Locale);
-  // NOTE: perlu ditambahkan ke i18n dictionary — lihat struktur "projects"
-  // yang disarankan di akhir chat.
   const { hero, featured, filters, further } = dict.projects;
 
   return (
@@ -297,7 +295,11 @@ export default async function ProjectsPage({
         </div>
       </section>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.projects.cta}
+        href="/contact?tab=inquiry#contact-form"
+      />
     </>
   );
 }

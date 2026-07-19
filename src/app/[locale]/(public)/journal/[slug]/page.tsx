@@ -22,8 +22,6 @@ export default async function ArticleDetailPage({
   if (!article) notFound();
 
   const dict = await getDictionary(locale as Locale);
-  // NOTE: perlu ditambahkan ke i18n dictionary — lihat struktur
-  // "articleDetail" yang disarankan di akhir chat.
   const { labels, cta } = dict.articleDetail;
 
   return (
@@ -96,7 +94,11 @@ export default async function ArticleDetailPage({
         </section>
       </div>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.articleDetail.bannerCta}
+        href="/journal"
+      />
     </>
   );
 }

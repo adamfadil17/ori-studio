@@ -41,7 +41,7 @@
         }
       ],
       "cta": "Learn More",
-       "eyebrow": "Ori Studio Services"
+      "eyebrow": "Ori Studio Services"
     },
     "featuredProject": {
       "eyebrow": "Featured Project",
@@ -56,10 +56,22 @@
       "body": "We listen, we observe and we design with intention, creating spaces that feel timeless today and for generations to come.",
       "cta": "Our Approach",
       "stats": [
-        { "value": "12+", "label": "Years of Practice" },
-        { "value": "60+", "label": "Projects Completed" },
-        { "value": "8", "label": "Countries & Regions" },
-        { "value": "5", "label": "Design Awards" }
+        {
+          "value": "12+",
+          "label": "Years of Practice"
+        },
+        {
+          "value": "60+",
+          "label": "Projects Completed"
+        },
+        {
+          "value": "8",
+          "label": "Countries & Regions"
+        },
+        {
+          "value": "5",
+          "label": "Design Awards"
+        }
       ]
     },
     "journal": {
@@ -107,11 +119,29 @@
     "team": {
       "eyebrow": "Our Team",
       "members": [
-        { "name": "Ethan Carter", "role": "Principal Architect" },
-        { "name": "Sophia Bennett", "role": "Senior Architect" },
-        { "name": "Liam Anderson", "role": "Project Architect" },
-        { "name": "Olivia Hayes", "role": "Interior Designer" }
+        {
+          "name": "Ethan Carter",
+          "role": "Principal Architect"
+        },
+        {
+          "name": "Sophia Bennett",
+          "role": "Senior Architect"
+        },
+        {
+          "name": "Liam Anderson",
+          "role": "Project Architect"
+        },
+        {
+          "name": "Olivia Hayes",
+          "role": "Interior Designer"
+        }
       ]
+    },
+    "cta": {
+      "eyebrow": "Work With ORI",
+      "headline": "Let's Design Something That Lasts.",
+      "subheadline": "From first sketch to final handover, we'd love to learn about your project.",
+      "cta": "Start a Conversation"
     }
   },
   "projects": {
@@ -121,7 +151,10 @@
       "subheadline": "Explore a portfolio of residential, hospitality, and commercial projects, each thoughtfully designed in response to its unique context.",
       "cta": "Explore Our Projects"
     },
-    "featured": { "eyebrow": "Featured Project", "cta": "View Project" },
+    "featured": {
+      "eyebrow": "Featured Project",
+      "cta": "View Project"
+    },
     "filters": {
       "location": "Location",
       "sectors": "Sectors",
@@ -129,7 +162,15 @@
       "all": "All",
       "empty": "No projects match these filters."
     },
-    "further": { "headline": "Further projects" }
+    "further": {
+      "headline": "Further projects"
+    },
+    "cta": {
+      "eyebrow": "Inspired By Our Work?",
+      "headline": "Let's Create Your Next Project.",
+      "subheadline": "Every project starts with a conversation. Share your vision and let's see where it can go.",
+      "cta": "Start Your Project"
+    }
   },
   "projectDetail": {
     "keyInformation": "Key Information",
@@ -144,7 +185,13 @@
       "buildingArea": "Building Area",
       "generalContractor": "General Contractor"
     },
-    "relatedProjects": "Related Projects"
+    "relatedProjects": "Related Projects",
+    "cta": {
+      "eyebrow": "Like What You See?",
+      "headline": "Let's Design Something Just As Considered.",
+      "subheadline": "Every project we take on starts with a conversation about your site, your needs, and your vision.",
+      "cta": "Start Your Project"
+    }
   },
   "studio": {
     "hero": {
@@ -208,6 +255,12 @@
       "eyebrow": "Studio Culture",
       "headline": "A studio shaped by curiosity and craft.",
       "body": "At ORI, collaboration is at the heart of everything we do. We foster an open studio culture where curiosity, craftsmanship, and diverse perspectives come together to create architecture that is thoughtful, enduring, and deeply connected to its place."
+    },
+    "cta": {
+      "eyebrow": "Ready To Build Together?",
+      "headline": "Let's Talk About Your Project.",
+      "subheadline": "Tell us what you're planning — we'll walk you through how our process could work for you.",
+      "cta": "Get In Touch"
     }
   },
   "philosophy": {
@@ -244,6 +297,12 @@
       "text": "Architecture is not only about shaping buildings, but about creating places where people feel connected—to nature, to culture, and to one another.",
       "name": "Ethan Carter",
       "role": "Founder & Principal Architect"
+    },
+    "cta": {
+      "eyebrow": "See It In Practice",
+      "headline": "Explore Where These Ideas Take Shape.",
+      "subheadline": "Our philosophy comes to life across every project we design — take a look at our completed work.",
+      "cta": "View Our Projects"
     }
   },
   "journal": {
@@ -265,13 +324,28 @@
     "filters": {
       "all": "All",
       "empty": "No articles match this filter."
+    },
+    "cta": {
+      "eyebrow": "See These Ideas In Practice",
+      "headline": "Explore Our Completed Projects.",
+      "subheadline": "From concept to completion, see how these ideas take shape in real spaces we've designed.",
+      "cta": "View Our Projects"
     }
   },
   "articleDetail": {
-    "labels": { "category": "Category", "publishedAt": "Published At" },
+    "labels": {
+      "category": "Category",
+      "publishedAt": "Published At"
+    },
     "cta": {
       "heading": "Ready to start new project?",
       "button": "Start a Conversation"
+    },
+    "bannerCta": {
+      "eyebrow": "Continue Reading",
+      "headline": "More Notes From The Studio.",
+      "subheadline": "Explore more essays and reflections on architecture, material, and the ideas that shape our practice.",
+      "cta": "Back To The Journal"
     }
   },
   "workWithCta": {
@@ -486,6 +560,12 @@
           }
         ]
       }
+    },
+    "cta": {
+      "eyebrow": "Not Ready To Reach Out Yet?",
+      "headline": "See What We've Built So Far.",
+      "subheadline": "Take a look through our portfolio while you think it over — we'll be here when you're ready.",
+      "cta": "View Our Projects"
     }
   }
 }

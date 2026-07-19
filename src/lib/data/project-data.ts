@@ -279,30 +279,3 @@ export function getRelatedProjects(
     .filter((project) => project.slug !== currentSlug)
     .slice(0, limit);
 }
-
-export const JOURNAL_ARTICLES = [
-  {
-    slug: "the-beauty-of-shadow",
-    title: "The Beauty of Shadow",
-    category: "Inspiration",
-    publishedLabel: "May 12, 2024",
-  },
-  {
-    slug: "tropical-modernism-in-bali",
-    title: "Tropical Modernism in Bali",
-    category: "Journal",
-    publishedLabel: "Apr 28, 2024",
-  },
-  {
-    slug: "material-notes-limestone-wood",
-    title: "Material Notes: Limestone & Wood",
-    category: "Material",
-    publishedLabel: "May 10, 2024",
-  },
-  {
-    slug: "designing-for-meaningful-living",
-    title: "Designing for Meaningful Living",
-    category: "Philosophy",
-    publishedLabel: "May 27, 2024",
-  },
-] as const;

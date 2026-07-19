@@ -170,7 +170,11 @@ export default async function ProjectDetailPage({
         </section>
       </div>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.projectDetail.cta}
+        href="/contact?tab=inquiry#contact-form"
+      />
     </>
   );
 }

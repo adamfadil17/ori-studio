@@ -78,7 +78,11 @@ export default async function ContactPage({
       {/* ---------- TABS + FORM + FAQ ---------- */}
       <ContactExperience dict={dict.contact} initialTab={initialTab} />
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.contact.cta}
+        href="/projects"
+      />
     </>
   );
 }

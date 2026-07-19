@@ -15,12 +15,17 @@ import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/cards/project-card";
 import ArticleCard from "@/components/cards/article-card";
+import { JOURNAL_ARTICLES } from "@/lib/data/article-data";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
 // Icon per service, urutannya mengikuti urutan dict.home.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management).
 const SERVICE_ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
+
+// Homepage cuma nampilin 4 artikel terbaru dari total 9 di article-data.ts
+// (Journal listing page yang nampilin semuanya).
+const HOMEPAGE_JOURNAL_ARTICLES = JOURNAL_ARTICLES.slice(0, 4);
 
 // Data proyek & artikel di bawah ini nantinya diganti query Prisma
 // (Project + ProjectTranslation, Article + ArticleTranslation) sesuai locale aktif.
@@ -45,32 +50,6 @@ const FEATURED_PROJECTS = [
   },
 ] as const;
 
-const JOURNAL_ARTICLES = [
-  {
-    slug: "the-beauty-of-shadow",
-    title: "The Beauty of Shadow",
-    category: "Inspiration",
-    publishedLabel: "May 12, 2024",
-  },
-  {
-    slug: "tropical-modernism-in-bali",
-    title: "Tropical Modernism in Bali",
-    category: "Journal",
-    publishedLabel: "Apr 28, 2024",
-  },
-  {
-    slug: "material-notes-limestone-wood",
-    title: "Material Notes: Limestone & Wood",
-    category: "Material",
-    publishedLabel: "May 10, 2024",
-  },
-  {
-    slug: "designing-for-meaningful-living",
-    title: "Designing for Meaningful Living",
-    category: "Philosophy",
-    publishedLabel: "May 27, 2024",
-  },
-] as const;
 
 export default async function HomePage({
   params,
@@ -383,7 +362,7 @@ export default async function HomePage({
           </div>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {JOURNAL_ARTICLES.map((article) => (
+            {HOMEPAGE_JOURNAL_ARTICLES.map((article) => (
               <ArticleCard
                 key={article.slug}
                 locale={locale as Locale}

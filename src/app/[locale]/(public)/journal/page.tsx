@@ -226,7 +226,11 @@ export default async function JournalPage({
         </div>
       </section>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.journal.cta}
+        href="/projects"
+      />
     </>
   );
 }

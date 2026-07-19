@@ -132,7 +132,11 @@ export default async function PhilosophyPage({
         </div>
       </section>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.philosophy.cta}
+        href="/projects"
+      />
     </>
   );
 }

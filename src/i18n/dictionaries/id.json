@@ -41,7 +41,7 @@
         }
       ],
       "cta": "Selengkapnya",
-       "eyebrow": "Layanan Ori Studio"
+      "eyebrow": "Layanan Ori Studio"
     },
     "featuredProject": {
       "eyebrow": "Proyek Unggulan",
@@ -56,10 +56,22 @@
       "body": "Kami mendengarkan, mengamati, dan merancang dengan intensi, menciptakan ruang yang terasa abadi hari ini dan untuk generasi mendatang.",
       "cta": "Pendekatan Kami",
       "stats": [
-        { "value": "12+", "label": "Tahun Praktik" },
-        { "value": "60+", "label": "Proyek Selesai" },
-        { "value": "8", "label": "Negara & Wilayah" },
-        { "value": "5", "label": "Penghargaan Desain" }
+        {
+          "value": "12+",
+          "label": "Tahun Praktik"
+        },
+        {
+          "value": "60+",
+          "label": "Proyek Selesai"
+        },
+        {
+          "value": "8",
+          "label": "Negara & Wilayah"
+        },
+        {
+          "value": "5",
+          "label": "Penghargaan Desain"
+        }
       ]
     },
     "journal": {
@@ -107,11 +119,29 @@
     "team": {
       "eyebrow": "Tim Kami",
       "members": [
-        { "name": "Ethan Carter", "role": "Principal Architect" },
-        { "name": "Sophia Bennett", "role": "Senior Architect" },
-        { "name": "Liam Anderson", "role": "Project Architect" },
-        { "name": "Olivia Hayes", "role": "Interior Designer" }
+        {
+          "name": "Ethan Carter",
+          "role": "Principal Architect"
+        },
+        {
+          "name": "Sophia Bennett",
+          "role": "Senior Architect"
+        },
+        {
+          "name": "Liam Anderson",
+          "role": "Project Architect"
+        },
+        {
+          "name": "Olivia Hayes",
+          "role": "Interior Designer"
+        }
       ]
+    },
+    "cta": {
+      "eyebrow": "Berkarya Bersama ORI",
+      "headline": "Mari Rancang Sesuatu yang Abadi.",
+      "subheadline": "Dari sketsa pertama hingga serah terima, kami ingin tahu lebih banyak tentang proyek Anda.",
+      "cta": "Mulai Percakapan"
     }
   },
   "projects": {
@@ -121,7 +151,10 @@
       "subheadline": "Jelajahi portofolio proyek residensial, hospitality, dan komersial, yang masing-masing dirancang dengan penuh pertimbangan sesuai konteksnya.",
       "cta": "Jelajahi Proyek Kami"
     },
-    "featured": { "eyebrow": "Proyek Unggulan", "cta": "Lihat Proyek" },
+    "featured": {
+      "eyebrow": "Proyek Unggulan",
+      "cta": "Lihat Proyek"
+    },
     "filters": {
       "location": "Lokasi",
       "sectors": "Sektor",
@@ -129,7 +162,15 @@
       "all": "Semua",
       "empty": "Tidak ada proyek yang sesuai dengan filter ini."
     },
-    "further": { "headline": "Proyek Lainnya" }
+    "further": {
+      "headline": "Proyek Lainnya"
+    },
+    "cta": {
+      "eyebrow": "Terinspirasi dari Karya Kami?",
+      "headline": "Mari Wujudkan Proyek Anda Selanjutnya.",
+      "subheadline": "Setiap proyek dimulai dari sebuah percakapan. Ceritakan visi Anda dan mari lihat ke mana ini bisa membawa kita.",
+      "cta": "Mulai Proyek Anda"
+    }
   },
   "projectDetail": {
     "keyInformation": "Informasi Utama",
@@ -144,7 +185,13 @@
       "buildingArea": "Luas Bangunan",
       "generalContractor": "Kontraktor Utama"
     },
-    "relatedProjects": "Proyek Terkait"
+    "relatedProjects": "Proyek Terkait",
+    "cta": {
+      "eyebrow": "Suka dengan Apa yang Anda Lihat?",
+      "headline": "Mari Rancang Sesuatu yang Sama Penuh Pertimbangannya.",
+      "subheadline": "Setiap proyek yang kami kerjakan dimulai dari percakapan tentang tapak, kebutuhan, dan visi Anda.",
+      "cta": "Mulai Proyek Anda"
+    }
   },
   "studio": {
     "hero": {
@@ -208,6 +255,12 @@
       "eyebrow": "Budaya Studio",
       "headline": "Studio yang dibentuk oleh rasa ingin tahu dan keahlian.",
       "body": "Di ORI, kolaborasi adalah inti dari semua yang kami lakukan. Kami membangun budaya studio yang terbuka, di mana rasa ingin tahu, keahlian, dan berbagai sudut pandang bertemu untuk menciptakan arsitektur yang penuh pertimbangan, abadi, dan terhubung erat dengan tempatnya."
+    },
+    "cta": {
+      "eyebrow": "Siap Berkarya Bersama?",
+      "headline": "Mari Bicarakan Proyek Anda.",
+      "subheadline": "Ceritakan rencana Anda — kami akan tunjukkan bagaimana proses kami bisa membantu mewujudkannya.",
+      "cta": "Hubungi Kami"
     }
   },
   "philosophy": {
@@ -244,6 +297,12 @@
       "text": "Arsitektur bukan hanya tentang membentuk bangunan, tetapi tentang menciptakan tempat di mana manusia merasa terhubung—dengan alam, dengan budaya, dan dengan satu sama lain.",
       "name": "Ethan Carter",
       "role": "Founder & Principal Architect"
+    },
+    "cta": {
+      "eyebrow": "Lihat dalam Praktiknya",
+      "headline": "Jelajahi Bagaimana Gagasan Ini Terwujud.",
+      "subheadline": "Filosofi kami hadir di setiap proyek yang kami rancang — lihat karya-karya kami yang telah selesai.",
+      "cta": "Lihat Proyek Kami"
     }
   },
   "journal": {
@@ -265,13 +324,28 @@
     "filters": {
       "all": "Semua",
       "empty": "Tidak ada artikel yang sesuai dengan filter ini."
+    },
+    "cta": {
+      "eyebrow": "Lihat Gagasan Ini dalam Praktik",
+      "headline": "Jelajahi Proyek yang Telah Kami Selesaikan.",
+      "subheadline": "Dari konsep hingga selesai, lihat bagaimana gagasan ini terwujud dalam ruang nyata yang kami rancang.",
+      "cta": "Lihat Proyek Kami"
     }
   },
   "articleDetail": {
-    "labels": { "category": "Kategori", "publishedAt": "Diterbitkan Pada" },
+    "labels": {
+      "category": "Kategori",
+      "publishedAt": "Diterbitkan Pada"
+    },
     "cta": {
       "heading": "Siap memulai proyek baru?",
       "button": "Mulai Percakapan"
+    },
+    "bannerCta": {
+      "eyebrow": "Lanjutkan Membaca",
+      "headline": "Catatan Lain dari Studio.",
+      "subheadline": "Jelajahi lebih banyak esai dan refleksi seputar arsitektur, material, dan gagasan yang membentuk cara kami berkarya.",
+      "cta": "Kembali ke Jurnal"
     }
   },
   "workWithCta": {
@@ -486,6 +560,12 @@
           }
         ]
       }
+    },
+    "cta": {
+      "eyebrow": "Belum Siap Menghubungi Kami?",
+      "headline": "Lihat Apa yang Telah Kami Bangun.",
+      "subheadline": "Sambil mempertimbangkan, lihat-lihat dulu portofolio kami — kami akan siap membantu ketika Anda sudah siap.",
+      "cta": "Lihat Proyek Kami"
     }
   }
 }

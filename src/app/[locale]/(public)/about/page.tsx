@@ -236,7 +236,11 @@ export default async function AboutPage({
         </div>
       </section>
 
-      <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
+      <CtaBanner
+        locale={locale as Locale}
+        dict={dict.about.cta}
+        href="/contact?tab=inquiry#contact-form"
+      />
     </>
   );
 }
