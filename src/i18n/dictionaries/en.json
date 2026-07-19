@@ -40,7 +40,8 @@
           "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
         }
       ],
-      "cta": "Learn More"
+      "cta": "Learn More",
+       "eyebrow": "Ori Studio Services"
     },
     "featuredProject": {
       "eyebrow": "Featured Project",
@@ -282,8 +283,7 @@
   "footer": {
     "description": "We are an architecture studio creating timeless spaces that connect nature, culture, and meaningful living.",
     "columns": {
-      "about": "About",
-      "philosophy": "Philosophy",
+      "mainMenu": "ORI Studio",
       "services": "Services",
       "contact": "Contact"
     }

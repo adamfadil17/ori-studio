@@ -32,7 +32,7 @@ export default function DesignProcess({
               type="button"
               onClick={() => setActiveIndex(index)}
               aria-pressed={isActive}
-              className="group flex h-full flex-col text-left focus-visible:outline-none"
+              className="group flex h-full flex-col text-left focus-visible:outline-none hover:cursor-pointer"
             >
               <div
                 className={`relative w-full aspect-[3/4] overflow-hidden bg-background-alt transition-all duration-300`}
@@ -86,7 +86,7 @@ export default function DesignProcess({
               onClick={() => setActiveIndex(index)}
               aria-label={`${step.number} ${step.title}`}
               aria-current={index === activeIndex}
-              className={`shrink-0 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow focus-visible:ring-offset-2 ${
+              className={`shrink-0 rounded-full transition-all duration-300 hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow focus-visible:ring-offset-2 ${
                 index === activeIndex
                   ? "h-3.5 w-3.5 bg-headline"
                   : "h-2.5 w-2.5 bg-headline/20 hover:bg-headline/40"

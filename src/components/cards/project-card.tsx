@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 
 export interface ProjectCardProps {
@@ -49,15 +50,7 @@ export default function ProjectCard({
           aria-hidden="true"
           className="mt-2 shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path
-              d="M4 9h10M9 4l5 5-5 5"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowRight className="h-[18px] w-[18px]" strokeWidth={1.5} />
         </span>
       </div>
     </Link>

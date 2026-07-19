@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { useHeaderTheme } from "./header-theme";
 
@@ -148,30 +149,19 @@ export default function Header({ locale, nav }: HeaderProps) {
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-            className="shrink-0"
-          >
-            {mobileOpen ? (
-              <path
-                d="M6 6l12 12M18 6L6 18"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            ) : (
-              <path
-                d="M4 7h16M4 12h16M4 17h16"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            )}
-          </svg>
+          {mobileOpen ? (
+            <X
+              className="h-6 w-6 shrink-0"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
+          ) : (
+            <Menu
+              className="h-6 w-6 shrink-0"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
+          )}
         </button>
       </div>
 

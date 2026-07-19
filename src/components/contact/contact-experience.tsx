@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Mail, MessageCircle } from "lucide-react";
 import PartnershipForm from "./partnership-form";
 import CareerForm from "./career-form";
 import ProjectInquiryForm from "./project-inquiry";
 import FaqAccordion from "../layout/faq-acccordion";
+import Image from "next/image";
 
 export type ContactTab = "inquiry" | "partnership" | "career";
 
@@ -50,6 +52,15 @@ export default function ContactExperience({
 }: ContactExperienceProps) {
   const [activeTab, setActiveTab] = useState<ContactTab>(initialTab);
 
+  // initialTab cuma dipakai React sebagai nilai awal useState (hanya kebaca
+  // sekali saat mount). Kalau user sudah di /contact lalu klik link lain yang
+  // cuma ganti query string (mis. dari footer, "?tab=career"), Next.js
+  // re-render page ini tapi component client ini TIDAK remount, jadi
+  // activeTab perlu disinkronkan manual setiap kali initialTab berubah.
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
   const tabOrder: ContactTab[] = ["inquiry", "partnership", "career"];
   const activeFaq = dict.faq[activeTab];
 
@@ -68,7 +79,7 @@ export default function ContactExperience({
                 type="button"
                 onClick={() => setActiveTab(tab)}
                 aria-current={activeTab === tab}
-                className={`relative pb-4 text-sm tracking-wide transition-colors ${
+                className={`relative pb-4 text-sm tracking-wide transition-colors hover:cursor-pointer ${
                   activeTab === tab
                     ? "text-headline"
                     : "text-body hover:text-headline"
@@ -86,8 +97,8 @@ export default function ContactExperience({
           </div>
 
           {/* Sidebar + active form */}
-          <div className="grid gap-14 py-16 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
-            <div>
+          <div className="grid gap-14 py-16 lg:grid-cols-[1fr_1.6fr] lg:items-start lg:gap-20">
+            <div className="lg:sticky lg:top-28">
               <p className="flex items-center gap-4 text-xs tracking-widest uppercase text-eyebrow">
                 {dict.sidebar.eyebrow}
                 <span className="h-px w-10 bg-eyebrow" aria-hidden="true" />
@@ -101,27 +112,56 @@ export default function ContactExperience({
                   href={`mailto:${dict.sidebar.email}`}
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <MailIcon />
+                  <Image
+                    src="/icons/email.svg"
+                    width={16}
+                    height={16}
+                    alt="Email"
+                  />
                   {dict.sidebar.email}
                 </a>
                 <a
-                  href={`tel:${dict.sidebar.phone.replace(/\s/g, "")}`}
+                  href={`https://wa.me/${dict.sidebar.phone.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <PhoneIcon />
+                  <Image
+                    src="/icons/whatsapp.svg"
+                    width={16}
+                    height={16}
+                    alt="Email"
+                  />
                   {dict.sidebar.phone}
                 </a>
-              </div>
-
-              <div className="mt-8 flex items-center gap-6 text-sm text-headline">
-                <span className="flex items-center gap-2">
-                  <InstagramIcon />
+                <a
+                  href={`https://instagram.com/${dict.sidebar.instagram.replace(/^@/, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 hover:opacity-70"
+                >
+                  <Image
+                    src="/icons/instagram.svg"
+                    width={16}
+                    height={16}
+                    alt="Email"
+                  />
                   {dict.sidebar.instagram}
-                </span>
-                <span className="flex items-center gap-2">
-                  <PinterestIcon />
+                </a>
+                <a
+                  href={`https://pinterest.com/${dict.sidebar.pinterest.replace(/^@/, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 hover:opacity-70"
+                >
+                  <Image
+                    src="/icons/pinterest.svg"
+                    width={16}
+                    height={16}
+                    alt="Email"
+                  />
                   {dict.sidebar.pinterest}
-                </span>
+                </a>
               </div>
             </div>
 
@@ -147,98 +187,5 @@ export default function ContactExperience({
         items={activeFaq.items}
       />
     </>
-  );
-}
-
-function MailIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="2"
-        y="3"
-        width="12"
-        height="10"
-        rx="1.5"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-      <path
-        d="M2.5 4l5.5 4 5.5-4"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function PhoneIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M4 2.5c.5 0 1.5 0 2 1l.5 1.5c.2.5 0 1-.3 1.3l-.7.7c.5 1.5 1.8 2.8 3.3 3.3l.7-.7c.3-.3.8-.5 1.3-.3l1.5.5c1 .5 1 1.5 1 2 0 1-1 2-2 2-4 0-8-4-8-8 0-1 1-2 2-2Z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function InstagramIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="2"
-        y="2"
-        width="12"
-        height="12"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-      <circle cx="8" cy="8" r="2.6" stroke="currentColor" strokeWidth="1.2" />
-      <circle cx="11.5" cy="4.5" r="0.7" fill="currentColor" />
-    </svg>
-  );
-}
-
-function PinterestIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2" />
-      <path
-        d="M6.5 11.5c.3-1 .8-3.2 1-4C7.7 6.7 8.5 6 9.3 6.3c.7.3 1 1 .8 1.9-.2 1-.5 2.2-1.7 2.2-.6 0-1-.4-1.1-1"
-        stroke="currentColor"
-        strokeWidth="1"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

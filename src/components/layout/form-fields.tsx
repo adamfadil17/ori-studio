@@ -1,4 +1,9 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import {
+  useState,
+  type InputHTMLAttributes,
+  type TextareaHTMLAttributes,
+} from "react";
+import { ChevronDown } from "lucide-react";
 
 // ------------------------------------------------------------
 // SECTION LABEL — heading kecil dengan garis bawah tipis
@@ -119,6 +124,14 @@ export function RadioGroupField({
   otherPlaceholder,
 }: RadioGroupFieldProps) {
   const hasOther = options.some((opt) => opt.value === "OTHER");
+  // Disimpan secara lokal supaya inputan langsung kelihatan saat diketik,
+  // nggak bergantung pada parent nge-pass balik `otherValue` yang ter-update.
+  const [otherText, setOtherText] = useState(otherValue ?? "");
+
+  function handleOtherTextChange(next: string) {
+    setOtherText(next);
+    onOtherChange?.(next);
+  }
 
   return (
     <div>
@@ -144,8 +157,8 @@ export function RadioGroupField({
             {option.value === "OTHER" && value === "OTHER" && onOtherChange && (
               <input
                 type="text"
-                value={otherValue ?? ""}
-                onChange={(e) => onOtherChange(e.target.value)}
+                value={otherText}
+                onChange={(e) => handleOtherTextChange(e.target.value)}
                 placeholder={otherPlaceholder}
                 onClick={(e) => e.stopPropagation()}
                 className="ml-2 flex-1 border border-eyebrow/50 bg-transparent px-3 py-1.5 text-xs normal-case text-headline placeholder:text-body/50 focus-visible:outline-none"
@@ -204,22 +217,12 @@ export function SelectField({
             </option>
           ))}
         </select>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 14 14"
-          fill="none"
+        <ChevronDown
+          size={14}
+          strokeWidth={1.3}
           aria-hidden="true"
           className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-headline"
-        >
-          <path
-            d="M3 5.5L7 9.5L11 5.5"
-            stroke="currentColor"
-            strokeWidth="1.3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </div>
       {error && <p className="mt-1.5 text-xs text-red-700">{error}</p>}
     </div>

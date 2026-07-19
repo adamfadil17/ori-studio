@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import CtaBanner from "@/components/cta-banner/cta-banner";
 import ArticleList, {
-  ArticleListItem,
+  type ArticleListItem,
 } from "@/components/journal/article-list";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
@@ -78,8 +79,6 @@ export default async function JournalPage({
   if (!isValidLocale(locale)) notFound();
 
   const dict = await getDictionary(locale as Locale);
-  // NOTE: perlu ditambahkan ke i18n dictionary — lihat struktur "journal"
-  // yang disarankan di akhir chat.
   const { hero, featured, explore, filters } = dict.journal;
 
   const featuredArticles = ALL_ARTICLES.slice(0, 2);
@@ -135,11 +134,27 @@ export default async function JournalPage({
             </div>
 
             <div className="flex shrink-0 items-center gap-3 text-headline">
-              <button type="button" aria-label="Previous featured article">
-                <ArrowIcon direction="left" />
+              <button
+                type="button"
+                aria-label="Previous featured article"
+                className="hover:cursor-pointer"
+              >
+                <ChevronLeft
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
-              <button type="button" aria-label="Next featured article">
-                <ArrowIcon />
+              <button
+                type="button"
+                aria-label="Next featured article"
+                className="hover:cursor-pointer"
+              >
+                <ChevronRight
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>
@@ -171,7 +186,11 @@ export default async function JournalPage({
                   </h3>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-widest text-headline">
                     READ MORE
-                    <ArrowIcon direction="right" small />
+                    <ArrowRight
+                      className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
                   </span>
                 </div>
               </Link>
@@ -209,35 +228,5 @@ export default async function JournalPage({
 
       <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
     </>
-  );
-}
-
-function ArrowIcon({
-  direction = "right",
-  small = false,
-}: {
-  direction?: "left" | "right";
-  small?: boolean;
-}) {
-  const size = small ? 14 : 16;
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-      className={`transition-transform duration-300 ${
-        direction === "left" ? "rotate-180" : "group-hover:translate-x-1"
-      }`}
-    >
-      <path
-        d="M3 8h10M9 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

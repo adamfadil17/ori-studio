@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
@@ -73,7 +74,11 @@ export default async function AboutPage({
               className="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
             >
               {story.cta}
-              <ArrowIcon />
+              <ArrowRight
+                className="h-4 w-4"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
             </Link>
           </div>
 
@@ -109,7 +114,9 @@ export default async function AboutPage({
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label} className="bg-background-alt p-8">
-                <p className="font-serif text-4xl text-headline">{stat.value}</p>
+                <p className="font-serif text-4xl text-headline">
+                  {stat.value}
+                </p>
                 <p className="mt-2 text-sm text-body">{stat.label}</p>
               </div>
             ))}
@@ -205,7 +212,11 @@ export default async function AboutPage({
               className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
             >
               {journal.cta}
-              <ArrowIcon />
+              <ArrowRight
+                className="h-4 w-4"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
             </Link>
           </div>
 
@@ -227,19 +238,5 @@ export default async function AboutPage({
 
       <CtaBanner locale={locale as Locale} dict={dict.workWithCta} />
     </>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path
-        d="M3 8h10M9 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

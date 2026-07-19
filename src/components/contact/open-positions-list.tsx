@@ -1,6 +1,5 @@
 import { OpenPosition } from "@/lib/data/open-positions";
 
-
 interface OpenPositionsListProps {
   positions: OpenPosition[];
   label: string;
@@ -36,7 +35,7 @@ export default function OpenPositionsList({
                 {position.level}
               </p>
             </div>
-            <span className="shrink-0 text-xs tracking-widest uppercase text-headline underline-offset-4 group-hover:underline">
+            <span className="shrink-0 text-xs tracking-widest uppercase text-headline underline-offset-4 group-hover:underline group-hover:cursor-pointer">
               {viewDetailsLabel}
             </span>
           </button>

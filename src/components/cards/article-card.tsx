@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 
 export interface ArticleCardProps {
@@ -50,22 +51,11 @@ export default function ArticleCard({
 
         <span className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-widest text-headline">
           READ MORE
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
+          <ArrowRight
+            className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+            strokeWidth={1.5}
             aria-hidden="true"
-            className="transition-transform duration-300 group-hover:translate-x-1"
-          >
-            <path
-              d="M3 7h8M7.5 3.5L11 7l-3.5 3.5"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          />
         </span>
       </div>
     </Link>

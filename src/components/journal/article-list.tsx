@@ -2,6 +2,15 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import {
+  LayoutGrid,
+  List as ListIconLucide,
+  ChevronDown,
+  ChevronsLeft,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsRight,
+} from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import ArticleCardView from "./article-card-view";
 
@@ -74,7 +83,11 @@ export default function ArticleList({
               </option>
             ))}
           </select>
-          <ChevronDownIcon className="pointer-events-none absolute right-0 h-2.5 w-2.5" />
+          <ChevronDown
+            className="pointer-events-none absolute right-0 h-3 w-3"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
         </div>
 
         <div className="flex items-center gap-3">
@@ -85,24 +98,32 @@ export default function ArticleList({
             aria-label="Grid view"
             className={`transition-colors ${
               viewMode === "grid"
-                ? "text-headline"
+                ? "text-headline hover:cursor-pointer"
                 : "text-headline/30 hover:text-headline/60"
             }`}
           >
-            <GridIcon />
+            <LayoutGrid
+              className="h-[18px] w-[18px]"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
           </button>
           <button
             type="button"
             onClick={() => setViewMode("list")}
             aria-pressed={viewMode === "list"}
             aria-label="List view"
-            className={`transition-colors ${
+            className={`transition-colors hover:cursor-pointer ${
               viewMode === "list"
                 ? "text-headline"
                 : "text-headline/30 hover:text-headline/60"
             }`}
           >
-            <ListIcon />
+            <ListIconLucide
+              className="h-[18px] w-[18px]"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
           </button>
         </div>
       </div>
@@ -171,14 +192,18 @@ function Pagination({
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
       >
-        «
+        <ChevronsLeft
+          className="h-4 w-4"
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
       </PageButton>
       <PageButton
         label="Previous page"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        ‹
+        <ChevronLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
       </PageButton>
 
       {pages.map((p, i) =>
@@ -192,7 +217,7 @@ function Pagination({
             type="button"
             onClick={() => onPageChange(p)}
             aria-current={p === currentPage}
-            className={`flex h-8 w-8 items-center justify-center transition-colors ${
+            className={`flex h-9 w-9 items-center justify-center transition-colors hover:cursor-pointer ${
               p === currentPage
                 ? "bg-headline text-background-main"
                 : "text-headline/60 hover:text-headline"
@@ -208,14 +233,22 @@ function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        ›
+        <ChevronRight
+          className="h-4 w-4"
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
       </PageButton>
       <PageButton
         label="Last page"
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
       >
-        »
+        <ChevronsRight
+          className="h-4 w-4"
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
       </PageButton>
     </div>
   );
@@ -238,7 +271,8 @@ function PageButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="flex h-8 w-8 items-center justify-center text-headline/60 transition-colors hover:text-headline disabled:cursor-not-allowed disabled:text-headline/20"
+      className="flex h-9 w-9 items-center justify-center text-headline/60 transition-colors hover:text-headline hover:cursor-pointer
+      disabled:cursor-not-allowed disabled:text-headline/20"
     >
       {children}
     </button>
@@ -263,61 +297,4 @@ function buildPageList(current: number, total: number): (number | "...")[] {
   pages.push(total);
 
   return pages;
-}
-
-function GridIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor" />
-      <rect x="10" y="2" width="6" height="6" rx="1" fill="currentColor" />
-      <rect x="2" y="10" width="6" height="6" rx="1" fill="currentColor" />
-      <rect x="10" y="10" width="6" height="6" rx="1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function ListIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M3 5h12M3 9h12M3 13h12"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-    >
-      <path
-        d="M2 3.5l3 3 3-3"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
 }

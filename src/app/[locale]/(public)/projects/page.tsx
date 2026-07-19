@@ -4,7 +4,10 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import CtaBanner from "@/components/cta-banner/cta-banner";
-import ProjectsList, { ProjectListItem } from "@/components/projects/projects-list";
+import ProjectsList, {
+  ProjectListItem,
+} from "@/components/projects/projects-list";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -182,11 +185,23 @@ export default async function ProjectsPage({
               {featured.eyebrow}
             </p>
             <div className="flex items-center gap-3 text-headline">
-              <button type="button" aria-label="Previous featured project">
-                <ArrowIcon direction="left" />
+              <button type="button" aria-label="Previous featured project" className="hover:cursor-pointer">
+                <ChevronLeft
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
-              <button type="button" aria-label="Next featured project">
-                <ArrowIcon />
+              <button
+                type="button"
+                aria-label="Next featured project"
+                className="hover:cursor-pointer"
+              >
+                <ChevronRight
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>
@@ -218,7 +233,10 @@ export default async function ProjectsPage({
       </section>
 
       {/* ---------- ALL PROJECTS (filter + grid/list + pagination) ---------- */}
-      <section id="all-projects" className="bg-background-main px-6 py-24 md:px-10">
+      <section
+        id="all-projects"
+        className="bg-background-main px-6 py-24 md:px-10"
+      >
         <div className="mx-auto max-w-7xl">
           <ProjectsList
             locale={locale as Locale}
@@ -234,7 +252,10 @@ export default async function ProjectsPage({
           <h2 className="font-serif text-3xl text-headline">
             {further.headline}
           </h2>
-          <span className="mt-3 block h-px w-10 bg-eyebrow" aria-hidden="true" />
+          <span
+            className="mt-3 block h-px w-10 bg-eyebrow"
+            aria-hidden="true"
+          />
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.4fr]">
             <div className="relative w-full lg:aspect-auto lg:h-full overflow-hidden bg-background-alt">

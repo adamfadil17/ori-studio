@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 
 export interface ArticleCardProps {
@@ -56,7 +57,7 @@ export default function ArticleCardView({
           aria-hidden="true"
           className="shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
         >
-          <ArrowIcon />
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
         </span>
       </Link>
     );
@@ -90,30 +91,13 @@ export default function ArticleCardView({
 
         <span className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-widest text-headline">
           READ MORE
-          <ArrowIcon />
+          <ArrowRight
+            className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
         </span>
       </div>
     </Link>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden="true"
-      className="transition-transform duration-300 group-hover:translate-x-1"
-    >
-      <path
-        d="M3 7h8M7.5 3.5L11 7l-3.5 3.5"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

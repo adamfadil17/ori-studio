@@ -136,7 +136,7 @@ export default function ProjectsList({
             onClick={() => setViewMode("grid")}
             aria-pressed={viewMode === "grid"}
             aria-label="Grid view"
-            className={`transition-colors ${
+            className={`transition-colors hover:cursor-pointer ${
               viewMode === "grid"
                 ? "text-headline"
                 : "text-headline/30 hover:text-headline/60"
@@ -149,7 +149,7 @@ export default function ProjectsList({
             onClick={() => setViewMode("list")}
             aria-pressed={viewMode === "list"}
             aria-label="List view"
-            className={`transition-colors ${
+            className={`transition-colors hover:cursor-pointer ${
               viewMode === "list"
                 ? "text-headline"
                 : "text-headline/30 hover:text-headline/60"
@@ -219,14 +219,29 @@ function FilterSelect<T extends string>({
   options: { value: T; label: string }[];
   allLabel: string;
 }) {
+  const selectedLabel =
+    value === "ALL"
+      ? allLabel
+      : (options.find((opt) => opt.value === value)?.label ?? allLabel);
+
   return (
     <label className="relative inline-flex cursor-pointer items-center gap-2 text-xs tracking-widest uppercase text-headline">
       <span>{label}</span>
       <span className="relative inline-flex items-center">
+        {/* Teks yang tampil, lebarnya ngikutin opsi yang lagi dipilih aja
+            (bukan opsi terpanjang), jadi chevron-nya nggak kebawa jauh. */}
+        <span className="whitespace-nowrap pr-5 text-xs tracking-widest uppercase text-headline">
+          {selectedLabel}
+        </span>
+        <ChevronDownIcon className="pointer-events-none absolute right-0 h-2.5 w-2.5" />
+
+        {/* Select asli, transparan, nutupin seluruh area buat interaksi/klik
+            dan aksesibilitas keyboard — nggak mempengaruhi layout visual. */}
         <select
           value={value}
           onChange={(e) => onChange(e.target.value as T | "ALL")}
-          className="cursor-pointer appearance-none bg-transparent pr-5 text-xs tracking-widest uppercase text-headline focus-visible:outline-none"
+          aria-label={label}
+          className="absolute inset-0 w-full cursor-pointer appearance-none opacity-0"
         >
           <option value="ALL">{allLabel}</option>
           {options.map((opt) => (
@@ -235,7 +250,6 @@ function FilterSelect<T extends string>({
             </option>
           ))}
         </select>
-        <ChevronDownIcon className="pointer-events-none absolute right-0 h-2.5 w-2.5" />
       </span>
     </label>
   );

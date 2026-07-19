@@ -1,12 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { Upload } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getActiveOpenPositions, OpenPosition } from "@/lib/data/open-positions";
+import {
+  getActiveOpenPositions,
+  OpenPosition,
+} from "@/lib/data/open-positions";
 import { CareerFormValues, careerSchema } from "@/utils/validators";
 import OpenPositionModal from "./open-position-modal";
-import { FieldSectionLabel, RadioGroupField, SelectField, TextField } from "../layout/form-fields";
+import {
+  FieldSectionLabel,
+  RadioGroupField,
+  SelectField,
+  TextField,
+} from "../layout/form-fields";
 import OpenPositionsList from "./open-positions-list";
 
 interface CareerDict {
@@ -86,13 +95,18 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
   }
 
   const experienceOptions = Object.entries(dict.experienceOptions).map(
-    ([value, label]) => ({ value, label })
+    ([value, label]) => ({ value, label }),
   );
-  const positionOptions = positions.map((p) => ({ value: p.id, label: p.title }));
+  const positionOptions = positions.map((p) => ({
+    value: p.id,
+    label: p.title,
+  }));
 
   return (
     <div>
-      <p className="text-xs tracking-widest uppercase text-eyebrow">{dict.eyebrow}</p>
+      <p className="text-xs tracking-widest uppercase text-eyebrow">
+        {dict.eyebrow}
+      </p>
       <h2 className="mt-3 font-serif text-2xl leading-snug text-headline md:text-3xl">
         {dict.headline}
       </h2>
@@ -192,15 +206,7 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
           <FieldSectionLabel>{dict.fields.uploadCv}</FieldSectionLabel>
           <div className="mt-4 flex items-center gap-4">
             <label className="flex cursor-pointer items-center gap-2 bg-headline px-6 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path
-                  d="M7 10V2M7 2L4 5M7 2l3 3M2 10v1a1 1 0 001 1h8a1 1 0 001-1v-1"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Upload size={14} strokeWidth={1.4} aria-hidden="true" />
               {dict.upload}
               <input
                 type="file"
@@ -209,14 +215,16 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
                 className="sr-only"
               />
             </label>
-            <span className="text-sm text-body">{cvFileName ?? dict.noFileChosen}</span>
+            <span className="text-sm text-body">
+              {cvFileName ?? dict.noFileChosen}
+            </span>
           </div>
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
           {isSubmitting ? "..." : dict.submit}
         </button>

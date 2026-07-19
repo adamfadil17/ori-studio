@@ -69,7 +69,7 @@ export default function OpenPositionModal({
             type="button"
             onClick={onClose}
             aria-label={dict.closeModal}
-            className="shrink-0 text-headline transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+            className="shrink-0 text-headline transition-opacity hover:opacity-60 hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
           >
             <svg
               width="20"
@@ -95,7 +95,7 @@ export default function OpenPositionModal({
         <button
           type="button"
           onClick={() => onApply(position)}
-          className="mt-8 bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90"
+          className="mt-8 bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer"
         >
           {dict.applyForPosition}
         </button>

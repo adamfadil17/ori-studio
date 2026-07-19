@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  ChevronDown,
+  PencilRuler,
+  Sofa,
+  Trees,
+  ClipboardList,
+} from "lucide-react";
 
 interface ServiceItem {
   title: string;
@@ -13,7 +20,18 @@ interface ServicesAccordionProps {
   imageUrl?: string;
 }
 
-const ICONS = [ArchitectureIcon, InteriorIcon, LandscapeIcon, ManagementIcon];
+// Urutan icon & slug mengikuti urutan dict.studio.services.items
+// (Architecture Design, Interior Design, Landscape Design, Project Management)
+// — sama seperti icon set di section Services homepage, biar konsisten.
+// Slug ini HARUS sama persis dengan anchor link Services di Footer
+// (mis. "/studio#architecture-design").
+const ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
+const SLUGS = [
+  "architecture-design",
+  "interior-design",
+  "landscape-design",
+  "project-management",
+];
 
 export default function ServicesAccordion({
   items,
@@ -21,30 +39,106 @@ export default function ServicesAccordion({
 }: ServicesAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  // Kalau URL punya hash yang cocok sama salah satu slug (mis. dari link
+  // Footer "/studio#interior-design"), otomatis buka item itu dan scroll
+  // ke posisinya.
+  //
+  // Ini butuh 2 mekanisme berbeda:
+  // 1. Saat halaman ini baru di-mount dengan hash sudah ada di URL (mis.
+  //    navigasi dari halaman lain, atau refresh/buka langsung /studio#slug).
+  // 2. Saat user SUDAH berada di halaman ini lalu klik link hash lain.
+  //    Next.js <Link> pakai history.pushState() untuk navigasi client-side,
+  //    dan pushState() TIDAK PERNAH memicu event "hashchange" (beda dari
+  //    klik <a> biasa) — jadi kita intercept klik-nya langsung di sini,
+  //    bukan menunggu event yang nggak akan pernah muncul.
+  useEffect(() => {
+    function openAndScrollTo(hash: string) {
+      const index = SLUGS.indexOf(hash);
+      if (index === -1) return;
+
+      setOpenIndex(index);
+      requestAnimationFrame(() => {
+        document
+          .getElementById(hash)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    // Mekanisme 1: cek hash begitu component mount.
+    if (window.location.hash) {
+      openAndScrollTo(window.location.hash.replace("#", ""));
+    }
+
+    // Mekanisme 2: intercept klik ke link berisi hash (mis. dari Footer),
+    // termasuk yang di-handle Next.js Link via pushState.
+    function handleDocumentClick(e: MouseEvent) {
+      const anchor = (e.target as HTMLElement)?.closest("a[href*='#']");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href") ?? "";
+      const hashIndex = href.indexOf("#");
+      if (hashIndex === -1) return;
+
+      const hash = href.slice(hashIndex + 1);
+      if (SLUGS.indexOf(hash) === -1) return;
+
+      // Beri jeda singkat supaya URL & DOM sempat settle dulu setelah
+      // navigasi Next.js selesai, sebelum kita set state & scroll.
+      setTimeout(() => openAndScrollTo(hash), 50);
+    }
+
+    // Tetap dengarkan hashchange juga untuk kasus edge (klik <a> native,
+    // atau location.hash di-set manual) — nggak ada ruginya dipasang dua-duanya.
+    function handleHashChange() {
+      openAndScrollTo(window.location.hash.replace("#", ""));
+    }
+
+    document.addEventListener("click", handleDocumentClick);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
   return (
     <div className="bg-background-main">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const Icon = ICONS[index % ICONS.length];
+        const slug = SLUGS[index % SLUGS.length];
 
         return (
           <div
             key={item.title}
-            className={index !== 0 ? "border-t border-headline/10" : ""}
+            id={slug}
+            className={`scroll-mt-28 ${
+              index !== 0 ? "border-t border-headline/10" : ""
+            }`}
           >
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : index)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-4 px-6 py-6 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow md:px-10"
+              className="flex w-full items-center justify-between gap-4 px-6 py-6 text-left hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow md:px-10"
             >
               <span className="flex items-center gap-4">
-                <Icon />
+                <Icon
+                  className="h-[22px] w-[22px] text-headline"
+                  strokeWidth={1.2}
+                  aria-hidden="true"
+                />
                 <span className="font-serif text-lg text-headline md:text-xl">
                   {item.title}
                 </span>
               </span>
-              <ChevronIcon isOpen={isOpen} />
+              <ChevronDown
+                className={`h-[18px] w-[18px] shrink-0 text-headline transition-transform duration-300 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+                strokeWidth={1.3}
+                aria-hidden="true"
+              />
             </button>
 
             <div
@@ -74,135 +168,5 @@ export default function ServicesAccordion({
         );
       })}
     </div>
-  );
-}
-
-function ChevronIcon({ isOpen }: { isOpen: boolean }) {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      aria-hidden="true"
-      className={`shrink-0 text-headline transition-transform duration-300 ${
-        isOpen ? "rotate-180" : ""
-      }`}
-    >
-      <path
-        d="M4.5 7l4.5 4.5L13.5 7"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ArchitectureIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="3"
-        y="3"
-        width="16"
-        height="16"
-        rx="2"
-        stroke="#33271F"
-        strokeWidth="1.2"
-      />
-      <path d="M3 9h16M9 3v16" stroke="#33271F" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
-function InteriorIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M4 12v-1a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v1"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-      <rect
-        x="3"
-        y="12"
-        width="16"
-        height="4"
-        rx="1"
-        stroke="#33271F"
-        strokeWidth="1.2"
-      />
-      <path
-        d="M4 16v2M18 16v2"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function LandscapeIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M11 4c2 2 3 4 3 6a3 3 0 1 1-6 0c0-2 1-4 3-6Z"
-        stroke="#33271F"
-        strokeWidth="1.2"
-      />
-      <path
-        d="M11 13v6M7 19h8"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function ManagementIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="11" cy="12" r="7" stroke="#33271F" strokeWidth="1.2" />
-      <path
-        d="M11 8v4l3 2"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M9 3h4"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

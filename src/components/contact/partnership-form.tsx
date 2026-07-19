@@ -3,7 +3,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PartnershipFormValues, partnershipSchema } from "@/utils/validators";
-import { RadioGroupField, TextAreaField, TextField } from "../layout/form-fields";
+import {
+  RadioGroupField,
+  TextAreaField,
+  TextField,
+} from "../layout/form-fields";
 
 interface PartnershipDict {
   eyebrow: string;
@@ -120,7 +124,7 @@ export default function PartnershipForm({ dict }: { dict: PartnershipDict }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="bg-headline px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
           {isSubmitting ? "..." : dict.submit}
         </button>

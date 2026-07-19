@@ -40,7 +40,8 @@
           "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
         }
       ],
-      "cta": "Selengkapnya"
+      "cta": "Selengkapnya",
+       "eyebrow": "Layanan Ori Studio"
     },
     "featuredProject": {
       "eyebrow": "Proyek Unggulan",
@@ -282,8 +283,7 @@
   "footer": {
     "description": "Kami adalah studio arsitektur yang menciptakan ruang abadi yang menghubungkan alam, budaya, dan kehidupan yang bermakna.",
     "columns": {
-      "about": "Tentang",
-      "philosophy": "Filosofi",
+      "mainMenu": "ORI Studio",
       "services": "Layanan",
       "contact": "Kontak"
     }

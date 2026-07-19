@@ -1,5 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  ArrowRight,
+  ArrowLeft,
+  PencilRuler,
+  Sofa,
+  Trees,
+  ClipboardList,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
@@ -7,6 +17,10 @@ import ProjectCard from "@/components/cards/project-card";
 import ArticleCard from "@/components/cards/article-card";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// Icon per service, urutannya mengikuti urutan dict.home.services.items
+// (Architecture Design, Interior Design, Landscape Design, Project Management).
+const SERVICE_ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
 
 // Data proyek & artikel di bawah ini nantinya diganti query Prisma
 // (Project + ProjectTranslation, Article + ArticleTranslation) sesuai locale aktif.
@@ -131,7 +145,11 @@ export default async function HomePage({
                 className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
               >
                 {about.cta}
-                <ArrowIcon />
+                <ArrowRight
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </Link>
             </div>
 
@@ -149,25 +167,43 @@ export default async function HomePage({
 
       {/* ---------- SERVICES ---------- */}
       <section className="bg-background-main px-6 pb-24 md:px-10">
-        <div className="mx-auto grid max-w-7xl gap-10 bg-background-alt p-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
-          {services.items.map((service) => (
-            <div key={service.title}>
-              <ServiceIcon />
-              <h3 className="mt-5 font-serif text-xl leading-snug text-headline">
-                {service.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-body">
-                {service.description}
-              </p>
-              <Link
-                href={`/${locale}/studio`}
-                className="mt-4 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
-              >
-                {services.cta}
-                <ArrowIcon />
-              </Link>
-            </div>
-          ))}
+        <div className="mx-auto max-w-7xl">
+          <p className="flex items-center gap-4 text-xs tracking-widest uppercase text-eyebrow">
+            {services.eyebrow}
+            <span className="h-px w-10 bg-eyebrow" aria-hidden="true" />
+          </p>
+
+          <div className="mt-8 grid gap-10 bg-background-alt p-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
+            {services.items.map((service, index) => {
+              const Icon = SERVICE_ICONS[index] ?? PencilRuler;
+              return (
+                <div key={service.title}>
+                  <Icon
+                    className="h-7 w-7 text-headline"
+                    strokeWidth={1.2}
+                    aria-hidden="true"
+                  />
+                  <h3 className="mt-5 font-serif text-xl leading-snug text-headline">
+                    {service.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-body">
+                    {service.description}
+                  </p>
+                  <Link
+                    href={`/${locale}/studio`}
+                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+                  >
+                    {services.cta}
+                    <ArrowRight
+                      className="h-4 w-4"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -188,11 +224,27 @@ export default async function HomePage({
               {featuredProject.eyebrow}
             </p>
             <div className="flex items-center gap-3 text-headline">
-              <button type="button" aria-label="Previous featured project">
-                <ArrowIcon direction="left" />
+              <button
+                type="button"
+                aria-label="Previous featured project"
+                className="hover:cursor-pointer"
+              >
+                <ChevronLeft
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
-              <button type="button" aria-label="Next featured project">
-                <ArrowIcon />
+              <button
+                type="button"
+                aria-label="Next featured project"
+                className="hover:cursor-pointer"
+              >
+                <ChevronRight
+                  className="h-4 w-4"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>
@@ -214,7 +266,11 @@ export default async function HomePage({
             className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
           >
             {featuredProject.cta}
-            <ArrowIcon />
+            <ArrowRight
+              className="h-4 w-4"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
           </Link>
         </div>
       </section>
@@ -232,7 +288,11 @@ export default async function HomePage({
               className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
             >
               {projects.cta}
-              <ArrowIcon />
+              <ArrowRight
+                className="h-4 w-4"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
             </Link>
           </div>
 
@@ -291,7 +351,11 @@ export default async function HomePage({
               className="mt-10 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
             >
               {approach.cta}
-              <ArrowIcon />
+              <ArrowRight
+                className="h-4 w-4"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
             </Link>
           </div>
         </div>
@@ -310,7 +374,11 @@ export default async function HomePage({
               className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
             >
               {journal.cta}
-              <ArrowIcon />
+              <ArrowRight
+                className="h-4 w-4"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
             </Link>
           </div>
 
@@ -330,54 +398,5 @@ export default async function HomePage({
         </div>
       </section>
     </>
-  );
-}
-
-function ArrowIcon({ direction = "right" }: { direction?: "left" | "right" }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-      className={direction === "left" ? "rotate-180" : ""}
-    >
-      <path
-        d="M3 8h10M9 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ServiceIcon() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 28 28"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="3"
-        y="3"
-        width="22"
-        height="22"
-        rx="4"
-        stroke="#33271F"
-        strokeWidth="1.2"
-      />
-      <path
-        d="M8 14h12M14 8v12"
-        stroke="#33271F"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
