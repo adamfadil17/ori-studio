@@ -98,11 +98,6 @@ enum PositionLevel {
   ALL_LEVELS
 }
 
-enum AdminRole {
-  SUPER_ADMIN
-  EDITOR
-}
-
 // ------------------------------------------------------------
 // PROJECT
 // ------------------------------------------------------------
@@ -297,21 +292,18 @@ model OpenPosition {
 }
 
 // ------------------------------------------------------------
-// ADMIN AUTH
+// USER (Auth)
 // ------------------------------------------------------------
 
-model AdminUser {
-  id           String    @id @default(uuid())
-  name         String
-  email        String    @unique
-  passwordHash String
-  role         AdminRole @default(EDITOR)
-  lastLoginAt  DateTime?
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       String   @default("user") // admin | editor | user
+  created_at DateTime @default(now())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("admin_users")
+  @@map("users")
 }
 
 

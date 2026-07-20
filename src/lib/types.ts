@@ -68,8 +68,6 @@ export type PositionLevel = "ENTRY" | "MID_SENIOR" | "SENIOR" | "ALL_LEVELS";
 
 export type ProjectImageType = "HERO" | "GALLERY";
 
-export type AdminRole = "SUPER_ADMIN" | "EDITOR";
-
 // ------------------------------------------------------------
 // PROJECT
 // ------------------------------------------------------------
@@ -271,4 +269,30 @@ export interface OpenPosition {
   is_active: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+// ------------------------------------------------------------
+// USER (Auth)
+// ------------------------------------------------------------
+// Catatan: PaginationMeta, ApiResponse tinggal di lib/api-response.ts,
+// dan JwtPayload tinggal di lib/auth.ts — tidak didefinisikan ulang di
+// sini supaya tidak ada dua sumber kebenaran untuk tipe yang sama.
+
+export type Role = "admin" | "editor" | "user";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  created_at: Date;
+}
+
+/** Shape User yang aman dikirim ke client (password sudah tidak ada dari awal di User). */
+export type PublicUser = Omit<User, never>;
+
+export interface AuthResponse {
+  user: PublicUser;
+  token: string;
+  expiresIn: string;
 }

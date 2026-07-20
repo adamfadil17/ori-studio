@@ -56,7 +56,7 @@ export default function FaqAccordion({
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
                 >
                   <span className="font-serif text-base text-headline md:text-lg">
                     {item.question}

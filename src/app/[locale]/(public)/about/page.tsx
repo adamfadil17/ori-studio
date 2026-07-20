@@ -23,6 +23,8 @@ export default async function AboutPage({
   const { stats } = dict.home.approach;
   const { journal } = dict.home;
 
+  const ABOUT_JOURNAL_ARTICLES = JOURNAL_ARTICLES.slice(0, 4);
+
   return (
     <>
       {/* ---------- HERO ---------- */}
@@ -221,7 +223,7 @@ export default async function AboutPage({
           </div>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {JOURNAL_ARTICLES.map((article) => (
+            {ABOUT_JOURNAL_ARTICLES.map((article) => (
               <ArticleCard
                 key={article.slug}
                 locale={locale as Locale}
