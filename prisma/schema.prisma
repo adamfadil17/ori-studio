@@ -61,7 +61,10 @@ enum BudgetRange {
   PREFER_NOT_TO_SAY
 }
 
-enum InquiryStatus {
+// Shared triage status for every contact submission
+// (inquiry / partnership / career). Renamed from InquiryStatus
+// because all three contact models reuse it.
+enum SubmissionStatus {
   NEW
   REVIEWED
   QUOTED
@@ -103,22 +106,23 @@ enum PositionLevel {
 // ------------------------------------------------------------
 
 model Project {
-  id                String   @id @default(uuid())
-  featured          Boolean  @default(false)
+  id                String          @id @default(uuid())
+  featured          Boolean         @default(false)
+  publishedAt       DateTime? // null = draft; set = published (sitemap/public)
   category          ProjectCategory
   services          ServiceType[]
-  location          String   // "City, Province, Country"
+  location          String // "City, Province, Country"
   yearStart         Int
   yearEnd           Int?
   client            String?
-  siteArea          Float?   // m2
-  buildingArea      Float?   // m2
-  status            ProjectStatus @default(COMPLETED)
-  architect         String   @default("ORI Studio")
+  siteArea          Float? // m2
+  buildingArea      Float? // m2
+  status            ProjectStatus   @default(COMPLETED)
+  architect         String          @default("ORI Studio")
   generalContractor String?
 
-  translations      ProjectTranslation[]
-  images            ProjectImage[]
+  translations ProjectTranslation[]
+  images       ProjectImage[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -127,13 +131,13 @@ model Project {
 }
 
 model ProjectTranslation {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   projectId   String
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   locale      Locale
   name        String
   slug        String
-  description String?  @db.Text
+  description String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,13 +149,13 @@ model ProjectTranslation {
 }
 
 model ProjectImage {
-  id        String   @id @default(uuid())
+  id        String           @id @default(uuid())
   projectId String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
   url       String
   alt       String?
   type      ProjectImageType
-  order     Int      @default(0)
+  order     Int              @default(0)
 
   createdAt DateTime @default(now())
 
@@ -168,14 +172,14 @@ enum ProjectImageType {
 // ------------------------------------------------------------
 
 model Article {
-  id            String   @id @default(uuid())
-  featured      Boolean  @default(false)
-  publishedAt   DateTime?
-  category      String
-  image         String
-  imageAlt      String?
+  id          String    @id @default(uuid())
+  featured    Boolean   @default(false)
+  publishedAt DateTime?
+  category    String
+  image       String
+  imageAlt    String?
 
-  translations  ArticleTranslation[]
+  translations ArticleTranslation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -184,14 +188,14 @@ model Article {
 }
 
 model ArticleTranslation {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   articleId String
-  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
   locale    Locale
   title     String
   slug      String
-  excerpt   String?  @db.Text
-  content   Json     // Tiptap JSON output
+  excerpt   String? @db.Text
+  content   Json // Tiptap JSON output
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -207,18 +211,18 @@ model ArticleTranslation {
 // ------------------------------------------------------------
 
 model ContactInquiry {
-  id                String        @id @default(uuid())
+  id                String             @id @default(uuid())
   fullName          String
   email             String
-  phoneNumber       String
-  status            InquiryStatus @default(NEW)
+  phoneNumber       String?
+  status            SubmissionStatus   @default(NEW)
   serviceType       ServiceType
   serviceTypeOther  String?
   projectType       ProjectTypeInquiry
   projectTypeOther  String?
   estimatedLocation String?
   estimatedBudget   BudgetRange
-  vision            String        @db.Text
+  vision            String             @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -231,15 +235,15 @@ model ContactInquiry {
 // ------------------------------------------------------------
 
 model ContactPartnership {
-  id              String          @id @default(uuid())
-  companyName     String
-  role            String
-  email           String
-  phoneNumber     String
-  partnershipType PartnershipType
+  id               String           @id @default(uuid())
+  companyName      String
+  role             String?
+  email            String
+  phoneNumber      String?
+  partnershipType  PartnershipType
   partnershipOther String?
-  vision          String          @db.Text
-  status          InquiryStatus   @default(NEW)
+  vision           String           @db.Text
+  status           SubmissionStatus @default(NEW)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -252,18 +256,18 @@ model ContactPartnership {
 // ------------------------------------------------------------
 
 model ContactCareer {
-  id               String          @id @default(uuid())
-  fullName         String
-  email            String
-  phoneNumber      String
-  openPositionId   String?
-  openPosition     OpenPosition?   @relation(fields: [openPositionId], references: [id], onDelete: SetNull)
-  positionOfInterest String        // fallback free text if position removed later
-  portfolioUrl     String?
-  linkedinUrl      String?
-  yearsOfExperience ExperienceRange
-  cvUrl            String          // uploaded PDF, max 5MB (validated at API layer)
-  status            InquiryStatus  @default(NEW)
+  id                 String           @id @default(uuid())
+  fullName           String
+  email              String
+  phoneNumber        String?
+  openPositionId     String?
+  openPosition       OpenPosition?    @relation(fields: [openPositionId], references: [id], onDelete: SetNull)
+  positionOfInterest String // fallback free text if position removed later
+  portfolioUrl       String // required — the form marks it mandatory
+  linkedinUrl        String?
+  yearsOfExperience  ExperienceRange
+  cvUrl              String // uploaded PDF, max 5MB (validated at API layer)
+  status             SubmissionStatus @default(NEW)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -276,12 +280,12 @@ model ContactCareer {
 // ------------------------------------------------------------
 
 model OpenPosition {
-  id          String          @id @default(uuid())
+  id          String         @id @default(uuid())
   title       String
   type        EmploymentType
   level       PositionLevel
-  description String          @db.Text
-  isActive    Boolean         @default(true)
+  description String         @db.Text
+  isActive    Boolean        @default(true)
 
   careerApplications ContactCareer[]
 
@@ -296,14 +300,19 @@ model OpenPosition {
 // ------------------------------------------------------------
 
 model User {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  password   String
-  role       String   @default("user") // admin | editor | user
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     String @default("user") // admin | editor | user
+
+  /// When the password last changed, truncated to the second.
+  /// Sessions are stateless JWTs, so this is what revokes them: any token
+  /// issued before this instant is rejected. Null means "never changed since
+  /// the account was created", so every existing token stays valid.
+  passwordChangedAt DateTime?
+
   created_at DateTime @default(now())
 
   @@map("users")
 }
-
-

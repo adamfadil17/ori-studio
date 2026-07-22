@@ -5,8 +5,8 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import { JOURNAL_ARTICLES } from "@/lib/data/article-data";
-import ArticleCard from "@/components/cards/article-card";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import ArticleCard from "@/components/public/cards/article-card";
+import CtaBanner from "@/components/public/layout/cta-banner";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -73,7 +73,7 @@ export default async function AboutPage({
             </p>
             <Link
               href={`/${locale}/philosophy`}
-              className="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+              className="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
             >
               {story.cta}
               <ArrowRight
@@ -211,7 +211,7 @@ export default async function AboutPage({
             </p>
             <Link
               href={`/${locale}/journal`}
-              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
             >
               {journal.cta}
               <ArrowRight

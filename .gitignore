@@ -24,6 +24,11 @@
 .DS_Store
 *.pem
 
+# uploaded images written by the local storage driver (public assets)
+/public/uploads
+# applicant CVs — personal data, served only via the authenticated download route
+/private-uploads
+
 # debug
 npm-debug.log*
 yarn-debug.log*

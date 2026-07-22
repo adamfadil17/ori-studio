@@ -3,10 +3,10 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import CtaBanner from "@/components/public/layout/cta-banner";
 import ProjectsList, {
   ProjectListItem,
-} from "@/components/projects/projects-list";
+} from "@/components/public/projects/projects-list";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
@@ -183,7 +183,11 @@ export default async function ProjectsPage({
               {featured.eyebrow}
             </p>
             <div className="flex items-center gap-3 text-headline">
-              <button type="button" aria-label="Previous featured project" className="hover:cursor-pointer">
+              <button
+                type="button"
+                aria-label="Previous featured project"
+                className="text-eyebrow hover:cursor-pointer"
+              >
                 <ChevronLeft
                   className="h-4 w-4"
                   strokeWidth={1.5}
@@ -193,7 +197,7 @@ export default async function ProjectsPage({
               <button
                 type="button"
                 aria-label="Next featured project"
-                className="hover:cursor-pointer"
+                className="text-eyebrow hover:cursor-pointer"
               >
                 <ChevronRight
                   className="h-4 w-4"
@@ -222,7 +226,7 @@ export default async function ProjectsPage({
 
           <Link
             href={`/${locale}/projects/uluwatu-clifftop-residence`}
-            className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+            className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
           >
             {featured.cta}
             <ArrowIcon />

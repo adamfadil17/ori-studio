@@ -4,10 +4,10 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import CtaBanner from "@/components/public/layout/cta-banner";
 import ArticleList, {
   type ArticleListItem,
-} from "@/components/journal/article-list";
+} from "@/components/public/journal/article-list";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 

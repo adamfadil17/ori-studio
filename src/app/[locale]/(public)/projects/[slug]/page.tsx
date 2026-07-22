@@ -2,11 +2,11 @@ import Image from "next/image";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import ProjectCardView from "@/components/projects/project-card-view";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import ProjectCardView from "@/components/public/projects/project-card-view";
+import CtaBanner from "@/components/public/layout/cta-banner";
 import { getProjectDetail, getRelatedProjects } from "@/lib/data/project-data";
-import GalleryMosaic from "@/components/projects/gallery-mossaic";
-import SetHeaderMode from "@/components/layout/set-header-mode";
+import GalleryMosaic from "@/components/public/projects/gallery-mossaic";
+import SetHeaderMode from "@/components/public/layout/set-header-mode";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 

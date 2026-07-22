@@ -13,8 +13,8 @@ import {
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import ProjectCard from "@/components/cards/project-card";
-import ArticleCard from "@/components/cards/article-card";
+import ProjectCard from "@/components/public/cards/project-card";
+import ArticleCard from "@/components/public/cards/article-card";
 import { JOURNAL_ARTICLES } from "@/lib/data/article-data";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
@@ -49,7 +49,6 @@ const FEATURED_PROJECTS = [
     yearLabel: "2025",
   },
 ] as const;
-
 
 export default async function HomePage({
   params,
@@ -121,7 +120,7 @@ export default async function HomePage({
               <p className="text-sm leading-relaxed text-body">{about.body}</p>
               <Link
                 href={`/${locale}/philosophy`}
-                className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+                className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
               >
                 {about.cta}
                 <ArrowRight
@@ -170,7 +169,7 @@ export default async function HomePage({
                   </p>
                   <Link
                     href={`/${locale}/studio`}
-                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
                   >
                     {services.cta}
                     <ArrowRight
@@ -206,7 +205,7 @@ export default async function HomePage({
               <button
                 type="button"
                 aria-label="Previous featured project"
-                className="hover:cursor-pointer"
+                className="text-eyebrow hover:cursor-pointer"
               >
                 <ChevronLeft
                   className="h-4 w-4"
@@ -217,7 +216,7 @@ export default async function HomePage({
               <button
                 type="button"
                 aria-label="Next featured project"
-                className="hover:cursor-pointer"
+                className="text-eyebrow hover:cursor-pointer"
               >
                 <ChevronRight
                   className="h-4 w-4"
@@ -242,7 +241,7 @@ export default async function HomePage({
 
           <Link
             href={`/${locale}/projects/uluwatu-clifftop-residence`}
-            className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+            className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
           >
             {featuredProject.cta}
             <ArrowRight
@@ -264,7 +263,7 @@ export default async function HomePage({
             </p>
             <Link
               href={`/${locale}/projects`}
-              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
             >
               {projects.cta}
               <ArrowRight
@@ -327,7 +326,7 @@ export default async function HomePage({
 
             <Link
               href={`/${locale}/philosophy`}
-              className="mt-10 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+              className="mt-10 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
             >
               {approach.cta}
               <ArrowRight
@@ -350,7 +349,7 @@ export default async function HomePage({
             </p>
             <Link
               href={`/${locale}/journal`}
-              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-headline hover:opacity-70"
+              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
             >
               {journal.cta}
               <ArrowRight

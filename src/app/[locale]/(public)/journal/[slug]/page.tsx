@@ -3,10 +3,10 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import CtaBanner from "@/components/public/layout/cta-banner";
 import { getArticleDetail } from "@/lib/data/article-data";
-import SetHeaderMode from "@/components/layout/set-header-mode";
-import TiptapContent from "@/components/tiptap/tiptap-content";
+import SetHeaderMode from "@/components/public/layout/set-header-mode";
+import TiptapContent from "@/components/public/journal/tiptap-content";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -84,7 +84,7 @@ export default async function ArticleDetailPage({
                 </p>
                 <Link
                   href={`/${locale}/contact`}
-                  className="mt-4 inline-flex w-full items-center justify-center bg-headline px-6 py-3 text-xs tracking-widest uppercase text-background-main hover:opacity-90"
+                  className="mt-4 inline-flex w-full items-center justify-center bg-eyebrow px-6 py-3 text-xs tracking-widest uppercase text-background-main hover:opacity-90"
                 >
                   {cta.button}
                 </Link>

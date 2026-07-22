@@ -3,9 +3,9 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import DesignProcess from "@/components/studio/design-process";
-import CtaBanner from "@/components/cta-banner/cta-banner";
-import ServicesAccordion from "@/components/studio/services-accordion";
+import DesignProcess from "@/components/public/studio/design-process";
+import CtaBanner from "@/components/public/layout/cta-banner";
+import ServicesAccordion from "@/components/public/studio/services-accordion";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 

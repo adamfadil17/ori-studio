@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import CtaBanner from "@/components/public/layout/cta-banner";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 

@@ -38,12 +38,20 @@ export type BudgetRange =
   | "ABOVE_150K"
   | "PREFER_NOT_TO_SAY";
 
-export type InquiryStatus =
+/** Shared triage status for every contact submission (mirrors Prisma `SubmissionStatus`). */
+export type SubmissionStatus =
   | "NEW"
   | "REVIEWED"
   | "QUOTED"
   | "BOOKED"
   | "ARCHIVED";
+
+/**
+ * Discriminator for the three contact channels. Not a Prisma enum — each form
+ * has its own table, so the type is implied by the table. It exists here to
+ * unify the three submissions in the admin inbox (list, filter, badge counts).
+ */
+export type SubmissionType = "PROJECT_INQUIRY" | "PARTNERSHIP" | "CAREER";
 
 export type PartnershipType =
   | "DEVELOPER_COLLABORATION"
@@ -186,7 +194,7 @@ export interface TiptapNode {
 export interface ContactInquiryInput {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   serviceType: ServiceType;
   serviceTypeOther?: string;
   projectType: ProjectTypeInquiry;
@@ -198,7 +206,8 @@ export interface ContactInquiryInput {
 
 export interface ContactInquiry extends ContactInquiryInput {
   id: string;
-  status: InquiryStatus;
+  type: "PROJECT_INQUIRY";
+  status: SubmissionStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -209,9 +218,9 @@ export interface ContactInquiry extends ContactInquiryInput {
 
 export interface ContactPartnershipInput {
   companyName: string;
-  role: string;
+  role?: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   partnershipType: PartnershipType;
   partnershipOther?: string;
   vision: string;
@@ -219,7 +228,8 @@ export interface ContactPartnershipInput {
 
 export interface ContactPartnership extends ContactPartnershipInput {
   id: string;
-  status: InquiryStatus;
+  type: "PARTNERSHIP";
+  status: SubmissionStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -231,29 +241,84 @@ export interface ContactPartnership extends ContactPartnershipInput {
 export interface ContactCareerInput {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   openPositionId?: string;
   positionOfInterest: string;
-  portfolioUrl?: string;
+  portfolioUrl: string; // required — the form marks it mandatory
   linkedinUrl?: string;
   yearsOfExperience: ExperienceRange;
-  cvFile: File; // client-side, validated: application/pdf, max 5MB
+  cvFile: File; // client-side, validated: application/pdf, max 5MB → uploaded to cvUrl
 }
 
 export interface ContactCareer {
   id: string;
+  type: "CAREER";
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string | null;
   openPositionId?: string | null;
   positionOfInterest: string;
-  portfolioUrl?: string | null;
+  portfolioUrl: string;
   linkedinUrl?: string | null;
   yearsOfExperience: ExperienceRange;
   cvUrl: string;
-  status: InquiryStatus;
+  status: SubmissionStatus;
   createdAt: string;
   updatedAt: string;
+}
+
+// ------------------------------------------------------------
+// SUBMISSIONS (unified view over the three contact channels)
+// ------------------------------------------------------------
+// The three contact forms stay in their own tables for data integrity.
+// These types unify them for the admin "Submissions" inbox: one list to
+// browse/filter/paginate, discriminated union for full detail, and counts
+// for dashboard badges. The API route stamps `type` when reading each table.
+
+/**
+ * Full detail of a single submission. Discriminated on `type` — narrow it and
+ * TypeScript exposes exactly the fields that channel has:
+ *
+ *   if (s.type === "CAREER") s.cvUrl // ✅  s.vision // ✗ compile error
+ */
+export type Submission =
+  | ContactInquiry
+  | ContactPartnership
+  | ContactCareer;
+
+/**
+ * Normalized row for the inbox list view. Every channel is projected onto the
+ * same shape so one table can render all three. `subject` is a short,
+ * human-readable summary of what the submission is about:
+ *   - inquiry     → service type (e.g. "Architecture Design")
+ *   - partnership → partnership type (e.g. "Developer Collaboration")
+ *   - career      → position of interest (e.g. "Junior Architect")
+ */
+export interface SubmissionListItem {
+  id: string;
+  type: SubmissionType;
+  status: SubmissionStatus;
+  name: string; // fullName (inquiry/career) or companyName (partnership)
+  email: string;
+  phoneNumber?: string | null;
+  subject: string;
+  createdAt: string;
+}
+
+/** Aggregate counts for the admin dashboard badges/filters. */
+export interface SubmissionCounts {
+  total: number;
+  byType: Record<SubmissionType, number>;
+  byStatus: Record<SubmissionStatus, number>;
+}
+
+/** Query params accepted by the unified submissions list endpoint. */
+export interface SubmissionListQuery {
+  type?: SubmissionType;
+  status?: SubmissionStatus;
+  search?: string;
+  page?: number;
+  limit?: number;
 }
 
 // ------------------------------------------------------------
@@ -265,8 +330,8 @@ export interface OpenPosition {
   title: string;
   type: EmploymentType;
   level: PositionLevel;
-  desc: string;
-  is_active: boolean;
+  description: string;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -291,8 +356,11 @@ export interface User {
 /** Shape User yang aman dikirim ke client (password sudah tidak ada dari awal di User). */
 export type PublicUser = Omit<User, never>;
 
+/**
+ * Body returned by login/register. The JWT is deliberately NOT here — it is
+ * delivered only as an httpOnly cookie, so client JS can never read it.
+ */
 export interface AuthResponse {
   user: PublicUser;
-  token: string;
   expiresIn: string;
 }

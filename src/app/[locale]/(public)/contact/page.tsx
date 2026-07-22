@@ -1,8 +1,8 @@
 import Image from "next/image";
-import CtaBanner from "@/components/cta-banner/cta-banner";
+import CtaBanner from "@/components/public/layout/cta-banner";
 import ContactExperience, {
   type ContactTab,
-} from "@/components/contact/contact-experience";
+} from "@/components/public/contact/contact-experience";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
