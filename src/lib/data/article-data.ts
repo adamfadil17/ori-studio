@@ -416,7 +416,7 @@ const EXCERPTS: Record<string, string> = {
     "Designing for tropical climates goes beyond large openings and natural ventilation. Explore how light, shade, materiality, and landscape work together to create comfortable and timeless homes.",
 };
 
-const ARTICLE_DETAILS: Record<string, ArticleDetail> = Object.fromEntries(
+export const ARTICLE_DETAILS: Record<string, ArticleDetail> = Object.fromEntries(
   [
     ...JOURNAL_ARTICLES,
     {

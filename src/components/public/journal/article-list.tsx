@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LayoutGrid, List as ListIconLucide } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import Dropdown from "@/components/ui/dropdown";
@@ -54,13 +54,30 @@ export default function ArticleList({
     currentPage * pageSize,
   );
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const pendingScroll = useRef(false);
+
+  // Scroll AFTER the new page renders, not in the click handler. A shorter page
+  // shrinks the document, and doing it too early lets the browser's scroll
+  // clamp cancel the animation and strand the reader at the bottom.
+  useEffect(() => {
+    if (!pendingScroll.current) return;
+    pendingScroll.current = false;
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [currentPage]);
+
   function handleCategoryChange(value: string) {
     setCategory(value);
     setPage(1);
   }
 
+  function handlePageChange(next: number) {
+    pendingScroll.current = true;
+    setPage(next);
+  }
+
   return (
-    <div>
+    <div ref={topRef} className="scroll-mt-28">
       {/* Filter bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-headline/10 pb-6">
         <Dropdown
@@ -150,7 +167,7 @@ export default function ArticleList({
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setPage}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

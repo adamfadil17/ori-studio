@@ -53,7 +53,7 @@ function SearchField({
           onChange={(e) => setTerm(e.target.value)}
           placeholder={placeholder}
           aria-label={ariaLabel}
-          className="w-full border border-eyebrow/50 bg-transparent py-2 pl-3.5 pr-9 text-sm text-headline placeholder:text-body/50 focus:border-eyebrow focus-visible:outline-none [&::-webkit-search-cancel-button]:appearance-none"
+          className="w-full border border-eyebrow/50 bg-transparent py-2 pl-3.5 pr-9 text-sm text-eyebrow placeholder:text-body/50 focus:border-eyebrow focus-visible:outline-none [&::-webkit-search-cancel-button]:appearance-none"
         />
         {term && (
           <button
@@ -158,7 +158,7 @@ export default function FilterBar({
             key={filter.name}
             className="inline-flex items-center gap-2 text-xs tracking-widest uppercase"
           >
-            <span className="text-body">{filter.label}</span>
+            <span className="text-eyebrow">{filter.label}</span>
             <Dropdown
               ariaLabel={filter.label}
               value={filter.value}

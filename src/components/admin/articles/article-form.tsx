@@ -4,10 +4,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
+import { toast, toastError } from "@/lib/toast";
+
+import LookupSelect from "@/components/admin/ui/lookup-select";
+import type { LookupItem } from "@/lib/lookups";
 import TiptapEditor, {
   EMPTY_DOC,
   isEmptyDoc,
@@ -42,7 +46,7 @@ export interface ArticleFormInitial {
   id: string;
   featured: boolean;
   published: boolean;
-  category: string;
+  categoryId: string;
   image: string;
   imageAlt: string | null;
   translations: {
@@ -56,9 +60,12 @@ export interface ArticleFormInitial {
 
 export default function ArticleForm({
   initial,
+  categories: initialCategories,
 }: {
   initial?: ArticleFormInitial;
+  categories: LookupItem[];
 }) {
+  const [categories, setCategories] = useState(initialCategories);
   const router = useRouter();
   const isEdit = Boolean(initial);
 
@@ -84,10 +91,10 @@ export default function ArticleForm({
 
   const [coverError, setCoverError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
+    control,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
@@ -96,7 +103,7 @@ export default function ArticleForm({
     defaultValues: {
       featured: initial?.featured ?? false,
       published: initial?.published ?? false,
-      category: initial?.category ?? "",
+      categoryId: initial?.categoryId ?? "",
       en: {
         title: en?.title ?? "",
         slug: en?.slug ?? "",
@@ -109,6 +116,9 @@ export default function ArticleForm({
       },
     },
   });
+
+  // Controlled widget: RHF stays the source of truth via setValue on change.
+  const categoryId = useWatch({ control, name: "categoryId" }) ?? "";
 
   function pickCover(fileList: FileList | null) {
     const file = fileList?.[0];
@@ -139,7 +149,6 @@ export default function ArticleForm({
   }
 
   async function onSubmit(values: ArticleFormValues) {
-    setFormError(null);
     setCoverError(null);
     setContentError(null);
 
@@ -194,7 +203,7 @@ export default function ArticleForm({
       const payload = {
         featured: values.featured,
         published: values.published,
-        category: values.category,
+        categoryId: values.categoryId,
         image,
         imageAlt: cover.alt.trim() || null,
         translations,
@@ -206,20 +215,11 @@ export default function ArticleForm({
         await axios.post("/api/articles", payload);
       }
 
+      toast.success(initial ? "Article updated" : "Article created");
       router.push("/dashboard/journal");
       router.refresh();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data;
-        const fieldErrors = data?.errors
-          ? Object.entries(data.errors)
-              .map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
-              .join(" · ")
-          : null;
-        setFormError(fieldErrors ?? data?.error ?? "Could not save the article");
-      } else {
-        setFormError("Could not save the article");
-      }
+      toastError(err, "Could not save the article");
     }
   }
 
@@ -229,12 +229,15 @@ export default function ArticleForm({
       <section className="space-y-6">
         <FieldSectionLabel>Details</FieldSectionLabel>
 
-        <TextField
+        <LookupSelect
+          kind="article-categories"
           label="Category"
           required
-          placeholder="e.g. Design Notes"
-          error={errors.category?.message}
-          {...register("category")}
+          value={categoryId}
+          onChange={(v) => setValue("categoryId", v, { shouldValidate: true })}
+          options={categories}
+          onOptionsChange={setCategories}
+          error={errors.categoryId?.message}
         />
 
         <div>
@@ -373,11 +376,6 @@ export default function ArticleForm({
         <TiptapEditor label="Isi" value={idContent} onChange={setIdContent} />
       </section>
 
-      {formError && (
-        <p role="alert" className="text-sm text-red-700">
-          {formError}
-        </p>
-      )}
 
       <div className="flex items-center gap-4">
         <button

@@ -4,11 +4,15 @@ import { ArrowRight } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
-import { JOURNAL_ARTICLES } from "@/lib/data/article-data";
 import ArticleCard from "@/components/public/cards/article-card";
 import CtaBanner from "@/components/public/layout/cta-banner";
+import { listPublishedArticles } from "@/lib/articles";
+import type { Locale as DbLocale } from "@/lib/types";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// Journal preview (4) dibaca langsung dari database.
+export const dynamic = "force-dynamic";
 
 export default async function AboutPage({
   params,
@@ -23,7 +27,9 @@ export default async function AboutPage({
   const { stats } = dict.home.approach;
   const { journal } = dict.home;
 
-  const ABOUT_JOURNAL_ARTICLES = JOURNAL_ARTICLES.slice(0, 4);
+  // Route locale is lowercase ("en"); the Prisma enum is uppercase ("EN").
+  const articles = await listPublishedArticles(locale.toUpperCase() as DbLocale);
+  const journalArticles = articles.slice(0, 4);
 
   return (
     <>
@@ -223,7 +229,7 @@ export default async function AboutPage({
           </div>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {ABOUT_JOURNAL_ARTICLES.map((article) => (
+            {journalArticles.map((article) => (
               <ArticleCard
                 key={article.slug}
                 locale={locale as Locale}
@@ -231,7 +237,7 @@ export default async function AboutPage({
                 title={article.title}
                 category={article.category}
                 publishedLabel={article.publishedLabel}
-                imageUrl={PLACEHOLDER}
+                imageUrl={article.imageUrl}
               />
             ))}
           </div>

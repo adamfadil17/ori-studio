@@ -38,7 +38,45 @@ function validatePassword(password: string): string | null {
   return null;
 }
 
+/**
+ * The sectors that used to be the `ProjectCategory` enum. They are rows now, so
+ * a fresh database would otherwise start with an empty dropdown and no way to
+ * create a project until someone invented a category first.
+ *
+ * Only project categories are seeded: article categories and locations were
+ * free text before, with no canonical list worth inventing here.
+ */
+const DEFAULT_PROJECT_CATEGORIES = [
+  "Residential",
+  "Hospitality",
+  "Commercial",
+  "Landscape",
+  "Interior",
+];
+
+async function seedProjectCategories() {
+  let created = 0;
+  for (const name of DEFAULT_PROJECT_CATEGORIES) {
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    // Skips anything already present, so a rename made in the dashboard is
+    // never undone by a re-run.
+    const existing = await prisma.projectCategory.findFirst({
+      where: { OR: [{ name }, { slug }] },
+    });
+    if (existing) continue;
+    await prisma.projectCategory.create({ data: { name, slug } });
+    created += 1;
+  }
+  console.log(
+    created > 0
+      ? `✓ Added ${created} project ${created === 1 ? "category" : "categories"}`
+      : "✓ Project categories already present",
+  );
+}
+
 async function main() {
+  await seedProjectCategories();
+
   const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
   const name = process.env.ADMIN_NAME?.trim() || "ORI Studio Admin";

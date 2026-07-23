@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+
+import { toast, toastError } from "@/lib/toast";
 
 import {
   FieldSectionLabel,
@@ -48,7 +49,6 @@ export default function UserForm({
   const isEdit = Boolean(initial);
   const isSelf = initial?.id === currentUserId;
   const roleLocked = isSelf || isLastAdmin;
-  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -70,7 +70,6 @@ export default function UserForm({
   const roleHint = ROLES.find((r) => r.value === selectedRole)?.hint;
 
   async function onSubmit(values: UserFormValues) {
-    setFormError(null);
     try {
       if (initial) {
         // A blank password field means "leave it alone" — sending "" would be
@@ -85,20 +84,11 @@ export default function UserForm({
       } else {
         await axios.post("/api/users", values);
       }
+      toast.success(initial ? "Account updated" : "Account created");
       router.push("/dashboard/users");
       router.refresh();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data;
-        const fieldErrors = data?.errors
-          ? Object.entries(data.errors)
-              .map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
-              .join(" · ")
-          : null;
-        setFormError(fieldErrors ?? data?.error ?? "Could not save the account");
-      } else {
-        setFormError("Could not save the account");
-      }
+      toastError(err, "Could not save the account");
     }
   }
 
@@ -191,12 +181,6 @@ export default function UserForm({
           </p>
         )}
       </section>
-
-      {formError && (
-        <p role="alert" className="text-sm text-red-700">
-          {formError}
-        </p>
-      )}
 
       <div className="flex items-center gap-4">
         <button

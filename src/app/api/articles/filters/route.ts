@@ -16,14 +16,19 @@ export async function GET(req: NextRequest) {
       requireRole(payload, "admin", "editor");
     }
 
-    const rows = await prisma.article.findMany({
-      where: includeUnpublished ? {} : { publishedAt: { not: null } },
-      select: { category: true },
-      distinct: ["category"],
-      orderBy: { category: "asc" },
+    // Only categories that actually have something to show: an empty filter
+    // option on the public journal would look broken.
+    const rows = await prisma.articleCategory.findMany({
+      where: {
+        articles: {
+          some: includeUnpublished ? {} : { publishedAt: { not: null } },
+        },
+      },
+      select: { id: true, name: true, slug: true },
+      orderBy: { name: "asc" },
     });
 
-    return ok({ categories: rows.map((r) => r.category) });
+    return ok({ categories: rows });
   } catch (error) {
     return handleError(error);
   }

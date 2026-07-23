@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
+
+import { toast, toastError } from "@/lib/toast";
 import {
   Briefcase,
   Inbox,
@@ -12,6 +14,7 @@ import {
   Menu,
   Newspaper,
   FolderKanban,
+  Tags,
   UserCog,
   Users,
   X,
@@ -32,6 +35,8 @@ const NAV: NavItem[] = [
   { href: "/dashboard/projects", label: "Projects", icon: FolderKanban },
   { href: "/dashboard/journal", label: "Journal", icon: Newspaper },
   { href: "/dashboard/positions", label: "Open Positions", icon: Briefcase },
+  // Categories and locations behind the project/article forms.
+  { href: "/dashboard/lists", label: "Lists", icon: Tags },
   { href: "/dashboard/submissions", label: "Submissions", icon: Inbox, roles: ["admin"] },
   { href: "/dashboard/users", label: "Users", icon: Users, roles: ["admin"] },
   // Every staff member manages their own password here — editors have no
@@ -75,9 +80,11 @@ export default function AdminShell({
     setSigningOut(true);
     try {
       await axios.post("/api/auth/logout");
+      toast.success("Signed out");
       router.replace("/login");
       router.refresh();
-    } finally {
+    } catch (err) {
+      toastError(err, "Could not sign out");
       setSigningOut(false);
     }
   }
@@ -94,8 +101,8 @@ export default function AdminShell({
             aria-current={active ? "page" : undefined}
             className={`flex items-center gap-3 px-4 py-2.5 text-xs tracking-widest uppercase transition-colors ${
               active
-                ? "bg-headline text-background-main"
-                : "text-body hover:bg-headline/5 hover:text-headline"
+                ? "bg-eyebrow text-background-main"
+                : "text-body hover:bg-eyebrow/5 hover:text-eyebrow"
             }`}
           >
             <Icon size={15} strokeWidth={1.5} />
@@ -145,7 +152,7 @@ export default function AdminShell({
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close navigation"
-                className="p-1 text-headline transition-opacity hover:opacity-60 hover:cursor-pointer"
+                className="p-1 text-eyebrow transition-opacity hover:opacity-60 hover:cursor-pointer"
               >
                 <X size={18} strokeWidth={1.5} />
               </button>
@@ -162,7 +169,7 @@ export default function AdminShell({
             type="button"
             onClick={() => setMobileOpen(true)}
             aria-label="Open navigation"
-            className="p-1 text-headline transition-opacity hover:opacity-60 hover:cursor-pointer lg:hidden"
+            className="p-1 text-eyebrow transition-opacity hover:opacity-60 hover:cursor-pointer lg:hidden"
           >
             <Menu size={20} strokeWidth={1.5} />
           </button>
@@ -178,7 +185,7 @@ export default function AdminShell({
               type="button"
               onClick={signOut}
               disabled={signingOut}
-              className="flex items-center gap-2 border border-headline/25 px-4 py-2 text-xs tracking-widest uppercase text-headline transition-opacity hover:opacity-70 hover:cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-2 border border-eyebrow/40 px-4 py-2 text-xs tracking-widest uppercase text-eyebrow transition-opacity hover:opacity-70 hover:cursor-pointer disabled:opacity-50"
             >
               <LogOut size={14} strokeWidth={1.5} />
               {signingOut ? "…" : "Sign out"}

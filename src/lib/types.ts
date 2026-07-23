@@ -7,13 +7,41 @@ export const DEFAULT_LOCALE: Locale = "EN";
 // ENUMS (mirror Prisma enums)
 // ------------------------------------------------------------
 
-export type ProjectCategory =
-  | "RESIDENTIAL"
-  | "HOSPITALITY"
-  | "COMMERCIAL"
-  | "LANDSCAPE"
-  | "INTERIOR"
-  | "OTHER";
+/**
+ * Studio-managed lookups. These used to be a `ProjectCategory` enum and plain
+ * strings; they are database rows now so the dashboard can add, rename and
+ * remove them without a deploy.
+ */
+export interface ProjectCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ArticleCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface Location {
+  id: string;
+  city: string;
+  province: string;
+  country: string;
+  slug: string;
+}
+
+/** "Canggu, Bali, Indonesia" — the single-line form used across the UI. */
+export function formatLocation(location: {
+  city: string;
+  province: string;
+  country: string;
+}): string {
+  return [location.city, location.province, location.country]
+    .filter(Boolean)
+    .join(", ");
+}
 
 export type ProjectStatus = "IN_PROGRESS" | "COMPLETED" | "ON_HOLD" | "PLANNED";
 
@@ -93,14 +121,17 @@ export interface ProjectTranslation {
   name: string;
   slug: string;
   description?: string | null;
+  philosophy?: string | null;
 }
 
 export interface Project {
   id: string;
   featured: boolean;
+  categoryId: string;
   category: ProjectCategory;
   services: ServiceType[];
-  location: string;
+  locationId: string;
+  location: Location;
   yearStart: number;
   yearEnd?: number | null;
   client?: string | null;
@@ -124,7 +155,9 @@ export interface ProjectView {
   featured: boolean;
   category: ProjectCategory;
   services: ServiceType[];
-  location: string;
+  location: Location;
+  /** "Canggu, Bali, Indonesia" — precomputed so cards don't re-join it. */
+  locationLabel: string;
   yearLabel: string; // e.g. "2023-2025"
   client?: string | null;
   siteArea?: number | null;
@@ -152,7 +185,8 @@ export interface Article {
   id: string;
   featured: boolean;
   publishedAt?: string | null;
-  category: string;
+  categoryId: string;
+  category: ArticleCategory;
   image: string;
   imageAlt?: string | null;
   translations: ArticleTranslation[];
@@ -168,7 +202,7 @@ export interface ArticleView {
   content: TiptapJSON;
   featured: boolean;
   publishedAt?: string | null;
-  category: string;
+  category: ArticleCategory;
   image: string;
   imageAlt?: string | null;
 }

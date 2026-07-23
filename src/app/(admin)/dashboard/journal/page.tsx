@@ -14,7 +14,7 @@ import { formatDate } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 export default async function JournalPage({
   searchParams,
@@ -95,7 +95,8 @@ export default async function JournalPage({
               name: "category",
               label: "Category",
               value: category ?? "",
-              options: options.categories.map((c) => ({ value: c, label: c })),
+              // Already {value: id, label: name} from the lookup table.
+              options: options.categories,
             },
             {
               name: "state",
@@ -129,7 +130,7 @@ export default async function JournalPage({
                   hasId: article.translations.some((t) => t.locale === "ID"),
                   featured: article.featured,
                   published: article.publishedAt !== null,
-                  category: article.category,
+                  category: article.category.name,
                   publishedLabel: formatDate(article.publishedAt),
                   image: article.image,
                   imageAlt: article.imageAlt ?? undefined,
@@ -173,7 +174,7 @@ export default async function JournalPage({
                         />
                       </span>
                     </td>
-                    <td className="px-3 py-3 text-body">{article.category}</td>
+                    <td className="px-3 py-3 text-body">{article.category.name}</td>
                     <td
                       className="px-3 py-3 text-body"
                       style={{ fontVariantNumeric: "tabular-nums" }}

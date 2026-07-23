@@ -10,7 +10,7 @@ import { listUsersForAdmin } from "@/lib/users";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 const ROLES = ["admin", "editor", "user"];
 
@@ -120,10 +120,10 @@ export default async function UsersPage({
                       <span
                         className={`inline-block px-2 py-1 text-[10px] tracking-widest uppercase ${
                           user.role === "admin"
-                            ? "bg-headline text-background-main"
+                            ? "bg-eyebrow text-background-main"
                             : user.role === "editor"
-                              ? "border border-headline/25 text-headline"
-                              : "border border-headline/15 text-body"
+                              ? "border border-eyebrow/40 text-eyebrow"
+                              : "border border-eyebrow/25 text-body"
                         }`}
                       >
                         {ROLE_LABELS[user.role] ?? user.role}

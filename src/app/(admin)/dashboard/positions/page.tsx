@@ -8,7 +8,7 @@ import { listPositionsForAdmin } from "@/lib/positions";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 const TYPES = ["FULL_TIME", "PART_TIME_FREELANCE", "CONTRACT", "INTERNSHIP"];
 const LEVELS = ["ENTRY", "MID_SENIOR", "SENIOR", "ALL_LEVELS"];
@@ -144,7 +144,7 @@ export default async function PositionsPage({
                     <span
                       className={`inline-block px-2 py-1 text-[10px] tracking-widest uppercase ${
                         position.isActive
-                          ? "bg-headline text-background-main"
+                          ? "bg-eyebrow text-background-main"
                           : "border border-headline/25 text-body"
                       }`}
                     >

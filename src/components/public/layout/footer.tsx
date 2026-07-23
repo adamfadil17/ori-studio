@@ -128,7 +128,7 @@ export default function Footer({ locale, dict }: FooterProps) {
         </div>
       </div>
 
-      <div className="bg-eyebrow px-6 py-6 text-center text-xs tracking-widest text-background-main md:px-10">
+      <div className="bg-eyebrow px-3 py-3 text-center text-xs tracking-widest text-background-main md:px-10">
         © {new Date().getFullYear()} ORI STUDIO ARCHITECT
       </div>
     </footer>

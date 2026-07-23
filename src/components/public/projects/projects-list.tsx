@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
-import { ProjectCategory, ServiceType } from "@/lib/types";
+import { ServiceType } from "@/lib/types";
 import Dropdown from "@/components/ui/dropdown";
 import Pagination from "@/components/ui/pagination";
 import ProjectCardView from "./project-card-view";
@@ -12,7 +12,9 @@ export interface ProjectListItem {
   name: string;
   location: string;
   yearLabel: string;
-  category: ProjectCategory;
+  // Category names come from the database now, so this is the label itself
+  // rather than an enum key needing a lookup table in the client.
+  category: string;
   services: ServiceType[];
   thumbnailUrl?: string;
 }
@@ -32,15 +34,6 @@ interface ProjectsExplorerProps {
   pageSize?: number;
 }
 
-const CATEGORY_LABELS: Record<ProjectCategory, string> = {
-  RESIDENTIAL: "Residential",
-  HOSPITALITY: "Hospitality",
-  COMMERCIAL: "Commercial",
-  LANDSCAPE: "Landscape",
-  INTERIOR: "Interior",
-  OTHER: "Other",
-};
-
 const SERVICE_LABELS: Record<ServiceType, string> = {
   ARCHITECTURE_DESIGN: "Architecture Design",
   INTERIOR_DESIGN: "Interior Design",
@@ -57,7 +50,7 @@ export default function ProjectsList({
 }: ProjectsExplorerProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [location, setLocation] = useState<string>("ALL");
-  const [sector, setSector] = useState<ProjectCategory | "ALL">("ALL");
+  const [sector, setSector] = useState<string>("ALL");
   const [service, setService] = useState<ServiceType | "ALL">("ALL");
   const [page, setPage] = useState(1);
 
@@ -67,7 +60,7 @@ export default function ProjectsList({
   );
   const sectorOptions = useMemo(
     () =>
-      Array.from(new Set(projects.map((p) => p.category))) as ProjectCategory[],
+      Array.from(new Set(projects.map((p) => p.category))).sort(),
     [projects],
   );
   const serviceOptions = useMemo(
@@ -92,13 +85,31 @@ export default function ProjectsList({
     currentPage * pageSize,
   );
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const pendingScroll = useRef(false);
+
+  // Scroll AFTER the new page has rendered, not in the click handler. A shorter
+  // page shrinks the document, and doing it too early lets the browser's scroll
+  // clamp cancel the animation and strand the reader at the bottom. `scroll-mt`
+  // on the anchor keeps it clear of the fixed header.
+  useEffect(() => {
+    if (!pendingScroll.current) return;
+    pendingScroll.current = false;
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [currentPage]);
+
   function handleFilterChange<T>(setter: (value: T) => void, value: T) {
     setter(value);
     setPage(1);
   }
 
+  function handlePageChange(next: number) {
+    pendingScroll.current = true;
+    setPage(next);
+  }
+
   return (
-    <div>
+    <div ref={topRef} className="scroll-mt-28">
       {/* Filter bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-headline/10 pb-6">
         <div className="flex flex-wrap items-center gap-6">
@@ -113,10 +124,7 @@ export default function ProjectsList({
             label={labels.sectors}
             value={sector}
             onChange={(v) => handleFilterChange(setSector, v)}
-            options={sectorOptions.map((c) => ({
-              value: c,
-              label: CATEGORY_LABELS[c],
-            }))}
+            options={sectorOptions.map((c) => ({ value: c, label: c }))}
             allLabel={labels.all}
           />
           <FilterSelect
@@ -200,7 +208,7 @@ export default function ProjectsList({
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setPage}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

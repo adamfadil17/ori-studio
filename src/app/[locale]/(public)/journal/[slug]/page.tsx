@@ -4,11 +4,15 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import CtaBanner from "@/components/public/layout/cta-banner";
-import { getArticleDetail } from "@/lib/data/article-data";
+import { getPublicArticleDetail } from "@/lib/articles";
+import type { Locale as DbLocale } from "@/lib/types";
 import SetHeaderMode from "@/components/public/layout/set-header-mode";
 import TiptapContent from "@/components/public/journal/tiptap-content";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// Read fresh per request so dashboard edits show at once, not a cached copy.
+export const dynamic = "force-dynamic";
 
 export default async function ArticleDetailPage({
   params,
@@ -18,7 +22,11 @@ export default async function ArticleDetailPage({
   const { locale, slug } = await params;
   if (!isValidLocale(locale)) notFound();
 
-  const article = getArticleDetail(slug);
+  // Route locale is lowercase ("en"); the Prisma enum is uppercase ("EN").
+  const article = await getPublicArticleDetail(
+    slug,
+    locale.toUpperCase() as DbLocale,
+  );
   if (!article) notFound();
 
   const dict = await getDictionary(locale as Locale);

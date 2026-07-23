@@ -8,6 +8,7 @@ export * from "./auth";
 export * from "./auth-guard";
 export * from "./session";
 export * from "./prisma";
+export * from "./lookups";
 export * from "./mailer";
 export * from "./storage";
 export * from "./rate-limit";

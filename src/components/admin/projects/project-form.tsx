@@ -4,9 +4,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+
+import { toast, toastError } from "@/lib/toast";
 
 import {
   FieldSectionLabel,
@@ -14,6 +16,8 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/ui/form-fields";
+import LookupSelect from "@/components/admin/ui/lookup-select";
+import type { LookupItem } from "@/lib/lookups";
 import { humanizeEnum } from "@/lib/format";
 import { toSlug } from "@/lib/slug";
 import {
@@ -31,14 +35,10 @@ import {
   type DraftImage,
 } from "@/lib/upload-client";
 import type {
-  ProjectCategory,
   ProjectStatus,
   ServiceType,
 } from "@/lib/types";
 
-const CATEGORIES: ProjectCategory[] = [
-  "RESIDENTIAL", "HOSPITALITY", "COMMERCIAL", "LANDSCAPE", "INTERIOR", "OTHER",
-];
 const STATUSES: ProjectStatus[] = [
   "IN_PROGRESS", "COMPLETED", "ON_HOLD", "PLANNED",
 ];
@@ -51,9 +51,9 @@ export interface ProjectFormInitial {
   id: string;
   featured: boolean;
   published: boolean;
-  category: ProjectCategory;
+  categoryId: string;
   services: ServiceType[];
-  location: string;
+  locationId: string;
   yearStart: number;
   yearEnd: number | null;
   client: string | null;
@@ -67,6 +67,7 @@ export interface ProjectFormInitial {
     name: string;
     slug: string;
     description: string | null;
+    philosophy: string | null;
   }[];
   images: {
     url: string;
@@ -94,9 +95,15 @@ function toDrafts(
 
 export default function ProjectForm({
   initial,
+  categories: initialCategories,
+  locations: initialLocations,
 }: {
   initial?: ProjectFormInitial;
+  categories: LookupItem[];
+  locations: LookupItem[];
 }) {
+  const [categories, setCategories] = useState(initialCategories);
+  const [locations, setLocations] = useState(initialLocations);
   const router = useRouter();
   const isEdit = Boolean(initial);
 
@@ -110,7 +117,6 @@ export default function ProjectForm({
     initial ? toDrafts(initial.images, "GALLERY") : [],
   );
   const [imageError, setImageError] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   // Slug mirrors the name until the admin edits it by hand. An existing slug
   // (edit mode) counts as hand-set, so renaming never silently changes a live
@@ -120,6 +126,7 @@ export default function ProjectForm({
 
   const {
     register,
+    control,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
@@ -128,9 +135,9 @@ export default function ProjectForm({
     defaultValues: {
       featured: initial?.featured ?? false,
       published: initial?.published ?? false,
-      category: initial?.category ?? "RESIDENTIAL",
+      categoryId: initial?.categoryId ?? "",
       services: initial?.services ?? ["ARCHITECTURE_DESIGN"],
-      location: initial?.location ?? "",
+      locationId: initial?.locationId ?? "",
       yearStart: initial?.yearStart ?? new Date().getFullYear(),
       yearEnd: initial?.yearEnd ?? undefined,
       client: initial?.client ?? "",
@@ -143,14 +150,21 @@ export default function ProjectForm({
         name: en?.name ?? "",
         slug: en?.slug ?? "",
         description: en?.description ?? "",
+        philosophy: en?.philosophy ?? "",
       },
       id: {
         name: id?.name ?? "",
         slug: id?.slug ?? "",
         description: id?.description ?? "",
+        philosophy: id?.philosophy ?? "",
       },
     },
   });
+
+  // LookupSelect is a controlled widget, so the ids are read back rather than
+  // registered — `setValue` on change keeps RHF as the source of truth.
+  const categoryId = useWatch({ control, name: "categoryId" }) ?? "";
+  const locationId = useWatch({ control, name: "locationId" }) ?? "";
 
   function addFiles(
     fileList: FileList | null,
@@ -205,7 +219,6 @@ export default function ProjectForm({
   }
 
   async function onSubmit(values: ProjectFormValues) {
-    setFormError(null);
     try {
       // Nothing was uploaded while editing — files go to storage only now.
       const images = await resolveDraftImages(
@@ -226,6 +239,7 @@ export default function ProjectForm({
           name: values.en.name,
           slug: values.en.slug?.trim() || undefined,
           description: values.en.description?.trim() || null,
+          philosophy: values.en.philosophy?.trim() || null,
         },
         // Only send ID when it has a name — EN-anchored, incremental policy.
         ...(values.id.name?.trim()
@@ -235,6 +249,7 @@ export default function ProjectForm({
                 name: values.id.name.trim(),
                 slug: values.id.slug?.trim() || undefined,
                 description: values.id.description?.trim() || null,
+                philosophy: values.id.philosophy?.trim() || null,
               },
             ]
           : []),
@@ -243,9 +258,9 @@ export default function ProjectForm({
       const payload = {
         featured: values.featured,
         published: values.published,
-        category: values.category,
+        categoryId: values.categoryId,
         services: values.services,
-        location: values.location,
+        locationId: values.locationId,
         yearStart: values.yearStart,
         yearEnd: values.yearEnd ?? null,
         client: values.client?.trim() || null,
@@ -264,20 +279,11 @@ export default function ProjectForm({
         await axios.post("/api/projects", payload);
       }
 
+      toast.success(initial ? "Project updated" : "Project created");
       router.push("/dashboard/projects");
       router.refresh();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data;
-        const fieldErrors = data?.errors
-          ? Object.entries(data.errors)
-              .map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
-              .join(" · ")
-          : null;
-        setFormError(fieldErrors ?? data?.error ?? "Could not save the project");
-      } else {
-        setFormError("Could not save the project");
-      }
+      toastError(err, "Could not save the project");
     }
   }
 
@@ -352,15 +358,17 @@ export default function ProjectForm({
         <FieldSectionLabel>Details</FieldSectionLabel>
 
         <div className="grid gap-6 sm:grid-cols-2">
-          <NativeSelectField
+          <LookupSelect
+            kind="project-categories"
             label="Category"
             required
-            options={CATEGORIES.map((c) => ({
-              value: c,
-              label: humanizeEnum(c),
-            }))}
-            error={errors.category?.message}
-            {...register("category")}
+            value={categoryId}
+            onChange={(v) =>
+              setValue("categoryId", v, { shouldValidate: true })
+            }
+            options={categories}
+            onOptionsChange={setCategories}
+            error={errors.categoryId?.message}
           />
           <NativeSelectField
             label="Status"
@@ -395,12 +403,15 @@ export default function ProjectForm({
           )}
         </fieldset>
 
-        <TextField
+        <LookupSelect
+          kind="locations"
           label="Location"
           required
-          placeholder="Canggu, Bali, Indonesia"
-          error={errors.location?.message}
-          {...register("location")}
+          value={locationId}
+          onChange={(v) => setValue("locationId", v, { shouldValidate: true })}
+          options={locations}
+          onOptionsChange={setLocations}
+          error={errors.locationId?.message}
         />
 
         <div className="grid gap-6 sm:grid-cols-2">
@@ -494,6 +505,11 @@ export default function ProjectForm({
           </p>
         </div>
         <TextAreaField label="Description" {...register("en.description")} />
+        <TextAreaField
+          label="Philosophy"
+          hint="Shown under the Philosophy heading on the project detail page."
+          {...register("en.philosophy")}
+        />
       </section>
 
       {/* ── Indonesian (optional) ───────────────────────────── */}
@@ -526,6 +542,7 @@ export default function ProjectForm({
           </p>
         </div>
         <TextAreaField label="Deskripsi" {...register("id.description")} />
+        <TextAreaField label="Filosofi" {...register("id.philosophy")} />
       </section>
 
       {/* ── Images ──────────────────────────────────────────── */}
@@ -549,12 +566,6 @@ export default function ProjectForm({
           "GALLERY",
         )}
       </section>
-
-      {formError && (
-        <p role="alert" className="text-sm text-red-700">
-          {formError}
-        </p>
-      )}
 
       <div className="flex items-center gap-4">
         <button

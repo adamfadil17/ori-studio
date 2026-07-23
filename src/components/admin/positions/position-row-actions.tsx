@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { toast, toastError } from "@/lib/toast";
+
 export default function PositionRowActions({
   id,
   title,
@@ -16,7 +18,6 @@ export default function PositionRowActions({
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function remove() {
     // Applications survive the delete (the FK is set to null) but lose their
@@ -33,23 +34,18 @@ export default function PositionRowActions({
     }
 
     setBusy(true);
-    setError(null);
     try {
       await axios.delete(`/api/open-positions/${id}`);
+      toast.success(`“${title}” deleted`);
       router.refresh();
     } catch (err) {
-      setError(
-        axios.isAxiosError(err)
-          ? (err.response?.data?.error ?? "Delete failed")
-          : "Delete failed",
-      );
+      toastError(err, "Delete failed");
       setBusy(false);
     }
   }
 
   return (
     <div className="flex items-center justify-end gap-3">
-      {error && <span className="text-xs text-red-700">{error}</span>}
       <Link
         href={`/dashboard/positions/${id}/edit`}
         className="text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"

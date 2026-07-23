@@ -350,14 +350,8 @@ export type UploadFolder = z.infer<typeof uploadFolderSchema>;
 // ------------------------------------------------------------
 
 const localeEnum = z.enum(["EN", "ID"]);
-const projectCategoryEnum = z.enum([
-  "RESIDENTIAL",
-  "HOSPITALITY",
-  "COMMERCIAL",
-  "LANDSCAPE",
-  "INTERIOR",
-  "OTHER",
-]);
+// The ProjectCategory enum that used to live here is a lookup table now —
+// see the project/article/location lookup schemas further down.
 const projectStatusEnum = z.enum([
   "IN_PROGRESS",
   "COMPLETED",
@@ -379,6 +373,7 @@ const projectTranslationInput = z.object({
   // Optional — auto-generated from `name` when omitted. Admin may override for SEO.
   slug: z.string().optional(),
   description: z.string().nullish(),
+  philosophy: z.string().nullish(),
 });
 
 const projectImageInput = z.object({
@@ -427,12 +422,52 @@ const projectTranslationsUpdate = z
   .min(1, "At least one translation is required")
   .refine(hasUniqueLocales, "Duplicate locale in translations");
 
+// ─────────────────────────────────────────────
+// LOOKUPS — project category, article category, location
+// ─────────────────────────────────────────────
+
+/**
+ * Slugs are derived from the name server-side rather than typed, so the same
+ * label always yields the same key and an editor can't accidentally create two
+ * categories that differ only by slug. Sent only when an admin overrides it.
+ */
+const optionalSlug = z
+  .string()
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase-kebab-case")
+  .optional();
+
+export const createProjectCategorySchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(60),
+  slug: optionalSlug,
+});
+export const updateProjectCategorySchema =
+  createProjectCategorySchema.partial();
+
+export const createArticleCategorySchema = createProjectCategorySchema;
+export const updateArticleCategorySchema = updateProjectCategorySchema;
+
+export const createLocationSchema = z.object({
+  city: z.string().trim().min(1, "City is required").max(80),
+  province: z.string().trim().min(1, "Province is required").max(80),
+  country: z.string().trim().min(1, "Country is required").max(80),
+  slug: optionalSlug,
+});
+export const updateLocationSchema = createLocationSchema.partial();
+
+export type CreateProjectCategoryDto = z.infer<
+  typeof createProjectCategorySchema
+>;
+export type CreateArticleCategoryDto = z.infer<
+  typeof createArticleCategorySchema
+>;
+export type CreateLocationDto = z.infer<typeof createLocationSchema>;
+
 export const createProjectSchema = z.object({
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  category: projectCategoryEnum,
+  categoryId: z.string().min(1, "Category is required"),
   services: z.array(serviceTypeEnum).min(1, "Select at least one service"),
-  location: z.string().min(1, "Location is required"),
+  locationId: z.string().min(1, "Location is required"),
   yearStart: z.number().int().min(1900).max(2100),
   yearEnd: z.number().int().min(1900).max(2100).nullish(),
   client: z.string().nullish(),
@@ -445,8 +480,20 @@ export const createProjectSchema = z.object({
   images: projectImagesSchema.default([]),
 });
 
+/**
+ * `.partial()` alone is NOT enough: fields carrying `.default()` still fill that
+ * default when the key is absent, so a PATCH that omits `published` would set it
+ * to false and unpublish the project — likewise `images: []` would wipe every
+ * image. Re-declare each defaulted field as plain optional so "absent" really
+ * means "leave unchanged" (the route guards on `!== undefined`).
+ */
 export const updateProjectSchema = createProjectSchema.partial().extend({
   translations: projectTranslationsUpdate.optional(),
+  featured: z.boolean().optional(),
+  published: z.boolean().optional(),
+  status: projectStatusEnum.optional(),
+  architect: z.string().min(1).optional(),
+  images: projectImagesSchema.optional(),
 });
 
 export type CreateProjectDto = z.infer<typeof createProjectSchema>;
@@ -471,9 +518,9 @@ const optionalNumber = (schema: z.ZodNumber) =>
 export const projectFormSchema = z.object({
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  category: projectCategoryEnum,
+  categoryId: z.string().min(1, "Category is required"),
   services: z.array(serviceTypeEnum).min(1, "Select at least one service"),
-  location: z.string().min(1, "Location is required"),
+  locationId: z.string().min(1, "Location is required"),
   yearStart: z.coerce.number().int().min(1900).max(2100),
   yearEnd: optionalNumber(z.number().int().min(1900).max(2100)),
   client: z.string().optional(),
@@ -486,12 +533,14 @@ export const projectFormSchema = z.object({
     name: z.string().min(1, "English name is required"),
     slug: z.string().optional(),
     description: z.string().optional(),
+    philosophy: z.string().optional(),
   }),
   // Optional second locale — leave the name blank to skip it entirely.
   id: z.object({
     name: z.string().optional(),
     slug: z.string().optional(),
     description: z.string().optional(),
+    philosophy: z.string().optional(),
   }),
 });
 
@@ -555,14 +604,18 @@ const articleTranslationsUpdate = z
 export const createArticleSchema = z.object({
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  category: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Category is required"),
   image: assetUrl("Cover image must be an uploaded path or an absolute URL"),
   imageAlt: z.string().nullish(),
   translations: articleTranslationsCreate,
 });
 
+// Same defaults-leak-through-partial trap as updateProjectSchema: re-declare
+// the defaulted fields as plain optional so omitting them leaves them unchanged.
 export const updateArticleSchema = createArticleSchema.partial().extend({
   translations: articleTranslationsUpdate.optional(),
+  featured: z.boolean().optional(),
+  published: z.boolean().optional(),
 });
 
 export type CreateArticleDto = z.infer<typeof createArticleSchema>;
@@ -577,7 +630,7 @@ export type UpdateArticleDto = z.infer<typeof updateArticleSchema>;
 export const articleFormSchema = z.object({
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  category: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Category is required"),
   // NOTE: `image` and `imageAlt` are NOT here — like project images, the cover
   // and its alt text are held together in component state (the file only
   // becomes a URL on submit) and validated there.

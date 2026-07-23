@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+
+import { toast, toastError } from "@/lib/toast";
 
 import {
   FieldSectionLabel,
@@ -45,7 +46,6 @@ export default function PositionForm({
 }) {
   const router = useRouter();
   const isEdit = Boolean(initial);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -64,27 +64,17 @@ export default function PositionForm({
   });
 
   async function onSubmit(values: OpenPositionFormValues) {
-    setFormError(null);
     try {
       if (initial) {
         await axios.patch(`/api/open-positions/${initial.id}`, values);
       } else {
         await axios.post("/api/open-positions", values);
       }
+      toast.success(initial ? "Position updated" : "Position created");
       router.push("/dashboard/positions");
       router.refresh();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data;
-        const fieldErrors = data?.errors
-          ? Object.entries(data.errors)
-              .map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
-              .join(" · ")
-          : null;
-        setFormError(fieldErrors ?? data?.error ?? "Could not save the position");
-      } else {
-        setFormError("Could not save the position");
-      }
+      toastError(err, "Could not save the position");
     }
   }
 
@@ -130,12 +120,6 @@ export default function PositionForm({
           Active — listed on the public careers section
         </label>
       </section>
-
-      {formError && (
-        <p role="alert" className="text-sm text-red-700">
-          {formError}
-        </p>
-      )}
 
       <div className="flex items-center gap-4">
         <button

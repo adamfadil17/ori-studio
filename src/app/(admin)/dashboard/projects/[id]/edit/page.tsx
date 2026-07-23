@@ -5,6 +5,7 @@ import ProjectForm, {
   type ProjectFormInitial,
 } from "@/components/admin/projects/project-form";
 import { PROJECT_INCLUDE } from "@/lib/projects";
+import { listLookup } from "@/lib/lookups";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +17,11 @@ export default async function EditProjectPage({
 }) {
   const { id } = await params;
 
-  const project = await prisma.project.findUnique({
-    where: { id },
-    include: PROJECT_INCLUDE,
-  });
+  const [project, categories, locations] = await Promise.all([
+    prisma.project.findUnique({ where: { id }, include: PROJECT_INCLUDE }),
+    listLookup("project-categories"),
+    listLookup("locations"),
+  ]);
   if (!project) notFound();
 
   // Map to a plain, serialisable shape for the client form (no Date objects).
@@ -27,9 +29,9 @@ export default async function EditProjectPage({
     id: project.id,
     featured: project.featured,
     published: project.publishedAt !== null,
-    category: project.category,
+    categoryId: project.categoryId,
     services: project.services,
-    location: project.location,
+    locationId: project.locationId,
     yearStart: project.yearStart,
     yearEnd: project.yearEnd,
     client: project.client,
@@ -43,6 +45,7 @@ export default async function EditProjectPage({
       name: t.name,
       slug: t.slug,
       description: t.description,
+      philosophy: t.philosophy,
     })),
     images: project.images.map((img) => ({
       url: img.url,
@@ -67,7 +70,11 @@ export default async function EditProjectPage({
           : "English only — Indonesian not added yet"}
       </p>
 
-      <ProjectForm initial={initial} />
+      <ProjectForm
+        initial={initial}
+        categories={categories}
+        locations={locations}
+      />
     </div>
   );
 }

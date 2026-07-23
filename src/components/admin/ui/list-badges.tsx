@@ -4,8 +4,8 @@ export function StateBadge({ published }: { published: boolean }) {
     <span
       className={`inline-block px-2 py-1 text-[10px] tracking-widest uppercase ${
         published
-          ? "bg-headline text-background-main"
-          : "border border-headline/25 text-body"
+          ? "bg-eyebrow text-background-main"
+          : "border border-eyebrow/40 text-body"
       }`}
     >
       {published ? "Published" : "Draft"}

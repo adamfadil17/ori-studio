@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { toast, toastError } from "@/lib/toast";
+
 export default function ArticleRowActions({
   id,
   title,
@@ -14,7 +16,6 @@ export default function ArticleRowActions({
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function remove() {
     // Deleting cascades every translation, so confirm explicitly.
@@ -27,23 +28,18 @@ export default function ArticleRowActions({
     }
 
     setBusy(true);
-    setError(null);
     try {
       await axios.delete(`/api/articles/${id}`);
+      toast.success(`“${title}” deleted`);
       router.refresh();
     } catch (err) {
-      setError(
-        axios.isAxiosError(err)
-          ? (err.response?.data?.error ?? "Delete failed")
-          : "Delete failed",
-      );
+      toastError(err, "Delete failed");
       setBusy(false);
     }
   }
 
   return (
     <div className="flex items-center justify-end gap-3">
-      {error && <span className="text-xs text-red-700">{error}</span>}
       <Link
         href={`/dashboard/journal/${id}/edit`}
         className="text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"

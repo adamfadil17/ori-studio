@@ -67,7 +67,9 @@ export async function PATCH(
 
     const data: Prisma.ArticleUpdateInput = {};
     if (dto.featured !== undefined) data.featured = dto.featured;
-    if (dto.category !== undefined) data.category = dto.category;
+    if (dto.categoryId !== undefined) {
+      data.category = { connect: { id: dto.categoryId } };
+    }
     if (dto.image !== undefined) data.image = dto.image;
     if (dto.imageAlt !== undefined) data.imageAlt = dto.imageAlt ?? null;
     // Publish toggle: keep the original publish date when re-publishing.

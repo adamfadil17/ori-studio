@@ -6,7 +6,7 @@ import ProjectGridCard from "@/components/admin/projects/project-grid-card";
 import ProjectRowActions from "@/components/admin/projects/project-row-actions";
 import ViewToggle, { parseView } from "@/components/admin/ui/view-toggle";
 import Pagination from "@/components/ui/pagination";
-import { humanizeEnum } from "@/lib/format";
+import { formatLocation } from "@/lib/types";
 import {
   getProjectFilterOptions,
   listProjectsForAdmin,
@@ -14,7 +14,7 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 function yearLabel(start: number, end: number | null) {
   return end && end !== start ? `${start}–${end}` : `${start}`;
@@ -102,16 +102,14 @@ export default async function ProjectsPage({
               name: "category",
               label: "Sector",
               value: category ?? "",
-              options: options.categories.map((c) => ({
-                value: c,
-                label: humanizeEnum(c),
-              })),
+              // Already {value: id, label: name} from the lookup tables.
+              options: options.categories,
             },
             {
               name: "location",
               label: "Location",
               value: location ?? "",
-              options: options.locations.map((l) => ({ value: l, label: l })),
+              options: options.locations,
             },
             {
               name: "state",
@@ -148,8 +146,8 @@ export default async function ProjectsPage({
                   hasId: project.translations.some((t) => t.locale === "ID"),
                   featured: project.featured,
                   published: project.publishedAt !== null,
-                  category: project.category,
-                  location: project.location,
+                  category: project.category.name,
+                  location: formatLocation(project.location),
                   yearLabel: yearLabel(project.yearStart, project.yearEnd),
                   thumbnailUrl: hero?.url,
                   thumbnailAlt: hero?.alt ?? undefined,
@@ -195,9 +193,11 @@ export default async function ProjectsPage({
                       </span>
                     </td>
                     <td className="px-3 py-3 text-body">
-                      {humanizeEnum(project.category)}
+                      {project.category.name}
                     </td>
-                    <td className="px-3 py-3 text-body">{project.location}</td>
+                    <td className="px-3 py-3 text-body">
+                      {formatLocation(project.location)}
+                    </td>
                     <td
                       className="px-3 py-3 text-body"
                       style={{ fontVariantNumeric: "tabular-nums" }}

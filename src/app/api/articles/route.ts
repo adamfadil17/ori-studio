@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.ArticleWhereInput = {
       ...(includeUnpublished ? {} : { publishedAt: { not: null } }),
-      ...(category ? { category } : {}),
+      ...(category ? { categoryId: category } : {}),
       ...(featured !== undefined ? { featured } : {}),
       ...(search
         ? { translations: { some: { title: { contains: search, mode: "insensitive" } } } }
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
       data: {
         featured: dto.featured,
         publishedAt: dto.published ? new Date() : null,
-        category: dto.category,
+        categoryId: dto.categoryId,
         image: dto.image,
         imageAlt: dto.imageAlt ?? null,
         translations: { create: translations },

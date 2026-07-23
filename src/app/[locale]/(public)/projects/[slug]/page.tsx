@@ -4,11 +4,19 @@ import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import ProjectCardView from "@/components/public/projects/project-card-view";
 import CtaBanner from "@/components/public/layout/cta-banner";
-import { getProjectDetail, getRelatedProjects } from "@/lib/data/project-data";
+import {
+  getPublicProjectDetail,
+  getRelatedPublicProjects,
+} from "@/lib/projects";
+import type { Locale as DbLocale } from "@/lib/types";
 import GalleryMosaic from "@/components/public/projects/gallery-mossaic";
 import SetHeaderMode from "@/components/public/layout/set-header-mode";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// Read fresh on every request so an edit made in the dashboard shows at once,
+// instead of Next.js serving a statically cached copy.
+export const dynamic = "force-dynamic";
 
 export default async function ProjectDetailPage({
   params,
@@ -18,7 +26,9 @@ export default async function ProjectDetailPage({
   const { locale, slug } = await params;
   if (!isValidLocale(locale)) notFound();
 
-  const project = getProjectDetail(slug);
+  // Route locale is lowercase ("en"); the Prisma enum is uppercase ("EN").
+  const dbLocale = locale.toUpperCase() as DbLocale;
+  const project = await getPublicProjectDetail(slug, dbLocale);
   if (!project) notFound();
 
   const dict = await getDictionary(locale as Locale);
@@ -27,7 +37,7 @@ export default async function ProjectDetailPage({
     labels,
     relatedProjects: relatedLabel,
   } = dict.projectDetail;
-  const related = getRelatedProjects(slug);
+  const related = await getRelatedPublicProjects(project.id, dbLocale);
 
   const keyInfoRows: Array<[string, string]> = [
     [labels.year, project.keyInfo.year],
@@ -123,8 +133,11 @@ export default async function ProjectDetailPage({
         {/* ---------- PHILOSOPHY + IMAGE GALLERY (5 Gallery Image) ---------- */}
         <section className="bg-background-main px-6 py-24 md:px-10">
           <div className="mx-auto max-w-7xl">
+            {/* The old dummy data carried this heading per project; it was the
+                same word every time, so it lives here now rather than in the
+                database as a field an editor would have to retype. */}
             <h2 className="font-serif text-3xl text-headline">
-              {project.philosophyHeadline}
+              {locale === "id" ? "Filosofi" : "Philosophy"}
             </h2>
             <span
               className="mt-3 block h-px w-10 bg-headline/30"
@@ -132,7 +145,7 @@ export default async function ProjectDetailPage({
             />
 
             <p className="mt-6 font-serif text-2xl leading-relaxed text-body md:text-3xl">
-              {project.philosophyBody}
+              {project.philosophy}
             </p>
 
             <GalleryMosaic

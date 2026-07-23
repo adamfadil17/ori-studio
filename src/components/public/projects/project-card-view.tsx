@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
+import { ArrowRight } from "lucide-react";
 
 export interface ProjectCardProps {
   locale: Locale;
@@ -51,9 +52,13 @@ export default function ProjectCardView({
 
           <span
             aria-hidden="true"
-            className="shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
+            className="shrink-0 text-eyebrow transition-transform duration-300 group-hover:translate-x-1"
           >
-            <ArrowIcon />
+            <ArrowRight
+              className="h-[18px] w-[18px]"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
           </span>
         </div>
       </Link>
@@ -85,31 +90,15 @@ export default function ProjectCardView({
 
         <span
           aria-hidden="true"
-          className="mt-1 shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
+          className="mt-1 shrink-0 text-eyebrow transition-transform duration-300 group-hover:translate-x-1"
         >
-          <ArrowIcon />
+          <ArrowRight
+            className="h-[18px] w-[18px]"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
         </span>
       </div>
     </Link>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M4 9h10M9 4l5 5-5 5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

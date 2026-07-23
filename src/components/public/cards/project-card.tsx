@@ -48,9 +48,13 @@ export default function ProjectCard({
 
         <span
           aria-hidden="true"
-          className="mt-2 shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
+          className=" mt-2 shrink-0 text-eyebrow transition-transform duration-300 group-hover:translate-x-1"
         >
-          <ArrowRight className="h-[18px] w-[18px]" strokeWidth={1.5} />
+          <ArrowRight
+            className="h-[18px] w-[18px]"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
         </span>
       </div>
     </Link>

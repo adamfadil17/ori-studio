@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { toast, toastError } from "@/lib/toast";
+
 export default function UserRowActions({
   id,
   name,
@@ -22,7 +24,6 @@ export default function UserRowActions({
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Both are refused by the API as well; hiding them here just avoids
   // offering an action that can only fail.
@@ -38,23 +39,18 @@ export default function UserRowActions({
     }
 
     setBusy(true);
-    setError(null);
     try {
       await axios.delete(`/api/users/${id}`);
+      toast.success(`${name} deleted`);
       router.refresh();
     } catch (err) {
-      setError(
-        axios.isAxiosError(err)
-          ? (err.response?.data?.error ?? "Delete failed")
-          : "Delete failed",
-      );
+      toastError(err, "Delete failed");
       setBusy(false);
     }
   }
 
   return (
     <div className="flex items-center justify-end gap-3">
-      {error && <span className="text-xs text-red-700">{error}</span>}
       <Link
         href={`/dashboard/users/${id}/edit`}
         className="text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"

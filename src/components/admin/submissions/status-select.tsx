@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import axios from "axios";
 
 import { humanizeEnum } from "@/lib/format";
+import { toast, toastError } from "@/lib/toast";
 import type { SubmissionStatus } from "@/lib/types";
 
 const STATUSES: SubmissionStatus[] = [
@@ -38,9 +39,13 @@ export default function StatusSelect({
     setError(false);
     try {
       await axios.patch(`/api/submissions/${kind}/${id}`, { status: next });
+      toast.success(`Marked ${humanizeEnum(next)}`);
       router.refresh();
-    } catch {
+    } catch (err) {
+      // The red border is the at-a-glance cue on the row; the toast carries the
+      // reason.
       setError(true);
+      toastError(err, "Could not update status");
     } finally {
       setPending(false);
     }
@@ -62,7 +67,7 @@ export default function StatusSelect({
         }`}
       >
         {STATUSES.map((s) => (
-          <option key={s} value={s} className="bg-background-main text-headline">
+          <option key={s} value={s} className="bg-background-main text-eyebrow">
             {humanizeEnum(s)}
           </option>
         ))}

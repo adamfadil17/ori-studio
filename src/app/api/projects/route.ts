@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { Prisma, ProjectCategory, ProjectStatus } from "@/generated/prisma";
+import { Prisma, ProjectStatus } from "@/generated/prisma";
 import {
   created,
   createProjectSchema,
@@ -31,11 +31,9 @@ export async function GET(req: NextRequest) {
       requireRole(payload, "admin", "editor");
     }
 
-    const categoryParam = params.get("category");
-    const category =
-      categoryParam && categoryParam in ProjectCategory
-        ? (categoryParam as ProjectCategory)
-        : undefined;
+    // Category and location are lookup row ids now, not enum names, so there
+    // is nothing to validate here — an unknown id simply matches no rows.
+    const category = params.get("category") ?? undefined;
 
     const statusParam = params.get("status");
     const status =
@@ -52,9 +50,9 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.ProjectWhereInput = {
       ...(includeUnpublished ? {} : { publishedAt: { not: null } }),
-      ...(category ? { category } : {}),
+      ...(category ? { categoryId: category } : {}),
       ...(status ? { status } : {}),
-      ...(location ? { location: { contains: location, mode: "insensitive" } } : {}),
+      ...(location ? { locationId: location } : {}),
       ...(featured !== undefined ? { featured } : {}),
       // A project spans yearStart..(yearEnd ?? yearStart); match if `year` is inside.
       ...(year !== undefined && !Number.isNaN(year)
@@ -107,6 +105,7 @@ export async function POST(req: NextRequest) {
         name: t.name,
         slug: await resolveProjectSlug(t, t.locale),
         description: t.description ?? null,
+        philosophy: t.philosophy ?? null,
       })),
     );
 
@@ -114,9 +113,9 @@ export async function POST(req: NextRequest) {
       data: {
         featured: dto.featured,
         publishedAt: dto.published ? new Date() : null,
-        category: dto.category,
+        categoryId: dto.categoryId,
         services: dto.services,
-        location: dto.location,
+        locationId: dto.locationId,
         yearStart: dto.yearStart,
         yearEnd: dto.yearEnd ?? null,
         client: dto.client ?? null,

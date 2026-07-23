@@ -15,7 +15,7 @@ import type { SubmissionStatus, SubmissionType } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 6;
 
 const STATUSES: SubmissionStatus[] = [
   "NEW",

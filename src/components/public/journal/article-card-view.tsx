@@ -55,7 +55,7 @@ export default function ArticleCardView({
 
         <span
           aria-hidden="true"
-          className="shrink-0 text-headline transition-transform duration-300 group-hover:translate-x-1"
+          className="shrink-0 text-eyebrow transition-transform duration-300 group-hover:translate-x-1"
         >
           <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
         </span>
@@ -89,7 +89,7 @@ export default function ArticleCardView({
           {title}
         </h3>
 
-        <span className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-widest text-headline">
+        <span className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-widest text-eyebrow">
           READ MORE
           <ArrowRight
             className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"

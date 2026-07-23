@@ -1,18 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
 import { FieldSectionLabel, TextField } from "@/components/ui/form-fields";
+import { toast, toastError } from "@/lib/toast";
 import { changePasswordSchema, type ChangePasswordDto } from "@/lib/validators";
 
 export default function ChangePasswordForm() {
   const router = useRouter();
-  const [formError, setFormError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
 
   const {
     register,
@@ -29,29 +27,15 @@ export default function ChangePasswordForm() {
   });
 
   async function onSubmit(values: ChangePasswordDto) {
-    setFormError(null);
-    setDone(false);
     try {
       await axios.post("/api/auth/change-password", values);
       reset();
-      setDone(true);
+      toast.success("Password changed. Other sessions have been signed out.");
       // The response re-issued the session cookie; refresh so anything holding
       // the old one re-reads it.
       router.refresh();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data;
-        const fieldErrors = data?.errors
-          ? Object.entries(data.errors)
-              .map(([, v]) => (v as string[]).join(", "))
-              .join(" · ")
-          : null;
-        setFormError(
-          fieldErrors ?? data?.error ?? "Could not change the password",
-        );
-      } else {
-        setFormError("Could not change the password");
-      }
+      toastError(err, "Could not change the password");
     }
   }
 
@@ -92,18 +76,6 @@ export default function ChangePasswordForm() {
           Changing it signs out every other device — this one stays signed in.
         </p>
       </section>
-
-      {formError && (
-        <p role="alert" className="text-sm text-red-700">
-          {formError}
-        </p>
-      )}
-
-      {done && (
-        <p role="status" className="text-sm text-headline">
-          Password changed. Any other sessions have been signed out.
-        </p>
-      )}
 
       <button
         type="submit"

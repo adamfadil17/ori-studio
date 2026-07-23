@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 
 import "../globals.css";
+import AdminToaster from "@/components/admin/ui/toaster";
 
 // Independent ROOT layout for the admin panel. There is no `app/layout.tsx`,
 // so this file and `app/[locale]/layout.tsx` are each root layouts for their
@@ -40,6 +41,7 @@ export default function AdminRootLayout({
     >
       <body className="min-h-full bg-background-main font-sans text-headline">
         {children}
+        <AdminToaster />
       </body>
     </html>
   );

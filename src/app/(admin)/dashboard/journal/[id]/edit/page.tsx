@@ -5,6 +5,7 @@ import ArticleForm, {
   type ArticleFormInitial,
 } from "@/components/admin/articles/article-form";
 import { ARTICLE_INCLUDE } from "@/lib/articles";
+import { listLookup } from "@/lib/lookups";
 import { prisma } from "@/lib/prisma";
 import type { TiptapJSON } from "@/lib/types";
 
@@ -17,10 +18,10 @@ export default async function EditArticlePage({
 }) {
   const { id } = await params;
 
-  const article = await prisma.article.findUnique({
-    where: { id },
-    include: ARTICLE_INCLUDE,
-  });
+  const [article, categories] = await Promise.all([
+    prisma.article.findUnique({ where: { id }, include: ARTICLE_INCLUDE }),
+    listLookup("article-categories"),
+  ]);
   if (!article) notFound();
 
   // Plain, serialisable shape for the client form (no Date objects). `content`
@@ -29,7 +30,7 @@ export default async function EditArticlePage({
     id: article.id,
     featured: article.featured,
     published: article.publishedAt !== null,
-    category: article.category,
+    categoryId: article.categoryId,
     image: article.image,
     imageAlt: article.imageAlt,
     translations: article.translations.map((t) => ({
@@ -56,7 +57,7 @@ export default async function EditArticlePage({
           : "English only — Indonesian not added yet"}
       </p>
 
-      <ArticleForm initial={initial} />
+      <ArticleForm initial={initial} categories={categories} />
     </div>
   );
 }

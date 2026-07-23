@@ -21,14 +21,9 @@ enum Locale {
   ID
 }
 
-enum ProjectCategory {
-  RESIDENTIAL
-  HOSPITALITY
-  COMMERCIAL
-  LANDSCAPE
-  INTERIOR
-  OTHER
-}
+// ProjectCategory used to be an enum here. It is now a table (see the model of
+// the same name below) so the studio can add, rename and remove categories from
+// the dashboard without a code deploy.
 
 enum ProjectStatus {
   IN_PROGRESS
@@ -106,12 +101,17 @@ enum PositionLevel {
 // ------------------------------------------------------------
 
 model Project {
-  id                String          @id @default(uuid())
-  featured          Boolean         @default(false)
-  publishedAt       DateTime? // null = draft; set = published (sitemap/public)
-  category          ProjectCategory
+  id          String    @id @default(uuid())
+  featured    Boolean   @default(false)
+  publishedAt DateTime? // null = draft; set = published (sitemap/public)
+
+  categoryId String
+  category   ProjectCategory @relation(fields: [categoryId], references: [id])
+
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
   services          ServiceType[]
-  location          String // "City, Province, Country"
   yearStart         Int
   yearEnd           Int?
   client            String?
@@ -127,7 +127,49 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // PostgreSQL does not index foreign keys on its own, and both columns are
+  // filtered on in the listings.
+  @@index([categoryId])
+  @@index([locationId])
   @@map("projects")
+}
+
+/// Studio-managed list of project sectors (Residential, Hospitality, …).
+/// The relation is intentionally left at Prisma's default `Restrict`: a
+/// category still attached to a project cannot be deleted, so a delete can
+/// never silently orphan or blank out a project's sector.
+model ProjectCategory {
+  id   String @id @default(uuid())
+  name String @unique
+  /// Stable key for filter URLs, so renaming the label doesn't break links.
+  slug String @unique
+
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("project_categories")
+}
+
+/// A place a project can sit in. One row per city — province and country are
+/// repeated rather than normalised into their own tables, which keeps the admin
+/// form to a single dropdown instead of three cascading ones.
+model Location {
+  id       String @id @default(uuid())
+  city     String
+  province String
+  country  String
+  /// "canggu-bali-indonesia"
+  slug String @unique
+
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([city, province, country])
+  @@map("locations")
 }
 
 model ProjectTranslation {
@@ -138,6 +180,9 @@ model ProjectTranslation {
   name        String
   slug        String
   description String? @db.Text
+  /// Narrative shown under the "Philosophy" heading on the detail page.
+  /// Per-locale like description, so it lives here rather than on Project.
+  philosophy String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -175,16 +220,36 @@ model Article {
   id          String    @id @default(uuid())
   featured    Boolean   @default(false)
   publishedAt DateTime?
-  category    String
-  image       String
-  imageAlt    String?
+
+  categoryId String
+  category   ArticleCategory @relation(fields: [categoryId], references: [id])
+
+  image    String
+  imageAlt String?
 
   translations ArticleTranslation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([categoryId])
   @@map("articles")
+}
+
+/// Journal categories, managed from the dashboard. Kept separate from
+/// ProjectCategory so an article category can never be attached to a project —
+/// the database itself rules it out.
+model ArticleCategory {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  articles Article[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("article_categories")
 }
 
 model ArticleTranslation {

@@ -7,15 +7,19 @@ import {
   Sofa,
   Trees,
   ClipboardList,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/public/cards/project-card";
 import ArticleCard from "@/components/public/cards/article-card";
-import { JOURNAL_ARTICLES } from "@/lib/data/article-data";
+import FeaturedProjectCarousel from "@/components/public/projects/featured-project-carousel";
+import {
+  listFeaturedProjectsForHero,
+  listPublishedProjects,
+} from "@/lib/projects";
+import { listPublishedArticles } from "@/lib/articles";
+import type { Locale as DbLocale } from "@/lib/types";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -23,32 +27,8 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 // (Architecture Design, Interior Design, Landscape Design, Project Management).
 const SERVICE_ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
 
-// Homepage cuma nampilin 4 artikel terbaru dari total 9 di article-data.ts
-// (Journal listing page yang nampilin semuanya).
-const HOMEPAGE_JOURNAL_ARTICLES = JOURNAL_ARTICLES.slice(0, 4);
-
-// Data proyek & artikel di bawah ini nantinya diganti query Prisma
-// (Project + ProjectTranslation, Article + ArticleTranslation) sesuai locale aktif.
-const FEATURED_PROJECTS = [
-  {
-    slug: "tegalalang-courtyard-house",
-    name: "Tegalalang Courtyard House",
-    location: "Tegalalang, Bali, Indonesia",
-    yearLabel: "2025",
-  },
-  {
-    slug: "sanur-beach-villa",
-    name: "Sanur Beach Villa",
-    location: "Sanur, Bali, Indonesia",
-    yearLabel: "2024",
-  },
-  {
-    slug: "ubud-wellness-retreat",
-    name: "Ubud Wellness Retreat",
-    location: "Ubud, Bali, Indonesia",
-    yearLabel: "2025",
-  },
-] as const;
+// Featured projects (3) dan journal preview (4) dibaca langsung dari database.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage({
   params,
@@ -68,6 +48,17 @@ export default async function HomePage({
     approach,
     journal,
   } = dict.home;
+
+  // Route locale is lowercase ("en"); the Prisma enum is uppercase ("EN").
+  // Both lists come back featured-first, so the homepage just takes the top few.
+  const dbLocale = locale.toUpperCase() as DbLocale;
+  const [allProjects, allArticles, featuredHero] = await Promise.all([
+    listPublishedProjects(dbLocale),
+    listPublishedArticles(dbLocale),
+    listFeaturedProjectsForHero(dbLocale),
+  ]);
+  const featuredProjects = allProjects.slice(0, 3);
+  const journalArticles = allArticles.slice(0, 4);
 
   return (
     <>
@@ -119,7 +110,7 @@ export default async function HomePage({
             <div>
               <p className="text-sm leading-relaxed text-body">{about.body}</p>
               <Link
-                href={`/${locale}/philosophy`}
+                href={`/${locale}/studio`}
                 className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
               >
                 {about.cta}
@@ -186,72 +177,14 @@ export default async function HomePage({
       </section>
 
       {/* ---------- FEATURED PROJECT ---------- */}
-      <section className="grid bg-background-alt md:grid-cols-2">
-        <div className="relative aspect-[4/3] w-full md:aspect-auto">
-          <Image
-            src={PLACEHOLDER}
-            alt="Uluwatu Clifftop Residence"
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        <div className="flex flex-col justify-center px-6 py-16 md:px-16">
-          <div className="flex items-center justify-between">
-            <p className="text-xs tracking-widest uppercase text-eyebrow">
-              {featuredProject.eyebrow}
-            </p>
-            <div className="flex items-center gap-3 text-headline">
-              <button
-                type="button"
-                aria-label="Previous featured project"
-                className="text-eyebrow hover:cursor-pointer"
-              >
-                <ChevronLeft
-                  className="h-4 w-4"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-              </button>
-              <button
-                type="button"
-                aria-label="Next featured project"
-                className="text-eyebrow hover:cursor-pointer"
-              >
-                <ChevronRight
-                  className="h-4 w-4"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
-          </div>
-
-          <h2 className="mt-4 font-serif text-3xl text-headline md:text-4xl">
-            Uluwatu Clifftop Residence
-          </h2>
-          <span className="mt-4 h-px w-10 bg-headline/30" aria-hidden="true" />
-
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-body">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry&apos;s standard dummy
-            text ever since 1966, when designers at Letraset and James Mosley,
-            the librarian at St Bride Printing Library in London.
-          </p>
-
-          <Link
-            href={`/${locale}/projects/uluwatu-clifftop-residence`}
-            className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
-          >
-            {featuredProject.cta}
-            <ArrowRight
-              className="h-4 w-4"
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
-          </Link>
-        </div>
-      </section>
+      {featuredHero.length > 0 && (
+        <FeaturedProjectCarousel
+          locale={locale as Locale}
+          items={featuredHero}
+          eyebrowLabel={featuredProject.eyebrow}
+          ctaLabel={featuredProject.cta}
+        />
+      )}
 
       {/* ---------- PROJECTS GRID ---------- */}
       <section className="bg-background-main px-6 py-24 md:px-10">
@@ -275,7 +208,7 @@ export default async function HomePage({
           </div>
 
           <div className="mt-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURED_PROJECTS.map((project) => (
+            {featuredProjects.map((project) => (
               <ProjectCard
                 key={project.slug}
                 locale={locale as Locale}
@@ -283,7 +216,7 @@ export default async function HomePage({
                 name={project.name}
                 location={project.location}
                 yearLabel={project.yearLabel}
-                thumbnailUrl={PLACEHOLDER}
+                thumbnailUrl={project.thumbnailUrl}
               />
             ))}
           </div>
@@ -361,7 +294,7 @@ export default async function HomePage({
           </div>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {HOMEPAGE_JOURNAL_ARTICLES.map((article) => (
+            {journalArticles.map((article) => (
               <ArticleCard
                 key={article.slug}
                 locale={locale as Locale}
@@ -369,7 +302,7 @@ export default async function HomePage({
                 title={article.title}
                 category={article.category}
                 publishedLabel={article.publishedLabel}
-                imageUrl={PLACEHOLDER}
+                imageUrl={article.imageUrl}
               />
             ))}
           </div>

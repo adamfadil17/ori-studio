@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { toast, toastError } from "@/lib/toast";
+
 export default function SubmissionDeleteButton({
   kind,
   id,
@@ -18,7 +20,6 @@ export default function SubmissionDeleteButton({
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function remove() {
     // Submissions are a record of a real person contacting the studio — no
@@ -32,24 +33,19 @@ export default function SubmissionDeleteButton({
     }
 
     setBusy(true);
-    setError(null);
     try {
       await axios.delete(`/api/submissions/${kind}/${id}`);
+      toast.success(`Submission from “${name}” deleted`);
       if (redirectTo) router.push(redirectTo);
       router.refresh();
     } catch (err) {
-      setError(
-        axios.isAxiosError(err)
-          ? (err.response?.data?.error ?? "Delete failed")
-          : "Delete failed",
-      );
+      toastError(err, "Delete failed");
       setBusy(false);
     }
   }
 
   return (
     <span className="inline-flex items-center gap-2">
-      {error && <span className="text-xs text-red-700">{error}</span>}
       <button
         type="button"
         onClick={remove}

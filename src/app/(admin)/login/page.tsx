@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,10 +7,10 @@ import axios from "axios";
 
 import { loginSchema, type LoginDto } from "@/lib/validators";
 import { TextField } from "@/components/ui/form-fields";
+import { toast, toastError } from "@/lib/toast";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -20,7 +19,6 @@ export default function LoginPage() {
   } = useForm<LoginDto>({ resolver: zodResolver(loginSchema) });
 
   async function onSubmit(values: LoginDto) {
-    setFormError(null);
     try {
       // The API sets an httpOnly session cookie; nothing to store client-side.
       await axios.post("/api/auth/login", values);
@@ -29,6 +27,8 @@ export default function LoginPage() {
       // read now, and a token sitting in localStorage is XSS-readable.
       localStorage.removeItem("token");
 
+      toast.success("Signed in");
+
       // Read ?next= straight off the URL (avoids a Suspense boundary for
       // useSearchParams) and only allow same-site paths.
       const next = new URLSearchParams(window.location.search).get("next");
@@ -36,11 +36,8 @@ export default function LoginPage() {
 
       router.replace(target);
       router.refresh(); // re-render server components with the new session
-    } catch (error) {
-      const message = axios.isAxiosError(error)
-        ? (error.response?.data?.error ?? "Unable to sign in")
-        : "Unable to sign in";
-      setFormError(message);
+    } catch (err) {
+      toastError(err, "Unable to sign in");
     }
   }
 
@@ -74,12 +71,6 @@ export default function LoginPage() {
             error={errors.password?.message}
             {...register("password")}
           />
-
-          {formError && (
-            <p role="alert" className="text-xs text-red-700">
-              {formError}
-            </p>
-          )}
 
           <button
             type="submit"

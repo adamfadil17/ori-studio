@@ -68,9 +68,15 @@ export async function PATCH(
     // Scalar fields — only touch what was sent.
     const data: Prisma.ProjectUpdateInput = {};
     if (dto.featured !== undefined) data.featured = dto.featured;
-    if (dto.category !== undefined) data.category = dto.category;
+    // Relations are set by id: `connect` rather than a scalar assignment,
+    // which is what Prisma expects once the column became a foreign key.
+    if (dto.categoryId !== undefined) {
+      data.category = { connect: { id: dto.categoryId } };
+    }
     if (dto.services !== undefined) data.services = dto.services;
-    if (dto.location !== undefined) data.location = dto.location;
+    if (dto.locationId !== undefined) {
+      data.location = { connect: { id: dto.locationId } };
+    }
     if (dto.yearStart !== undefined) data.yearStart = dto.yearStart;
     if (dto.yearEnd !== undefined) data.yearEnd = dto.yearEnd ?? null;
     if (dto.client !== undefined) data.client = dto.client ?? null;
@@ -94,6 +100,7 @@ export async function PATCH(
             name: t.name,
             slug: await resolveProjectSlug(t, t.locale, id),
             description: t.description ?? null,
+            philosophy: t.philosophy ?? null,
           })),
         )
       : undefined;
@@ -107,7 +114,12 @@ export async function PATCH(
           await tx.projectTranslation.upsert({
             where: { projectId_locale: { projectId: id, locale: t.locale } },
             create: { projectId: id, ...t },
-            update: { name: t.name, slug: t.slug, description: t.description },
+            update: {
+              name: t.name,
+              slug: t.slug,
+              description: t.description,
+              philosophy: t.philosophy,
+            },
           });
         }
       }
