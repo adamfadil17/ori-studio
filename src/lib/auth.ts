@@ -1,9 +1,7 @@
 import * as jose from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? "change-me-in-production",
-);
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "change-me-in-production");
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? "7d";
 
 export interface JwtPayload {
@@ -14,14 +12,8 @@ export interface JwtPayload {
   exp?: number;
 }
 
-export async function signToken(
-  payload: Omit<JwtPayload, "iat" | "exp">,
-): Promise<string> {
-  return await new jose.SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(JWT_EXPIRES_IN)
-    .sign(JWT_SECRET);
+export async function signToken(payload: Omit<JwtPayload, "iat" | "exp">): Promise<string> {
+  return await new jose.SignJWT(payload).setProtectedHeader({ alg: "HS256" }).setIssuedAt().setExpirationTime(JWT_EXPIRES_IN).sign(JWT_SECRET);
 }
 
 export async function verifyToken(token: string): Promise<JwtPayload> {
@@ -35,7 +27,7 @@ export const AUTH_COOKIE = "token";
 /** Cookie options for the session token (shared by login, register, logout). */
 export const AUTH_COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: process.env.USE_HTTPS === "true",
   sameSite: "lax" as const,
   path: "/",
 };
@@ -44,10 +36,7 @@ export const AUTH_COOKIE_OPTIONS = {
 export const AUTH_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 /** Attach the session cookie to a response (sign-in / sign-up). */
-export function setSessionCookie<T extends NextResponse>(
-  response: T,
-  token: string,
-): T {
+export function setSessionCookie<T extends NextResponse>(response: T, token: string): T {
   response.cookies.set(AUTH_COOKIE, token, {
     ...AUTH_COOKIE_OPTIONS,
     maxAge: AUTH_COOKIE_MAX_AGE,
@@ -91,9 +80,7 @@ export function extractToken(req: NextRequest): string | null {
  * or malformed Bearer header can't shadow a perfectly valid session cookie —
  * that combination used to fail with a confusing 401.
  */
-export async function getAuthPayload(
-  req: NextRequest,
-): Promise<JwtPayload | null> {
+export async function getAuthPayload(req: NextRequest): Promise<JwtPayload | null> {
   for (const token of candidateTokens(req)) {
     try {
       return await verifyToken(token);
