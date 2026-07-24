@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -13,6 +14,61 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 
 // Read fresh per request so dashboard edits show at once, not a cached copy.
 export const dynamic = "force-dynamic";
+
+/**
+ * Per-article title/description/og:image. Description uses the `excerpt` (plain
+ * text) — not the Tiptap `content` JSON. The getter is `cache()`d, so this
+ * shares its query with the page render below.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isValidLocale(locale)) return {};
+
+  const dbLocale = locale.toUpperCase() as DbLocale;
+  const article = await getPublicArticleDetail(slug, dbLocale);
+  if (!article) return {};
+
+  const description = article.excerpt.slice(0, 160);
+  const image = article.image;
+
+  const enSlug = article.slugByLocale.EN ?? article.slug;
+  const idSlug = article.slugByLocale.ID;
+  const hasOwnTranslation = Boolean(article.slugByLocale[dbLocale]);
+
+  return {
+    title: article.title,
+    description,
+    // Self-canonical when translated; points to EN when falling back, so the
+    // fallback page isn't treated as a duplicate.
+    alternates: {
+      canonical: hasOwnTranslation
+        ? `/${locale}/journal/${article.slug}`
+        : `/en/journal/${enSlug}`,
+      languages: {
+        en: `/en/journal/${enSlug}`,
+        ...(idSlug ? { id: `/id/journal/${idSlug}` } : {}),
+        "x-default": `/en/journal/${enSlug}`,
+      },
+    },
+    openGraph: {
+      type: "article",
+      title: article.title,
+      description,
+      images: image
+        ? [{ url: image, alt: article.imageAlt ?? article.title }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description,
+    },
+  };
+}
 
 export default async function ArticleDetailPage({
   params,

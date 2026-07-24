@@ -3,6 +3,8 @@ import { Playfair_Display, Inter } from "next/font/google";
 
 import "../globals.css";
 import AdminToaster from "@/components/admin/ui/toaster";
+import { ConfirmProvider } from "@/components/admin/ui/confirm-dialog";
+import { UnsavedChangesProvider } from "@/components/admin/ui/unsaved-changes";
 
 // Independent ROOT layout for the admin panel. There is no `app/layout.tsx`,
 // so this file and `app/[locale]/layout.tsx` are each root layouts for their
@@ -40,7 +42,12 @@ export default function AdminRootLayout({
       className={`${fontDisplay.variable} ${fontBody.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background-main font-sans text-headline">
-        {children}
+        {/* Like the toaster, these are hosted once here — so they exist only on
+            the admin branch, never on the public site. The unsaved-changes
+            guard sits inside so it can reuse the confirm dialog. */}
+        <ConfirmProvider>
+          <UnsavedChangesProvider>{children}</UnsavedChangesProvider>
+        </ConfirmProvider>
         <AdminToaster />
       </body>
     </html>

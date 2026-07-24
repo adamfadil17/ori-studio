@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { useConfirm } from "@/components/admin/ui/confirm-dialog";
 import { toast, toastError } from "@/lib/toast";
 
 export default function SubmissionDeleteButton({
@@ -19,18 +20,20 @@ export default function SubmissionDeleteButton({
   redirectTo?: string;
 }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [busy, setBusy] = useState(false);
 
   async function remove() {
     // Submissions are a record of a real person contacting the studio — no
     // recycle bin, so make the consequence explicit.
-    if (
-      !window.confirm(
-        `Delete the submission from “${name}”? This permanently removes their message and cannot be undone.`,
-      )
-    ) {
-      return;
-    }
+    const ok = await confirm({
+      title: `Delete the submission from “${name}”?`,
+      description:
+        "This permanently removes their message and cannot be undone.",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
 
     setBusy(true);
     try {

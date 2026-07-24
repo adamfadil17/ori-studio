@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { useConfirm } from "@/components/admin/ui/confirm-dialog";
 import { toast, toastError } from "@/lib/toast";
 
 export default function ArticleRowActions({
@@ -15,17 +16,19 @@ export default function ArticleRowActions({
   title: string;
 }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [busy, setBusy] = useState(false);
 
   async function remove() {
-    // Deleting cascades every translation, so confirm explicitly.
-    if (
-      !window.confirm(
-        `Delete “${title}”? This removes all its translations and cannot be undone.`,
-      )
-    ) {
-      return;
-    }
+    // Deleting cascades every translation, so spell that out.
+    const ok = await confirm({
+      title: `Delete “${title}”?`,
+      description:
+        "This removes all its translations and cannot be undone.",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
 
     setBusy(true);
     try {

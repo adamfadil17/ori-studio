@@ -6,6 +6,10 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
+import {
+  useLeaveGuard,
+  useUnsavedChanges,
+} from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 
 import {
@@ -54,7 +58,7 @@ export default function UserForm({
     register,
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<UserFormInput, unknown, UserFormValues>({
     resolver: zodResolver(isEdit ? editUserFormSchema : createUserFormSchema),
     defaultValues: {
@@ -65,6 +69,10 @@ export default function UserForm({
       role: initial?.role ?? "editor",
     },
   });
+
+  // Warn before navigating away from edits that haven't been saved.
+  useUnsavedChanges(isDirty);
+  const confirmLeave = useLeaveGuard();
 
   const selectedRole = useWatch({ control, name: "role" });
   const roleHint = ROLES.find((r) => r.value === selectedRole)?.hint;
@@ -192,7 +200,9 @@ export default function UserForm({
         </button>
         <button
           type="button"
-          onClick={() => router.push("/dashboard/users")}
+          onClick={async () => {
+            if (await confirmLeave()) router.push("/dashboard/users");
+          }}
           className="text-xs tracking-widest uppercase text-body hover:opacity-70 hover:cursor-pointer"
         >
           Cancel

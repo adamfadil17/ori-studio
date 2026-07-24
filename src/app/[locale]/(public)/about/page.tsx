@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
@@ -13,6 +15,17 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 
 // Journal preview (4) dibaca langsung dari database.
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
+  const dict = await getDictionary(locale as Locale);
+  return staticPageMetadata(locale, "/about", dict.about.meta);
+}
 
 export default async function AboutPage({
   params,

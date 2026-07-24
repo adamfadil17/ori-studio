@@ -81,6 +81,10 @@
     }
   },
   "about": {
+    "meta": {
+      "title": "About",
+      "description": "We are an architecture studio creating timeless spaces that connect nature, culture, and meaningful living."
+    },
     "hero": {
       "eyebrow": "About ORI",
       "headline": "We design with intention, rooted in place.",
@@ -145,6 +149,10 @@
     }
   },
   "projects": {
+    "meta": {
+      "title": "Our Work",
+      "description": "Explore a portfolio of residential, hospitality, and commercial projects, each thoughtfully designed in response to its unique context."
+    },
     "hero": {
       "eyebrow": "Our Work",
       "headline": "A collection of spaces shaped by place and purpose.",
@@ -194,6 +202,10 @@
     }
   },
   "studio": {
+    "meta": {
+      "title": "The Studio",
+      "description": "Behind every project is a collaborative process shaped by curiosity, expertise, and a shared commitment to thoughtful architecture."
+    },
     "hero": {
       "eyebrow": "The Studio",
       "headline": "How we work, and who we work with.",
@@ -264,6 +276,10 @@
     }
   },
   "philosophy": {
+    "meta": {
+      "title": "Our Philosophy",
+      "description": "We believe meaningful architecture emerges from understanding people, place, and purpose—long before form begins to take shape."
+    },
     "hero": {
       "eyebrow": "Our Philosophy",
       "headline": "Good architecture begins long before the first line is drawn.",
@@ -306,6 +322,10 @@
     }
   },
   "journal": {
+    "meta": {
+      "title": "Journal",
+      "description": "Insights and perspectives on architecture, design, materials, and the spaces that shape everyday life."
+    },
     "hero": {
       "eyebrow": "Journal",
       "headline": "Stories, notes, and reflections on architecture and living.",
@@ -363,6 +383,10 @@
     }
   },
   "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Whether you have a project in mind, a partnership to explore, or want to join our team — we'd love to hear from you."
+    },
     "hero": {
       "eyebrow": "Contact",
       "headline": "Let's start\na conversation.",

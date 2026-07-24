@@ -8,6 +8,10 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
+import {
+  useLeaveGuard,
+  useUnsavedChanges,
+} from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 
 import {
@@ -117,6 +121,9 @@ export default function ProjectForm({
     initial ? toDrafts(initial.images, "GALLERY") : [],
   );
   const [imageError, setImageError] = useState<string | null>(null);
+  // Images live outside React Hook Form, so `isDirty` can't see them — this
+  // flag is flipped by the add/remove/alt handlers below.
+  const [imagesDirty, setImagesDirty] = useState(false);
 
   // Slug mirrors the name until the admin edits it by hand. An existing slug
   // (edit mode) counts as hand-set, so renaming never silently changes a live
@@ -129,7 +136,7 @@ export default function ProjectForm({
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<ProjectFormInput, unknown, ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
@@ -166,6 +173,10 @@ export default function ProjectForm({
   const categoryId = useWatch({ control, name: "categoryId" }) ?? "";
   const locationId = useWatch({ control, name: "locationId" }) ?? "";
 
+  // Fields tracked by RHF, plus the image state it cannot see.
+  useUnsavedChanges(isDirty || imagesDirty);
+  const confirmLeave = useLeaveGuard();
+
   function addFiles(
     fileList: FileList | null,
     current: DraftImage[],
@@ -197,6 +208,7 @@ export default function ProjectForm({
       });
     }
     setter(next);
+    setImagesDirty(true);
   }
 
   function removeAt(
@@ -207,6 +219,7 @@ export default function ProjectForm({
     const item = current[index];
     if (item.kind === "new") revokePreview(item.previewUrl); // free the blob
     setter(current.filter((_, i) => i !== index));
+    setImagesDirty(true);
   }
 
   function setAlt(
@@ -216,6 +229,7 @@ export default function ProjectForm({
     setter: (next: DraftImage[]) => void,
   ) {
     setter(current.map((img, i) => (i === index ? { ...img, alt } : img)));
+    setImagesDirty(true);
   }
 
   async function onSubmit(values: ProjectFormValues) {
@@ -581,7 +595,9 @@ export default function ProjectForm({
         </button>
         <button
           type="button"
-          onClick={() => router.push("/dashboard/projects")}
+          onClick={async () => {
+            if (await confirmLeave()) router.push("/dashboard/projects");
+          }}
           className="text-xs tracking-widest uppercase text-body hover:opacity-70 hover:cursor-pointer"
         >
           Cancel

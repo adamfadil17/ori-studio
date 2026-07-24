@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 
+import { useConfirm } from "@/components/admin/ui/confirm-dialog";
+import { GuardedLink } from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 import {
   Briefcase,
@@ -62,6 +63,7 @@ export default function AdminShell({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const confirm = useConfirm();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
@@ -77,6 +79,15 @@ export default function AdminShell({
   }, [mobileOpen]);
 
   async function signOut() {
+    // Not destructive, but easy to hit by accident — and losing a half-typed
+    // form to a stray click is worth one question.
+    const ok = await confirm({
+      title: "Sign out?",
+      description: "You'll need to sign in again to reach the dashboard.",
+      confirmLabel: "Sign out",
+    });
+    if (!ok) return;
+
     setSigningOut(true);
     try {
       await axios.post("/api/auth/logout");
@@ -94,10 +105,10 @@ export default function AdminShell({
       {items.map(({ href, label, icon: Icon }) => {
         const active = isActive(pathname, href);
         return (
-          <Link
+          <GuardedLink
             key={href}
             href={href}
-            onClick={() => setMobileOpen(false)}
+            onNavigate={() => setMobileOpen(false)}
             aria-current={active ? "page" : undefined}
             className={`flex items-center gap-3 px-4 py-2.5 text-xs tracking-widest uppercase transition-colors ${
               active
@@ -107,27 +118,31 @@ export default function AdminShell({
           >
             <Icon size={15} strokeWidth={1.5} />
             {label}
-          </Link>
+          </GuardedLink>
         );
       })}
     </nav>
   );
 
   const brand = (
-    <Link href="/dashboard" className="block px-4 py-1">
+    <GuardedLink href="/dashboard" className="block px-4 py-1">
       <span className="block text-[10px] tracking-[0.25em] uppercase text-eyebrow">
         Dashboard
       </span>
       <span className="mt-0.5 block font-serif text-lg tracking-wide text-headline">
         ORI Studio
       </span>
-    </Link>
+    </GuardedLink>
   );
 
   return (
     <div className="flex min-h-screen">
       {/* ── Sidebar (desktop) ───────────────────────────────── */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-headline/10 bg-background-alt py-6 lg:flex">
+      {/* Sticky rather than a separate scroll pane: the document stays the one
+          scroller, so the confirm dialog's body scroll-lock and any
+          scroll-into-view still behave. `overflow-y-auto` only matters if the
+          nav ever outgrows the viewport. */}
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-headline/10 bg-background-alt py-6 lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto">
         {brand}
         <div className="mt-8">{nav}</div>
       </aside>
@@ -164,7 +179,9 @@ export default function AdminShell({
 
       {/* ── Main column ─────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-4 border-b border-headline/10 bg-background-main px-5 py-4">
+        {/* z-30 keeps it under the mobile drawer (z-50) and confirm dialog
+            (z-100); the opaque background stops content showing through. */}
+        <header className="sticky top-0 z-30 flex items-center gap-4 border-b border-headline/10 bg-background-main px-5 py-4">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}

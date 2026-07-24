@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
 import { FieldSectionLabel, TextField } from "@/components/ui/form-fields";
+import { useUnsavedChanges } from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 import { changePasswordSchema, type ChangePasswordDto } from "@/lib/validators";
 
@@ -16,7 +17,7 @@ export default function ChangePasswordForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<ChangePasswordDto>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -25,6 +26,9 @@ export default function ChangePasswordForm() {
       confirmPassword: "",
     },
   });
+
+  // Warn before navigating away from a half-typed password change.
+  useUnsavedChanges(isDirty);
 
   async function onSubmit(values: ChangePasswordDto) {
     try {

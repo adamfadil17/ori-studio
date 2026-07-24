@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { Prisma } from "@/generated/prisma";
 
 import { prisma } from "./prisma";
@@ -106,12 +108,40 @@ export async function listPublishedArticles(locale: Locale) {
 }
 
 /**
+ * Sitemap entries — one per translation of each published article, mirroring
+ * getSitemapProjects. `lastModified` is the later of the article's and the
+ * translation's update time.
+ */
+export async function getSitemapArticles() {
+  const rows = await prisma.article.findMany({
+    where: { publishedAt: { not: null } },
+    select: {
+      updatedAt: true,
+      translations: { select: { locale: true, slug: true, updatedAt: true } },
+    },
+  });
+
+  return rows.flatMap((a) =>
+    a.translations.map((t) => ({
+      locale: t.locale.toLowerCase(),
+      slug: t.slug,
+      lastModified: t.updatedAt > a.updatedAt ? t.updatedAt : a.updatedAt,
+    })),
+  );
+}
+
+/**
  * The detail page's data, in the shape it already renders.
  *
  * As with projects, the slug is matched in ANY locale so an English-only
  * article still resolves under /id instead of 404ing.
  */
-export async function getPublicArticleDetail(slug: string, locale: Locale) {
+// Wrapped in React `cache()` so the detail page and its `generateMetadata`
+// share a single query per request instead of hitting the DB twice.
+export const getPublicArticleDetail = cache(async function (
+  slug: string,
+  locale: Locale,
+) {
   const match = await prisma.articleTranslation.findFirst({
     where: { slug },
     select: { articleId: true },
@@ -132,6 +162,11 @@ export async function getPublicArticleDetail(slug: string, locale: Locale) {
   return {
     id: article.id,
     slug: t?.slug ?? slug,
+    // Every locale's own slug — see the note in getPublicProjectDetail. Feeds
+    // hreflang / canonical without a second query.
+    slugByLocale: Object.fromEntries(
+      article.translations.map((tr) => [tr.locale, tr.slug]),
+    ) as { EN?: string; ID?: string },
     title: t?.title ?? "(untitled)",
     category: article.category.name,
     excerpt: t?.excerpt ?? "",
@@ -140,7 +175,7 @@ export async function getPublicArticleDetail(slug: string, locale: Locale) {
     imageAlt: article.imageAlt,
     content: t?.content as unknown as TiptapJSON,
   };
-}
+});
 
 /** Other published articles to show under a detail page. */
 export async function getRelatedPublicArticles(

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
@@ -24,6 +26,17 @@ const CULTURE_GALLERY_SPANS = [
   "",
   "",
 ] as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
+  const dict = await getDictionary(locale as Locale);
+  return staticPageMetadata(locale, "/studio", dict.studio.meta);
+}
 
 export default async function StudioPage({
   params,

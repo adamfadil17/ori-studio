@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
 import axios from "axios";
 
+import { useConfirm } from "@/components/admin/ui/confirm-dialog";
 import { toast, toastError } from "@/lib/toast";
 
 import type { LookupItem, LookupKind } from "@/lib/lookups";
@@ -26,6 +27,7 @@ export default function LookupManager({
   initialItems: LookupItem[];
 }) {
   const isLocation = kind === "locations";
+  const confirm = useConfirm();
 
   const [items, setItems] = useState(initialItems);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -104,7 +106,19 @@ export default function LookupManager({
   }
 
   async function remove(item: LookupItem) {
-    if (!window.confirm(`Delete “${item.label}”?`)) return;
+    const ok = await confirm({
+      title: `Delete “${item.label}”?`,
+      description:
+        item.usageCount > 0
+          ? `It is still used by ${item.usageCount} item${
+              item.usageCount === 1 ? "" : "s"
+            }, so this will be refused.`
+          : "This cannot be undone.",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
+
     setBusyId(item.id);
     try {
       await axios.delete(`/api/lookups/${kind}/${item.id}`);

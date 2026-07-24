@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
@@ -17,6 +18,65 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 // Read fresh on every request so an edit made in the dashboard shows at once,
 // instead of Next.js serving a statically cached copy.
 export const dynamic = "force-dynamic";
+
+/**
+ * Per-project title/description/og:image, so each project has unique metadata
+ * instead of the generic site default. The getter is `cache()`d, so this shares
+ * its query with the page render below rather than hitting the DB twice.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isValidLocale(locale)) return {};
+
+  const dbLocale = locale.toUpperCase() as DbLocale;
+  const project = await getPublicProjectDetail(slug, dbLocale);
+  if (!project) return {};
+
+  const description = project.description.slice(0, 160);
+  // Hero image if the project has one; metadataBase turns a "/uploads/…" path
+  // into an absolute URL for the preview.
+  const image = project.heroImages[0]?.url;
+
+  // EN is the anchor (always exists); ID is optional. metadataBase makes these
+  // relative paths absolute.
+  const enSlug = project.slugByLocale.EN ?? project.slug;
+  const idSlug = project.slugByLocale.ID;
+  const hasOwnTranslation = Boolean(project.slugByLocale[dbLocale]);
+
+  return {
+    title: project.name,
+    description,
+    // Self-canonical when this locale has its own translation. When it's
+    // falling back to EN, the canonical points at the EN URL instead, so the
+    // fallback page isn't indexed as a duplicate.
+    alternates: {
+      canonical: hasOwnTranslation
+        ? `/${locale}/projects/${project.slug}`
+        : `/en/projects/${enSlug}`,
+      languages: {
+        en: `/en/projects/${enSlug}`,
+        // Advertised only when a real ID translation exists.
+        ...(idSlug ? { id: `/id/projects/${idSlug}` } : {}),
+        "x-default": `/en/projects/${enSlug}`,
+      },
+    },
+    openGraph: {
+      type: "article",
+      title: project.name,
+      description,
+      images: image ? [{ url: image, alt: project.name }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.name,
+      description,
+    },
+  };
+}
 
 export default async function ProjectDetailPage({
   params,

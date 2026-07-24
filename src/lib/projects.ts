@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { Prisma } from "@/generated/prisma";
 
 import { prisma } from "./prisma";
@@ -94,6 +96,30 @@ export async function listPublishedProjects(locale: Locale) {
   return rows.map((row) => toPublicListItem(row, locale));
 }
 
+/**
+ * Sitemap entries — one per translation of each published project, so a project
+ * appears under every locale it actually has (an EN-only project yields just
+ * its /en URL, matching the canonical rule). `lastModified` is the later of the
+ * project's and the translation's update time.
+ */
+export async function getSitemapProjects() {
+  const rows = await prisma.project.findMany({
+    where: { publishedAt: { not: null } },
+    select: {
+      updatedAt: true,
+      translations: { select: { locale: true, slug: true, updatedAt: true } },
+    },
+  });
+
+  return rows.flatMap((p) =>
+    p.translations.map((t) => ({
+      locale: t.locale.toLowerCase(),
+      slug: t.slug,
+      lastModified: t.updatedAt > p.updatedAt ? t.updatedAt : p.updatedAt,
+    })),
+  );
+}
+
 /** One slide of the featured-project carousel. */
 export interface FeaturedHeroItem {
   slug: string;
@@ -168,7 +194,12 @@ function areaLabel(value: number | null): string {
  * projects only carry an English translation, and `/id/projects/<en-slug>`
  * should still resolve rather than 404 while an Indonesian version is pending.
  */
-export async function getPublicProjectDetail(slug: string, locale: Locale) {
+// Wrapped in React `cache()` so the detail page and its `generateMetadata`
+// share a single query per request instead of hitting the DB twice.
+export const getPublicProjectDetail = cache(async function (
+  slug: string,
+  locale: Locale,
+) {
   const match = await prisma.projectTranslation.findFirst({
     where: { slug },
     select: { projectId: true },
@@ -197,6 +228,12 @@ export async function getPublicProjectDetail(slug: string, locale: Locale) {
   return {
     id: project.id,
     slug: t?.slug ?? slug,
+    // Every locale's own slug, so `generateMetadata` can build hreflang /
+    // canonical links without a second query. Absent locale = no translation
+    // yet, which is exactly what the SEO logic keys off.
+    slugByLocale: Object.fromEntries(
+      project.translations.map((tr) => [tr.locale, tr.slug]),
+    ) as { EN?: string; ID?: string },
     name: t?.name ?? "(untitled)",
     location: locationLabel,
     yearLabel: projectYearLabel(project.yearStart, project.yearEnd),
@@ -221,7 +258,7 @@ export async function getPublicProjectDetail(slug: string, locale: Locale) {
     heroImages: project.images.filter((img) => img.type === "HERO"),
     galleryImages: project.images.filter((img) => img.type === "GALLERY"),
   };
-}
+});
 
 /** Other published projects to show under a detail page. */
 export async function getRelatedPublicProjects(

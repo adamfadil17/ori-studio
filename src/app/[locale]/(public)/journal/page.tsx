@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
@@ -16,6 +18,17 @@ export const dynamic = "force-dynamic";
 
 // Data artikel di bawah ini nantinya diganti query Prisma
 // (Article + ArticleTranslation) sesuai locale aktif.
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
+  const dict = await getDictionary(locale as Locale);
+  return staticPageMetadata(locale, "/journal", dict.journal.meta);
+}
 
 export default async function JournalPage({
   params,

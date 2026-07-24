@@ -81,6 +81,10 @@
     }
   },
   "about": {
+    "meta": {
+      "title": "Tentang",
+      "description": "Kami adalah studio arsitektur yang menciptakan ruang abadi yang menghubungkan alam, budaya, dan kehidupan yang bermakna."
+    },
     "hero": {
       "eyebrow": "Tentang ORI",
       "headline": "Kami merancang dengan intensi, berakar pada tempat.",
@@ -145,6 +149,10 @@
     }
   },
   "projects": {
+    "meta": {
+      "title": "Karya Kami",
+      "description": "Jelajahi portofolio proyek residensial, hospitality, dan komersial, yang masing-masing dirancang dengan penuh pertimbangan sesuai konteksnya."
+    },
     "hero": {
       "eyebrow": "Karya Kami",
       "headline": "Kumpulan ruang yang dibentuk oleh tempat dan tujuan.",
@@ -194,6 +202,10 @@
     }
   },
   "studio": {
+    "meta": {
+      "title": "Studio",
+      "description": "Di balik setiap proyek ada proses kolaboratif yang dibentuk oleh rasa ingin tahu, keahlian, dan komitmen bersama terhadap arsitektur yang penuh pertimbangan."
+    },
     "hero": {
       "eyebrow": "Studio",
       "headline": "Bagaimana kami bekerja, dan bersama siapa.",
@@ -264,6 +276,10 @@
     }
   },
   "philosophy": {
+    "meta": {
+      "title": "Filosofi Kami",
+      "description": "Kami percaya arsitektur yang bermakna lahir dari pemahaman terhadap manusia, tempat, dan tujuan—jauh sebelum bentuknya mulai terbentuk."
+    },
     "hero": {
       "eyebrow": "Filosofi Kami",
       "headline": "Arsitektur yang baik dimulai jauh sebelum garis pertama digambar.",
@@ -306,6 +322,10 @@
     }
   },
   "journal": {
+    "meta": {
+      "title": "Jurnal",
+      "description": "Wawasan dan perspektif seputar arsitektur, desain, material, dan ruang-ruang yang membentuk kehidupan sehari-hari."
+    },
     "hero": {
       "eyebrow": "Jurnal",
       "headline": "Kisah, catatan, dan refleksi seputar arsitektur dan kehidupan.",
@@ -363,6 +383,10 @@
     }
   },
   "contact": {
+    "meta": {
+      "title": "Kontak",
+      "description": "Baik Anda punya proyek yang direncanakan, kemitraan yang ingin dijajaki, atau ingin bergabung dengan tim kami — kami senang mendengarnya."
+    },
     "hero": {
       "eyebrow": "Kontak",
       "headline": "Mari mulai\nsebuah percakapan.",

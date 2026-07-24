@@ -8,6 +8,10 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
+import {
+  useLeaveGuard,
+  useUnsavedChanges,
+} from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 
 import LookupSelect from "@/components/admin/ui/lookup-select";
@@ -90,6 +94,8 @@ export default function ArticleForm({
   const [idSlugLocked, setIdSlugLocked] = useState(Boolean(id?.slug));
 
   const [coverError, setCoverError] = useState<string | null>(null);
+  // Flipped by the explicit cover actions below (RHF cannot see them).
+  const [coverDirty, setCoverDirty] = useState(false);
   const [contentError, setContentError] = useState<string | null>(null);
 
   const {
@@ -97,7 +103,7 @@ export default function ArticleForm({
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<ArticleFormInput, unknown, ArticleFormValues>({
     resolver: zodResolver(articleFormSchema),
     defaultValues: {
@@ -120,6 +126,15 @@ export default function ArticleForm({
   // Controlled widget: RHF stays the source of truth via setValue on change.
   const categoryId = useWatch({ control, name: "categoryId" }) ?? "";
 
+  // Cover and Tiptap bodies live outside RHF. Content is compared against its
+  // initial value rather than flagged on change, because the editor can emit an
+  // onChange while mounting — that would mark a pristine form dirty.
+  const contentDirty =
+    JSON.stringify(enContent) !== JSON.stringify(en?.content ?? EMPTY_DOC) ||
+    JSON.stringify(idContent) !== JSON.stringify(id?.content ?? EMPTY_DOC);
+  useUnsavedChanges(isDirty || coverDirty || contentDirty);
+  const confirmLeave = useLeaveGuard();
+
   function pickCover(fileList: FileList | null) {
     const file = fileList?.[0];
     if (!file) return;
@@ -139,6 +154,7 @@ export default function ArticleForm({
       previewUrl: makePreview(file),
       alt: cover?.alt ?? "",
     });
+    setCoverDirty(true);
   }
 
   function clearCover() {
@@ -146,6 +162,7 @@ export default function ArticleForm({
     // Alt is part of the cover, so removing the image removes its description
     // too — no stale value can linger.
     setCover(null);
+    setCoverDirty(true);
   }
 
   async function onSubmit(values: ArticleFormValues) {
@@ -260,9 +277,10 @@ export default function ArticleForm({
               <input
                 type="text"
                 value={cover.alt}
-                onChange={(e) =>
-                  setCover({ ...cover, alt: e.target.value })
-                }
+                onChange={(e) => {
+                  setCover({ ...cover, alt: e.target.value });
+                  setCoverDirty(true);
+                }}
                 placeholder="Alt text"
                 aria-label="Alt text for the cover image"
                 className="mt-2 w-full border border-eyebrow/40 bg-transparent px-2 py-1 text-xs text-headline placeholder:text-body/50 focus-visible:outline-none"
@@ -387,7 +405,9 @@ export default function ArticleForm({
         </button>
         <button
           type="button"
-          onClick={() => router.push("/dashboard/journal")}
+          onClick={async () => {
+            if (await confirmLeave()) router.push("/dashboard/journal");
+          }}
           className="text-xs tracking-widest uppercase text-body hover:opacity-70 hover:cursor-pointer"
         >
           Cancel

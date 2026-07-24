@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
+import {
+  useLeaveGuard,
+  useUnsavedChanges,
+} from "@/components/admin/ui/unsaved-changes";
 import { toast, toastError } from "@/lib/toast";
 
 import {
@@ -50,7 +54,7 @@ export default function PositionForm({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<OpenPositionFormInput, unknown, OpenPositionFormValues>({
     resolver: zodResolver(createOpenPositionSchema),
     defaultValues: {
@@ -62,6 +66,10 @@ export default function PositionForm({
       isActive: initial?.isActive ?? true,
     },
   });
+
+  // Warn before navigating away from edits that haven't been saved.
+  useUnsavedChanges(isDirty);
+  const confirmLeave = useLeaveGuard();
 
   async function onSubmit(values: OpenPositionFormValues) {
     try {
@@ -131,7 +139,9 @@ export default function PositionForm({
         </button>
         <button
           type="button"
-          onClick={() => router.push("/dashboard/positions")}
+          onClick={async () => {
+            if (await confirmLeave()) router.push("/dashboard/positions");
+          }}
           className="text-xs tracking-widest uppercase text-body hover:opacity-70 hover:cursor-pointer"
         >
           Cancel

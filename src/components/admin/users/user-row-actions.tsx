@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { useConfirm } from "@/components/admin/ui/confirm-dialog";
 import { toast, toastError } from "@/lib/toast";
 
 export default function UserRowActions({
@@ -23,6 +24,7 @@ export default function UserRowActions({
   isLastAdmin: boolean;
 }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [busy, setBusy] = useState(false);
 
   // Both are refused by the API as well; hiding them here just avoids
@@ -30,13 +32,13 @@ export default function UserRowActions({
   const canDelete = !isSelf && !isLastAdmin;
 
   async function remove() {
-    if (
-      !window.confirm(
-        `Delete ${name} (${email})? They lose dashboard access immediately. This cannot be undone.`,
-      )
-    ) {
-      return;
-    }
+    const ok = await confirm({
+      title: `Delete ${name}?`,
+      description: `${email} loses dashboard access immediately. This cannot be undone.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
 
     setBusy(true);
     try {
