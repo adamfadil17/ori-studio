@@ -89,6 +89,41 @@ export async function readPrivateFile(
 }
 
 /**
+ * Read a PUBLIC upload (an image) so a route handler can serve it.
+ *
+ * In production Next snapshots `public/` once at startup and 404s anything
+ * written afterwards — so freshly uploaded images are unreachable as static
+ * assets until the next restart. Serving them through a route handler, which
+ * reads the disk per request, sidesteps that. `segments` is the URL path after
+ * `/uploads/` (e.g. ["images","projects","<file>.jpg"]).
+ *
+ * Returns null when any segment is unsafe or the file is missing. The resolved
+ * path is re-checked against the upload root as a second guard against
+ * traversal.
+ */
+export async function readPublicUpload(
+  segments: string[],
+): Promise<Buffer | null> {
+  if (
+    segments.length === 0 ||
+    segments.some((s) => !/^[a-zA-Z0-9._-]+$/.test(s) || s === "..")
+  ) {
+    return null;
+  }
+
+  const root = path.join(process.cwd(), "public", UPLOAD_ROOT);
+  const target = path.join(root, ...segments);
+  // Defence in depth: the resolved path must stay under the upload root.
+  if (target !== root && !target.startsWith(root + path.sep)) return null;
+
+  try {
+    return await readFile(target);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Upload an image (project hero/gallery, article cover). `folder` groups them
  * on disk — e.g. "projects" → `/uploads/images/projects/…`. Returns the public
  * URL to store on the record; `next/image` handles AVIF/WebP at serve time.

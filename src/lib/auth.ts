@@ -35,7 +35,7 @@ export const AUTH_COOKIE = "token";
 /** Cookie options for the session token (shared by login, register, logout). */
 export const AUTH_COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: process.env.USE_HTTPS === "true",
   sameSite: "lax" as const,
   path: "/",
 };
