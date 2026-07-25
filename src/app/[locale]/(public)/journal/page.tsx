@@ -48,6 +48,11 @@ export default async function JournalPage({
     listFeaturedArticles(dbLocale),
   ]);
 
+  // The featured carousel supplies the gap under the hero via its own padding.
+  // When nothing is featured it renders nothing, so the Explore section has to
+  // carry that top spacing itself — otherwise it butts straight against the hero.
+  const hasFeatured = featuredArticles.length > 0;
+
   return (
     <>
       {/* ---------- HERO ---------- */}
@@ -93,7 +98,9 @@ export default async function JournalPage({
       {/* ---------- EXPLORE THE JOURNAL (filter + grid/list + pagination) ---------- */}
       <section
         id="all-articles"
-        className="bg-background-main px-6 pb-24 md:px-10"
+        className={`bg-background-main px-6 pb-24 md:px-10 ${
+          hasFeatured ? "" : "pt-24"
+        }`}
       >
         <div className="mx-auto max-w-7xl">
           <p className="flex items-center gap-4 text-xs tracking-widest uppercase text-eyebrow">
