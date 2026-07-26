@@ -9,6 +9,7 @@ import {
   paginateQuery,
   parsePagination,
   prisma,
+  promote,
   requireAuth,
   requireRole,
 } from "@/lib";
@@ -98,6 +99,9 @@ export async function POST(req: NextRequest) {
       },
       include: ARTICLE_INCLUDE,
     });
+
+    // Move the cover from tmp to committed now that the row exists.
+    await promote([article.image]);
 
     return created(article);
   } catch (error) {

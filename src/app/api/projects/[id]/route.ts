@@ -8,8 +8,10 @@ import {
   notFound,
   ok,
   prisma,
+  promote,
   requireAuth,
   requireRole,
+  trash,
   updateProjectSchema,
 } from "@/lib";
 import { PROJECT_INCLUDE, resolveProjectSlug } from "@/lib/projects";
@@ -61,7 +63,8 @@ export async function PATCH(
 
     const existing = await prisma.project.findUnique({
       where: { id },
-      select: { id: true, publishedAt: true },
+      // Old image URLs are needed to trash the ones this edit drops.
+      select: { id: true, publishedAt: true, images: { select: { url: true } } },
     });
     if (!existing) return notFound("Project");
 
@@ -141,6 +144,19 @@ export async function PATCH(
       }
     });
 
+    // Files, after the DB is consistent (DB-first ordering). New images move
+    // tmp→committed; images this edit removed move committed→tmp for the sweeper.
+    // Kept images are in both sets: promote skips them (already committed),
+    // and they're filtered out of the trash list.
+    if (dto.images) {
+      const newUrls = dto.images.map((img) => img.url);
+      const newSet = new Set(newUrls);
+      await promote(newUrls);
+      await trash(
+        existing.images.map((img) => img.url).filter((url) => !newSet.has(url)),
+      );
+    }
+
     const project = await prisma.project.findUnique({
       where: { id },
       include: PROJECT_INCLUDE,
@@ -163,7 +179,16 @@ export async function DELETE(
     const payload = await requireAuth(req);
     requireRole(payload, "admin", "editor");
 
+    // Capture image URLs before the cascade removes the rows, so they can be
+    // trashed once the record is gone.
+    const existing = await prisma.project.findUnique({
+      where: { id },
+      select: { images: { select: { url: true } } },
+    });
+    if (!existing) return notFound("Project");
+
     await prisma.project.delete({ where: { id } });
+    await trash(existing.images.map((img) => img.url));
 
     return noContent();
   } catch (error) {

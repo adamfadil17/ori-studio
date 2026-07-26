@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "sweep": "tsx --env-file=.env scripts/sweep-uploads.ts",
     "db:seed": "prisma db seed",
     "postinstall": "prisma generate"
   },

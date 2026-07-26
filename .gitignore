@@ -24,9 +24,11 @@
 .DS_Store
 *.pem
 
-# uploaded images written by the local storage driver (public assets)
+# local dev upload storage (committed + tmp, both images and CVs). In prod these
+# live outside the app tree via UPLOADS_DIR / PRIVATE_UPLOADS_DIR etc.
+/.data
+# legacy local upload dirs (pre-external-storage); kept ignored for old checkouts
 /public/uploads
-# applicant CVs — personal data, served only via the authenticated download route
 /private-uploads
 
 # debug
@@ -37,6 +39,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# …but the template, which holds no secrets, is committed
+!.env.example
 
 # vercel
 .vercel

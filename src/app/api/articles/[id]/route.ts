@@ -8,8 +8,10 @@ import {
   notFound,
   ok,
   prisma,
+  promote,
   requireAuth,
   requireRole,
+  trash,
   updateArticleSchema,
 } from "@/lib";
 import { ARTICLE_INCLUDE, resolveArticleSlug } from "@/lib/articles";
@@ -61,7 +63,8 @@ export async function PATCH(
 
     const existing = await prisma.article.findUnique({
       where: { id },
-      select: { id: true, publishedAt: true },
+      // Old cover is needed to trash it when this edit replaces it.
+      select: { id: true, publishedAt: true, image: true },
     });
     if (!existing) return notFound("Article");
 
@@ -110,6 +113,15 @@ export async function PATCH(
       }
     });
 
+    // Files, after the DB is consistent. A new cover moves tmp→committed; if it
+    // replaced a different one, the old cover moves committed→tmp for the sweeper.
+    if (dto.image !== undefined) {
+      await promote([dto.image]);
+      if (existing.image && existing.image !== dto.image) {
+        await trash([existing.image]);
+      }
+    }
+
     const article = await prisma.article.findUnique({
       where: { id },
       include: ARTICLE_INCLUDE,
@@ -132,7 +144,15 @@ export async function DELETE(
     const payload = await requireAuth(req);
     requireRole(payload, "admin", "editor");
 
+    // Capture the cover before deleting, so it can be trashed afterwards.
+    const existing = await prisma.article.findUnique({
+      where: { id },
+      select: { image: true },
+    });
+    if (!existing) return notFound("Article");
+
     await prisma.article.delete({ where: { id } });
+    await trash([existing.image]);
 
     return noContent();
   } catch (error) {

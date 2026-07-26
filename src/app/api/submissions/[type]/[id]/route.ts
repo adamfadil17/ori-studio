@@ -9,6 +9,7 @@ import {
   requireAuth,
   requireRole,
   submissionKindSchema,
+  trash,
   updateSubmissionStatusSchema,
   type SubmissionKind,
 } from "@/lib";
@@ -91,7 +92,19 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     const { type, id } = await params;
     const kind = submissionKindSchema.parse(type);
 
+    // A career submission owns a CV file; capture it before deleting so it can
+    // be trashed for the sweeper. Other kinds have no files.
+    let cvUrl: string | null = null;
+    if (kind === "career") {
+      const record = await prisma.contactCareer.findUnique({
+        where: { id },
+        select: { cvUrl: true },
+      });
+      cvUrl = record?.cvUrl ?? null;
+    }
+
     await deleteByKind(kind, id);
+    if (cvUrl) await trash([cvUrl]);
 
     return noContent();
   } catch (error) {

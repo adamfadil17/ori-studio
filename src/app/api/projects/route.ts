@@ -9,6 +9,7 @@ import {
   paginateQuery,
   parsePagination,
   prisma,
+  promote,
   requireAuth,
   requireRole,
 } from "@/lib";
@@ -136,6 +137,10 @@ export async function POST(req: NextRequest) {
       },
       include: PROJECT_INCLUDE,
     });
+
+    // The row is saved: move its images from tmp to committed so they're
+    // servable. Any that failed to save stay in tmp for the sweeper.
+    await promote(project.images.map((img) => img.url));
 
     return created(project);
   } catch (error) {

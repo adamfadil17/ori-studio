@@ -7,6 +7,7 @@ import {
   handleError,
   notifyNewSubmission,
   prisma,
+  promote,
   rateLimit,
   uploadCv,
 } from "@/lib";
@@ -69,6 +70,10 @@ export async function POST(req: NextRequest) {
         cvUrl,
       },
     });
+
+    // Row saved: move the CV from tmp to committed private storage. If the
+    // create had thrown, the CV would stay in tmp for the sweeper.
+    await promote([cvUrl]);
 
     await notifyNewSubmission("CAREER", career);
 
