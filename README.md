@@ -18,7 +18,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Copy `.env.example` to `.env` and fill it in first. For self-hosted deployment
 (file storage dirs, the upload sweeper cron, and Nginx), see
-[docs/deployment.md](docs/deployment.md).
+[docs/deployment.md](docs/deployment.md). On every deploy, run `npm run build`
+then restart the app — Next compiles the whole app, so code changes don't take
+effect until you rebuild.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

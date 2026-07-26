@@ -20,8 +20,17 @@ npm run build
 pm2 start "npm run start" --name ori-studio
 ```
 
-Re-run `npx prisma generate` + `npm run build` + `pm2 restart ori-studio` on
-every deploy that changes the schema or adds a route (e.g. the uploads route).
+On **every** deploy, rebuild and restart — Next compiles the whole app, so no
+code change (component, style, route, or logic) takes effect until then:
+
+```bash
+npm run build
+pm2 restart ori-studio
+```
+
+The Prisma steps are conditional: run `npx prisma generate` only when the schema
+changed or on a fresh clone (`src/generated` is gitignored), and
+`npx prisma migrate deploy` only when there are new migrations.
 
 ## 2. File storage directories
 
