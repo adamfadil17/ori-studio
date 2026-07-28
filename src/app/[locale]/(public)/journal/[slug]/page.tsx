@@ -163,6 +163,7 @@ export default async function ArticleDetailPage({
         locale={locale as Locale}
         dict={dict.articleDetail.bannerCta}
         href="/journal"
+        imageUrl="/images/cta-banner/cta-journal.png"
       />
     </>
   );

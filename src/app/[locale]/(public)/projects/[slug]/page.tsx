@@ -247,6 +247,7 @@ export default async function ProjectDetailPage({
         locale={locale as Locale}
         dict={dict.projectDetail.cta}
         href="/contact?tab=inquiry#contact-form"
+        imageUrl="/images/cta-banner/cta-projects.png"
       />
     </>
   );
