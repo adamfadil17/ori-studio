@@ -7,6 +7,7 @@ import CareerForm from "./career-form";
 import ProjectInquiryForm from "./project-inquiry";
 import FaqAccordion from "./faq-accordion";
 import Image from "next/image";
+import type { PublicPosition } from "@/lib/types";
 
 export type ContactTab = "inquiry" | "partnership" | "career";
 
@@ -43,11 +44,13 @@ interface ContactExperienceDict {
 
 interface ContactExperienceProps {
   dict: ContactExperienceDict;
+  positions: PublicPosition[];
   initialTab?: ContactTab;
 }
 
 export default function ContactExperience({
   dict,
+  positions,
   initialTab = "inquiry",
 }: ContactExperienceProps) {
   const [activeTab, setActiveTab] = useState<ContactTab>(initialTab);
@@ -172,7 +175,9 @@ export default function ContactExperience({
               {activeTab === "partnership" && (
                 <PartnershipForm dict={dict.partnership} />
               )}
-              {activeTab === "career" && <CareerForm dict={dict.career} />}
+              {activeTab === "career" && (
+                <CareerForm dict={dict.career} positions={positions} />
+              )}
             </div>
           </div>
         </div>

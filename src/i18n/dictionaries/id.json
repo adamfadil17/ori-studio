@@ -447,7 +447,8 @@
         "PREFER_NOT_TO_SAY": "Tidak ingin menyebutkan"
       },
       "submit": "Kirim",
-      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda."
+      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda.",
+      "errorMessage": "Terjadi kesalahan — silakan coba lagi sebentar."
     },
     "partnership": {
       "eyebrow": "Formulir Kemitraan",
@@ -471,7 +472,8 @@
         "OTHER": "Lainnya"
       },
       "submit": "Kirim",
-      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda."
+      "successMessage": "Terima kasih — pesan Anda sudah terkirim. Kami akan segera menghubungi Anda.",
+      "errorMessage": "Terjadi kesalahan — silakan coba lagi sebentar."
     },
     "career": {
       "eyebrow": "Formulir Karier",
@@ -504,7 +506,8 @@
       "closeModal": "Tutup",
       "positionType": "Tipe",
       "positionLevel": "Level",
-      "successMessage": "Terima kasih — lamaran Anda sudah terkirim. Kami akan segera menghubungi Anda."
+      "successMessage": "Terima kasih — lamaran Anda sudah terkirim. Kami akan segera menghubungi Anda.",
+      "errorMessage": "Terjadi kesalahan — silakan coba lagi sebentar."
     },
     "faq": {
       "eyebrow": "FAQ",

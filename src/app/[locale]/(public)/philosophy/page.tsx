@@ -9,6 +9,15 @@ import CtaBanner from "@/components/public/layout/cta-banner";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
+// One image per principle, index-aligned with `dict.philosophy.principles`.
+// Images aren't translatable, so they live here rather than in the dictionaries.
+const PRINCIPLE_IMAGES = [
+  "/images/philosophy/principle-1.png",
+  "/images/philosophy/principle-2.png",
+  "/images/philosophy/principle-3.png",
+  "/images/philosophy/principle-4.png",
+];
+
 export async function generateMetadata({
   params,
 }: {
@@ -36,7 +45,7 @@ export default async function PhilosophyPage({
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-philosophy.png"
           alt="ORI Studio Architect design philosophy"
           fill
           priority
@@ -96,9 +105,10 @@ export default async function PhilosophyPage({
 
                 <div className="relative aspect-square w-full overflow-hidden bg-background-main">
                   <Image
-                    src={PLACEHOLDER}
+                    src={PRINCIPLE_IMAGES[index] ?? PLACEHOLDER}
                     alt={item.title}
                     fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
                     className="object-cover"
                   />
                 </div>
@@ -111,7 +121,7 @@ export default async function PhilosophyPage({
       {/* ---------- IMAGE BREAK ---------- */}
       <section className="relative h-[400px] w-full overflow-hidden">
         <Image
-          src={PLACEHOLDER}
+          src="/images/philosophy/philosophy-banner.png"
           alt="ORI Studio Architect at work"
           fill
           className="object-cover"
@@ -129,7 +139,7 @@ export default async function PhilosophyPage({
           <div className="mt-8 flex flex-col items-center">
             <div className="relative h-16 w-16 overflow-hidden rounded-full bg-background-main">
               <Image
-                src={PLACEHOLDER}
+                src="/images/about/team/member-1.png"
                 alt={quote.name}
                 fill
                 className="object-cover"
@@ -149,6 +159,7 @@ export default async function PhilosophyPage({
         locale={locale as Locale}
         dict={dict.philosophy.cta}
         href="/projects"
+        imageUrl="/images/cta-banner/cta-philosophy.png"
       />
     </>
   );

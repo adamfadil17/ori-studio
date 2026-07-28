@@ -1,6 +1,6 @@
 "use client";
 
-import { OpenPosition } from "@/lib/data/open-positions";
+import type { PublicPosition } from "@/lib/types";
 import { useEffect } from "react";
 
 interface OpenPositionModalDict {
@@ -11,10 +11,10 @@ interface OpenPositionModalDict {
 }
 
 interface OpenPositionModalProps {
-  position: OpenPosition;
+  position: PublicPosition;
   dict: OpenPositionModalDict;
   onClose: () => void;
-  onApply: (position: OpenPosition) => void;
+  onApply: (position: PublicPosition) => void;
 }
 
 export default function OpenPositionModal({

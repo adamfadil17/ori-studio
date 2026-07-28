@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,6 +14,7 @@ import {
   TextAreaField,
   TextField,
 } from "../../ui/form-fields";
+import RecaptchaCheckbox, { RECAPTCHA_ENABLED } from "./recaptcha-checkbox";
 
 interface ProjectInquiryDict {
   eyebrow: string;
@@ -35,6 +38,7 @@ interface ProjectInquiryDict {
   budgetOptions: Record<string, string>;
   submit: string;
   successMessage: string;
+  errorMessage: string;
 }
 
 export default function ProjectInquiryForm({
@@ -48,7 +52,7 @@ export default function ProjectInquiryForm({
     handleSubmit,
     setValue,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<ProjectInquiryFormValues>({
     resolver: zodResolver(projectInquirySchema),
     defaultValues: {
@@ -58,11 +62,31 @@ export default function ProjectInquiryForm({
     },
   });
 
+  // Own the outcome rather than RHF's isSubmitSuccessful: a failed request must
+  // NOT read as success (the callback completing without a throw isn't enough).
+  const [submitState, setSubmitState] = useState<"idle" | "ok" | "error">(
+    "idle",
+  );
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  // Bumping this remounts the checkbox, clearing it (the token is single-use).
+  const [recaptchaKey, setRecaptchaKey] = useState(0);
+
   async function onSubmit(values: ProjectInquiryFormValues) {
-    // TODO: kirim ke API route -> Prisma ContactInquiry.create() + email notifikasi (Nodemailer)
-    console.log("Project inquiry submission:", values);
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    reset();
+    setSubmitState("idle");
+    // When enabled, the box must be ticked. Skip the round-trip if it isn't.
+    if (RECAPTCHA_ENABLED && !recaptchaToken) {
+      setSubmitState("error");
+      return;
+    }
+    try {
+      await axios.post("/api/contact/inquiry", { ...values, recaptchaToken });
+      reset();
+      setRecaptchaToken("");
+      setRecaptchaKey((k) => k + 1);
+      setSubmitState("ok");
+    } catch {
+      setSubmitState("error");
+    }
   }
 
   const serviceOptions = Object.entries(dict.serviceTypeOptions).map(
@@ -197,6 +221,8 @@ export default function ProjectInquiryForm({
           {...register("vision")}
         />
 
+        <RecaptchaCheckbox key={recaptchaKey} onChange={setRecaptchaToken} />
+
         <button
           type="submit"
           disabled={isSubmitting}
@@ -205,8 +231,11 @@ export default function ProjectInquiryForm({
           {isSubmitting ? "..." : dict.submit}
         </button>
 
-        {isSubmitSuccessful && (
+        {submitState === "ok" && (
           <p className="text-sm text-eyebrow">{dict.successMessage}</p>
+        )}
+        {submitState === "error" && (
+          <p className="text-sm text-red-700">{dict.errorMessage}</p>
         )}
       </form>
     </div>

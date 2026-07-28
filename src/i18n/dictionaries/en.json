@@ -447,7 +447,8 @@
         "PREFER_NOT_TO_SAY": "Prefer not to say"
       },
       "submit": "Submit",
-      "successMessage": "Thank you — your inquiry has been sent. We'll be in touch soon."
+      "successMessage": "Thank you — your inquiry has been sent. We'll be in touch soon.",
+      "errorMessage": "Something went wrong — please try again in a moment."
     },
     "partnership": {
       "eyebrow": "Partnership Form",
@@ -471,7 +472,8 @@
         "OTHER": "Other"
       },
       "submit": "Submit",
-      "successMessage": "Thank you — your message has been sent. We'll be in touch soon."
+      "successMessage": "Thank you — your message has been sent. We'll be in touch soon.",
+      "errorMessage": "Something went wrong — please try again in a moment."
     },
     "career": {
       "eyebrow": "Career Form",
@@ -504,7 +506,8 @@
       "closeModal": "Close",
       "positionType": "Type",
       "positionLevel": "Level",
-      "successMessage": "Thank you — your application has been sent. We'll be in touch soon."
+      "successMessage": "Thank you — your application has been sent. We'll be in touch soon.",
+      "errorMessage": "Something went wrong — please try again in a moment."
     },
     "faq": {
       "eyebrow": "FAQ",

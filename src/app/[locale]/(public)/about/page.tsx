@@ -16,6 +16,13 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 // Journal preview (4) dibaca langsung dari database.
 export const dynamic = "force-dynamic";
 
+const MEMBER_IMAGES = [
+  "/images/about/team/member-1.png",
+  "/images/about/team/member-2.png",
+  "/images/about/team/member-3.png",
+  "/images/about/team/member-4.png",
+];
+
 export async function generateMetadata({
   params,
 }: {
@@ -41,7 +48,9 @@ export default async function AboutPage({
   const { journal } = dict.home;
 
   // Route locale is lowercase ("en"); the Prisma enum is uppercase ("EN").
-  const articles = await listPublishedArticles(locale.toUpperCase() as DbLocale);
+  const articles = await listPublishedArticles(
+    locale.toUpperCase() as DbLocale,
+  );
   const journalArticles = articles.slice(0, 4);
 
   return (
@@ -49,7 +58,7 @@ export default async function AboutPage({
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-about.png"
           alt="ORI Studio Architect team at work"
           fill
           priority
@@ -107,7 +116,7 @@ export default async function AboutPage({
           <div className="relative h-[420px] w-full sm:h-[480px]">
             <div className="absolute left-0 top-0 h-[45%] w-[72%] overflow-hidden bg-background-alt">
               <Image
-                src={PLACEHOLDER}
+                src="/images/about/story/story-1.png"
                 alt="ORI Studio project detail"
                 fill
                 className="object-cover"
@@ -115,7 +124,7 @@ export default async function AboutPage({
             </div>
             <div className="absolute bottom-0 right-0 h-[44%] w-[72%] overflow-hidden bg-background-alt">
               <Image
-                src={PLACEHOLDER}
+                src="/images/about/story/story-2.png"
                 alt="ORI Studio material detail"
                 fill
                 className="object-cover"
@@ -156,7 +165,7 @@ export default async function AboutPage({
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start">
             <div className="relative aspect-square w-full overflow-hidden bg-background-alt lg:sticky lg:top-28">
               <Image
-                src={PLACEHOLDER}
+                src="/images/about/values-principles/values-principles.png"
                 alt="ORI Studio design values"
                 fill
                 className="object-cover"
@@ -198,13 +207,14 @@ export default async function AboutPage({
           </p>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {team.members.map((member) => (
+            {team.members.map((member, index) => (
               <div key={member.name}>
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-background-alt">
                   <Image
-                    src={PLACEHOLDER}
+                    src={MEMBER_IMAGES[index] ?? PLACEHOLDER}
                     alt={member.name}
                     fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover"
                   />
                 </div>
@@ -261,6 +271,7 @@ export default async function AboutPage({
         locale={locale as Locale}
         dict={dict.about.cta}
         href="/contact?tab=inquiry#contact-form"
+        imageUrl="/images/cta-banner/cta-about.png"
       />
     </>
   );

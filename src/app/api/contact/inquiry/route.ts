@@ -1,12 +1,14 @@
 import { NextRequest } from "next/server";
 
 import {
+  badRequest,
   created,
   handleError,
   notifyNewSubmission,
   prisma,
   projectInquirySchema,
   rateLimit,
+  verifyRecaptcha,
 } from "@/lib";
 
 export async function POST(req: NextRequest) {
@@ -15,6 +17,13 @@ export async function POST(req: NextRequest) {
     if (limited) return limited;
 
     const body = await req.json();
+
+    // Spam gate before touching the DB. Disabled when no secret key is set.
+    if (!(await verifyRecaptcha(body?.recaptchaToken))) {
+      return badRequest("reCAPTCHA verification failed. Please try again.");
+    }
+
+    // The schema strips the extra `recaptchaToken` key on parse.
     const dto = projectInquirySchema.parse(body);
 
     const inquiry = await prisma.contactInquiry.create({

@@ -9,6 +9,7 @@ import { getPublicArticleDetail } from "@/lib/articles";
 import type { Locale as DbLocale } from "@/lib/types";
 import SetHeaderMode from "@/components/public/layout/set-header-mode";
 import TiptapContent from "@/components/public/journal/tiptap-content";
+import { ar } from "zod/v4/locales";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -112,7 +113,7 @@ export default async function ArticleDetailPage({
         {/* ---------- FULL-WIDTH IMAGE ---------- */}
         <section className="relative h-[360px] w-full overflow-hidden bg-background-alt md:h-[460px]">
           <Image
-            src={PLACEHOLDER}
+            src={article.image ?? PLACEHOLDER}
             alt={article.title}
             fill
             priority
