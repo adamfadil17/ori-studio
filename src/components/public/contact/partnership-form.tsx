@@ -160,7 +160,7 @@ export default function PartnershipForm({ dict }: { dict: PartnershipDict }) {
           disabled={isSubmitting}
           className="bg-eyebrow px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
-          {isSubmitting ? "..." : dict.submit}
+          {isSubmitting ? "Sending..." : dict.submit}
         </button>
 
         {submitState === "ok" && (
