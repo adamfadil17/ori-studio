@@ -235,7 +235,7 @@ export default async function ProjectDetailPage({
                   name={item.name}
                   location={item.location}
                   yearLabel={item.yearLabel}
-                  thumbnailUrl={PLACEHOLDER}
+                  thumbnailUrl={item.thumbnailUrl ?? PLACEHOLDER}
                 />
               ))}
             </div>
