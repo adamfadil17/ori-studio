@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PartnershipFormValues, partnershipSchema } from "@/lib/validators";
@@ -8,6 +10,7 @@ import {
   TextAreaField,
   TextField,
 } from "../../ui/form-fields";
+import RecaptchaCheckbox, { RECAPTCHA_ENABLED } from "./recaptcha-checkbox";
 
 interface PartnershipDict {
   eyebrow: string;
@@ -26,6 +29,7 @@ interface PartnershipDict {
   partnershipTypeOptions: Record<string, string>;
   submit: string;
   successMessage: string;
+  errorMessage: string;
 }
 
 export default function PartnershipForm({ dict }: { dict: PartnershipDict }) {
@@ -35,17 +39,40 @@ export default function PartnershipForm({ dict }: { dict: PartnershipDict }) {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<PartnershipFormValues>({
     resolver: zodResolver(partnershipSchema),
     defaultValues: { partnershipType: "DEVELOPER_COLLABORATION" },
   });
 
+  // Own the outcome rather than RHF's isSubmitSuccessful: a failed request must
+  // NOT read as success (the callback completing without a throw isn't enough).
+  const [submitState, setSubmitState] = useState<"idle" | "ok" | "error">(
+    "idle",
+  );
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  // Bumping this remounts the checkbox, clearing it (the token is single-use).
+  const [recaptchaKey, setRecaptchaKey] = useState(0);
+
   async function onSubmit(values: PartnershipFormValues) {
-    // TODO: kirim ke API route -> Prisma ContactPartnership.create() + email notifikasi
-    console.log("Partnership submission:", values);
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    reset();
+    setSubmitState("idle");
+    // When enabled, the box must be ticked. Skip the round-trip if it isn't.
+    if (RECAPTCHA_ENABLED && !recaptchaToken) {
+      setSubmitState("error");
+      return;
+    }
+    try {
+      await axios.post("/api/contact/partnership", {
+        ...values,
+        recaptchaToken,
+      });
+      reset();
+      setRecaptchaToken("");
+      setRecaptchaKey((k) => k + 1);
+      setSubmitState("ok");
+    } catch {
+      setSubmitState("error");
+    }
   }
 
   const partnershipOptions = Object.entries(dict.partnershipTypeOptions).map(
@@ -126,16 +153,21 @@ export default function PartnershipForm({ dict }: { dict: PartnershipDict }) {
           {...register("vision")}
         />
 
+        <RecaptchaCheckbox key={recaptchaKey} onChange={setRecaptchaToken} />
+
         <button
           type="submit"
           disabled={isSubmitting}
           className="bg-eyebrow px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
-          {isSubmitting ? "..." : dict.submit}
+          {isSubmitting ? "Sending..." : dict.submit}
         </button>
 
-        {isSubmitSuccessful && (
+        {submitState === "ok" && (
           <p className="text-sm text-eyebrow">{dict.successMessage}</p>
+        )}
+        {submitState === "error" && (
+          <p className="text-sm text-red-700">{dict.errorMessage}</p>
         )}
       </form>
     </div>

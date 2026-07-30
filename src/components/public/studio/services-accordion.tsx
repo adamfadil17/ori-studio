@@ -17,12 +17,13 @@ interface ServiceItem {
 
 interface ServicesAccordionProps {
   items: readonly ServiceItem[];
-  imageUrl?: string;
 }
 
-// Urutan icon & slug mengikuti urutan dict.studio.services.items
+const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// Icon, slug, and image all follow the order of dict.studio.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management)
-// — sama seperti icon set di section Services homepage, biar konsisten.
+// — same icon set as the homepage Services section, for consistency.
 // Slug ini HARUS sama persis dengan anchor link Services di Footer
 // (mis. "/studio#architecture-design").
 const ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
@@ -32,10 +33,16 @@ const SLUGS = [
   "landscape-design",
   "project-management",
 ];
+// One image per service. Images aren't translatable, so they live here.
+const SERVICE_IMAGES = [
+  "/images/studio/services/services-1.png",
+  "/images/studio/services/services-2.png",
+  "/images/studio/services/services-3.png",
+  "/images/studio/services/services-4.png",
+];
 
 export default function ServicesAccordion({
   items,
-  imageUrl = "https://placehold.net/default.svg",
 }: ServicesAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -152,9 +159,10 @@ export default function ServicesAccordion({
                 <div className="grid gap-6 px-6 pb-8 md:grid-cols-[280px_1fr] md:px-10">
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-background-alt">
                     <Image
-                      src={imageUrl}
+                      src={SERVICE_IMAGES[index] ?? PLACEHOLDER}
                       alt={item.title}
                       fill
+                      sizes="(min-width: 768px) 280px, 100vw"
                       className="object-cover"
                     />
                   </div>

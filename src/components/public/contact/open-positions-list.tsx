@@ -1,10 +1,10 @@
-import { OpenPosition } from "@/lib/data/open-positions";
+import type { PublicPosition } from "@/lib/types";
 
 interface OpenPositionsListProps {
-  positions: OpenPosition[];
+  positions: PublicPosition[];
   label: string;
   viewDetailsLabel: string;
-  onSelect: (position: OpenPosition) => void;
+  onSelect: (position: PublicPosition) => void;
 }
 
 export default function OpenPositionsList({

@@ -58,12 +58,12 @@ export default function StatusSelect({
         disabled={pending}
         onChange={(e) => change(e.target.value)}
         aria-label="Submission status"
-        className={`cursor-pointer appearance-none border bg-transparent py-1 pl-2 pr-6 text-[10px] tracking-widest uppercase focus-visible:outline-none disabled:opacity-50 ${
+        className={`cursor-pointer appearance-none border py-1 pl-2 pr-6 text-[10px] tracking-widest uppercase focus-visible:outline-none disabled:opacity-50 ${
           error
-            ? "border-red-700 text-red-700"
+            ? "border-red-700 bg-transparent text-red-700"
             : status === "NEW"
               ? "border-eyebrow bg-eyebrow text-background-main"
-              : "border-headline/25 text-body"
+              : "border-headline/25 bg-transparent text-body"
         }`}
       >
         {STATUSES.map((s) => (

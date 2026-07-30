@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
 import {
+  badRequest,
   careerFieldsSchema,
   created,
   cvFileSchema,
@@ -10,6 +11,7 @@ import {
   promote,
   rateLimit,
   uploadCv,
+  verifyRecaptcha,
 } from "@/lib";
 
 /** Read a form field as a trimmed string, or `undefined` when empty/absent. */
@@ -26,6 +28,11 @@ export async function POST(req: NextRequest) {
     if (limited) return limited;
 
     const form = await req.formData();
+
+    // Spam gate before any upload/DB work. Disabled when no secret key is set.
+    if (!(await verifyRecaptcha(field(form, "recaptchaToken")))) {
+      return badRequest("reCAPTCHA verification failed. Please try again.");
+    }
 
     // Validate text + file BEFORE uploading, so a bad payload never leaves an
     // orphaned CV on disk.

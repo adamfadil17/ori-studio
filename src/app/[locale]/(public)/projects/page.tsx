@@ -56,7 +56,7 @@ export default async function ProjectsPage({
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-projects.png"
           alt="ORI Studio Architect — our work"
           fill
           priority
@@ -130,6 +130,7 @@ export default async function ProjectsPage({
         locale={locale as Locale}
         dict={dict.projects.cta}
         href="/contact?tab=inquiry#contact-form"
+        imageUrl="/images/cta-banner/cta-projects.png"
       />
     </>
   );

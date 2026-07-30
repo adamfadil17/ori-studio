@@ -14,7 +14,6 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 // Grid galeri "Studio Culture" — pola col-span berselang-seling per baris,
 // meniru layout di desain. Pola "besar" (md:col-span-2) baru aktif dari
 // breakpoint md (tablet/iPad) ke atas; di HP semua foto ukuran seragam.
-// Nanti bisa diganti foto studio asli.
 const CULTURE_GALLERY_SPANS = [
   "",
   "",
@@ -26,6 +25,19 @@ const CULTURE_GALLERY_SPANS = [
   "",
   "",
 ] as const;
+
+// One image per gallery slot, index-aligned with CULTURE_GALLERY_SPANS.
+const CULTURE_IMAGES = [
+  "/images/studio/studio-culture/culture-1.png",
+  "/images/studio/studio-culture/culture-2.png",
+  "/images/studio/studio-culture/culture-3.png",
+  "/images/studio/studio-culture/culture-4.png",
+  "/images/studio/studio-culture/culture-5.png",
+  "/images/studio/studio-culture/culture-6.png",
+  "/images/studio/studio-culture/culture-7.png",
+  "/images/studio/studio-culture/culture-8.png",
+  "/images/studio/studio-culture/culture-9.png",
+];
 
 export async function generateMetadata({
   params,
@@ -54,7 +66,7 @@ export default async function StudioPage({
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-studio.png"
           alt="ORI Studio Architect team collaborating"
           fill
           priority
@@ -90,7 +102,7 @@ export default async function StudioPage({
           </p>
 
           <div className="mt-8">
-            <DesignProcess steps={process.steps} imageUrl={PLACEHOLDER} />
+            <DesignProcess steps={process.steps} />
           </div>
         </div>
       </section>
@@ -104,7 +116,7 @@ export default async function StudioPage({
           </p>
 
           <div className="mt-8">
-            <ServicesAccordion items={services.items} imageUrl={PLACEHOLDER} />
+            <ServicesAccordion items={services.items} />
           </div>
         </div>
       </section>
@@ -130,9 +142,14 @@ export default async function StudioPage({
                 className={`relative h-[220px] overflow-hidden bg-background-alt sm:h-[260px] md:h-[300px] ${span}`}
               >
                 <Image
-                  src={PLACEHOLDER}
-                  alt="ORI Studio culture"
+                  src={CULTURE_IMAGES[index] ?? PLACEHOLDER}
+                  alt={`ORI Studio culture ${index + 1}`}
                   fill
+                  sizes={
+                    span.includes("col-span-2")
+                      ? "(min-width: 768px) 50vw, 50vw"
+                      : "(min-width: 768px) 25vw, 50vw"
+                  }
                   className="object-cover"
                 />
               </div>
@@ -145,6 +162,7 @@ export default async function StudioPage({
         locale={locale as Locale}
         dict={dict.studio.cta}
         href="/contact?tab=inquiry#contact-form"
+        imageUrl="/images/cta-banner/cta-studio.png"
       />
     </>
   );

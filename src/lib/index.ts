@@ -10,5 +10,6 @@ export * from "./session";
 export * from "./prisma";
 export * from "./lookups";
 export * from "./mailer";
+export * from "./recaptcha";
 export * from "./storage";
 export * from "./rate-limit";

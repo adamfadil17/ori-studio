@@ -8,6 +8,7 @@ import { staticPageMetadata } from "@/lib/seo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
+import { listActivePositions } from "@/lib/positions";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -41,12 +42,16 @@ export default async function ContactPage({
   const dict = await getDictionary(locale as Locale);
   const { hero } = dict.contact;
 
+  // Active roles for the career tab, read fresh (the page is already dynamic via
+  // searchParams, so a dashboard change to positions shows on the next request).
+  const positions = await listActivePositions();
+
   return (
     <>
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-contact.png"
           alt="ORI Studio Architect — contact"
           fill
           priority
@@ -89,12 +94,17 @@ export default async function ContactPage({
       </section>
 
       {/* ---------- TABS + FORM + FAQ ---------- */}
-      <ContactExperience dict={dict.contact} initialTab={initialTab} />
+      <ContactExperience
+        dict={dict.contact}
+        positions={positions}
+        initialTab={initialTab}
+      />
 
       <CtaBanner
         locale={locale as Locale}
         dict={dict.contact.cta}
         href="/projects"
+        imageUrl="/images/cta-banner/cta-contact.png"
       />
     </>
   );

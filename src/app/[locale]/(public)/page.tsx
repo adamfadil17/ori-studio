@@ -66,7 +66,7 @@ export default async function HomePage({
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         {/* Background image */}
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-home.png"
           alt="ORI Studio Architect — featured architecture"
           fill
           priority
@@ -124,7 +124,7 @@ export default async function HomePage({
 
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-background-alt lg:aspect-auto lg:h-72">
               <Image
-                src={PLACEHOLDER}
+                src="/images/home/home-1.png"
                 alt="ORI Studio Architect at work"
                 fill
                 className="object-cover"
@@ -228,7 +228,7 @@ export default async function HomePage({
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-background-main">
             <Image
-              src={PLACEHOLDER}
+              src="/images/home/home-2.png"
               alt="ORI Studio design approach"
               fill
               className="object-cover"

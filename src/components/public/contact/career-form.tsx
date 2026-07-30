@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import axios from "axios";
 import { Upload } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  getActiveOpenPositions,
-  OpenPosition,
-} from "@/lib/data/open-positions";
 import { CareerFormValues, careerSchema } from "@/lib/validators";
+import type { PublicPosition } from "@/lib/types";
 import OpenPositionModal from "./open-position-modal";
+import RecaptchaCheckbox, { RECAPTCHA_ENABLED } from "./recaptcha-checkbox";
 import {
   FieldSectionLabel,
   RadioGroupField,
@@ -45,12 +44,18 @@ interface CareerDict {
   positionType: string;
   positionLevel: string;
   successMessage: string;
+  errorMessage: string;
 }
 
-export default function CareerForm({ dict }: { dict: CareerDict }) {
-  const positions = getActiveOpenPositions();
+export default function CareerForm({
+  dict,
+  positions,
+}: {
+  dict: CareerDict;
+  positions: PublicPosition[];
+}) {
   const [selectedPositionForModal, setSelectedPositionForModal] =
-    useState<OpenPosition | null>(null);
+    useState<PublicPosition | null>(null);
 
   const {
     register,
@@ -58,7 +63,7 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<CareerFormValues>({
     resolver: zodResolver(careerSchema),
     defaultValues: {
@@ -68,13 +73,45 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
     },
   });
 
+  // Own the outcome rather than RHF's isSubmitSuccessful (see the inquiry form).
+  const [submitState, setSubmitState] = useState<"idle" | "ok" | "error">(
+    "idle",
+  );
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  // Bumping this remounts the checkbox, clearing it (the token is single-use).
+  const [recaptchaKey, setRecaptchaKey] = useState(0);
+
   async function onSubmit(values: CareerFormValues) {
-    // TODO: kirim sebagai multipart/form-data ke API route (upload CV) ->
-    // Prisma ContactCareer.create() + simpan file CV + email notifikasi.
-    // `values.cvFile` sudah tervalidasi (PDF, maks 5MB) lewat cvFileSchema.
-    console.log("Career submission:", values);
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    reset();
+    setSubmitState("idle");
+    // When enabled, the box must be ticked. Skip the round-trip if it isn't.
+    if (RECAPTCHA_ENABLED && !recaptchaToken) {
+      setSubmitState("error");
+      return;
+    }
+    try {
+      // multipart/form-data — the CV is a File. Let the browser set the
+      // Content-Type (with its boundary); don't override it.
+      const fd = new FormData();
+      fd.append("recaptchaToken", recaptchaToken);
+      fd.append("fullName", values.fullName);
+      fd.append("email", values.email);
+      if (values.phoneNumber) fd.append("phoneNumber", values.phoneNumber);
+      if (values.openPositionId)
+        fd.append("openPositionId", values.openPositionId);
+      fd.append("positionOfInterest", values.positionOfInterest);
+      fd.append("portfolioUrl", values.portfolioUrl);
+      if (values.linkedinUrl) fd.append("linkedinUrl", values.linkedinUrl);
+      fd.append("yearsOfExperience", values.yearsOfExperience);
+      fd.append("cvFile", values.cvFile);
+
+      await axios.post("/api/contact/career", fd);
+      reset();
+      setRecaptchaToken("");
+      setRecaptchaKey((k) => k + 1);
+      setSubmitState("ok");
+    } catch {
+      setSubmitState("error");
+    }
   }
 
   const experienceOptions = Object.entries(dict.experienceOptions).map(
@@ -222,16 +259,21 @@ export default function CareerForm({ dict }: { dict: CareerDict }) {
           )}
         />
 
+        <RecaptchaCheckbox key={recaptchaKey} onChange={setRecaptchaToken} />
+
         <button
           type="submit"
           disabled={isSubmitting}
           className="bg-eyebrow px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
-          {isSubmitting ? "..." : dict.submit}
+          {isSubmitting ? "Sending..." : dict.submit}
         </button>
 
-        {isSubmitSuccessful && (
+        {submitState === "ok" && (
           <p className="text-sm text-eyebrow">{dict.successMessage}</p>
+        )}
+        {submitState === "error" && (
+          <p className="text-sm text-red-700">{dict.errorMessage}</p>
         )}
       </form>
 

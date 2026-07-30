@@ -14,19 +14,17 @@ const globalForMailer = globalThis as unknown as {
 };
 
 function buildTransporter(): Transporter | null {
-  const host = process.env.SMTP_HOST;
-  const port = process.env.SMTP_PORT;
-  if (!host || !port) return null;
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_APP_PASSWORD;
+  // Both required — no creds means "email disabled" (see dispatch()).
+  if (!user || !pass) return null;
 
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-
+  // Gmail via a Google App Password (the account needs 2FA enabled). The
+  // "gmail" service fills in host/port/secure, so only these two env vars are
+  // needed instead of a full SMTP block.
   return nodemailer.createTransport({
-    host,
-    port: Number(port),
-    // Port 465 is implicit TLS; everything else uses STARTTLS.
-    secure: process.env.SMTP_SECURE === "true" || Number(port) === 465,
-    auth: user && pass ? { user, pass } : undefined,
+    service: "gmail",
+    auth: { user, pass },
   });
 }
 
@@ -39,11 +37,12 @@ export function getTransporter(): Transporter | null {
 }
 
 function mailFrom(): string {
-  return process.env.MAIL_FROM ?? `ORI Studio <${process.env.SMTP_USER}>`;
+  return `ORI Studio Architect <${process.env.EMAIL_USER}>`;
 }
 
 function studioInbox(): string | undefined {
-  return process.env.MAIL_TO ?? process.env.SMTP_USER;
+  // Notifications go to the studio's own Gmail (the sending account).
+  return process.env.EMAIL_USER;
 }
 
 /** Best-effort send: never throws — logs and swallows so the request survives. */
@@ -245,26 +244,31 @@ function renderCustomerEmail(
   const name =
     (record.fullName as string) ?? (record.companyName as string) ?? "there";
   const noun = CONTACT_NOUN[type];
-  const intro = `We’ve received your ${noun} and our team will get back to you shortly. Here’s a copy of what you submitted, for your records.`;
 
-  // Echo back their submission as a receipt, minus the internal CV storage path.
-  const rows = fieldRows(type, record)
-    .filter(nonEmpty)
-    .filter(([label]) => label !== "CV");
+  // A warm auto-reply rather than a field-by-field receipt: it reassures the
+  // sender and sets a response expectation, without echoing their data back.
+  const lines = [
+    `Thank you for reaching out to ORI Studio Architect. We’ve received your ${noun}, and it’s now with our team.`,
+    `We design spaces rooted in place and crafted for life — and we’re glad you’re considering us for yours. Our team will review the details you shared and get back to you personally within 2 business days.`,
+    `In the meantime, feel free to reply to this email with anything else that would help us understand your vision.`,
+  ];
 
   const text = `Hi ${name},
 
-Thank you for reaching out to ORI Studio. ${intro}
-
-${rowsToText(rows)}
+${lines.join("\n\n")}
 
 Warm regards,
-ORI Studio Architect`;
+ORI Studio Architect
+Bali, Indonesia`;
 
-  const body = `${paragraph(`Hi ${escapeHtml(name)},`)}${paragraph(
-    intro,
-    "0 0 24px",
-  )}${rowsToHtml(rows)}${paragraph("Warm regards,<br>ORI Studio Architect", "24px 0 0")}`;
+  const body = `${paragraph(`Hi ${escapeHtml(name)},`)}${lines
+    .map((line, i) =>
+      paragraph(line, i === lines.length - 1 ? "0 0 24px" : "0 0 16px"),
+    )
+    .join("")}${paragraph(
+    "Warm regards,<br>ORI Studio Architect<br>Bali, Indonesia",
+    "24px 0 0",
+  )}`;
 
   const html = emailLayout({
     eyebrow: "Received",
@@ -287,7 +291,7 @@ export async function sendAdminNotification(
   const to = studioInbox();
   if (!to) {
     console.warn(
-      `[mailer] No studio inbox (MAIL_TO/SMTP_USER) — skipping admin ${type} notification (id: ${record.id})`,
+      `[mailer] No studio inbox (EMAIL_USER) — skipping admin ${type} notification (id: ${record.id})`,
     );
     return;
   }

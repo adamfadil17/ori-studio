@@ -370,6 +370,19 @@ export interface OpenPosition {
   updatedAt: string;
 }
 
+/**
+ * An active position shaped for the public careers section: enums humanized for
+ * display and `description` renamed to `desc`. Lives here (not in `positions.ts`)
+ * so client components can import it as a type without pulling in Prisma.
+ */
+export interface PublicPosition {
+  id: string;
+  title: string;
+  type: string;
+  level: string;
+  desc: string;
+}
+
 // ------------------------------------------------------------
 // USER (Auth)
 // ------------------------------------------------------------

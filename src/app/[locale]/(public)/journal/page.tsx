@@ -58,7 +58,7 @@ export default async function JournalPage({
       {/* ---------- HERO ---------- */}
       <section className="relative h-[520px] w-full overflow-hidden md:h-[600px]">
         <Image
-          src={PLACEHOLDER}
+          src="/images/hero/hero-journal.png"
           alt="ORI Studio Architect — journal"
           fill
           priority
@@ -128,6 +128,7 @@ export default async function JournalPage({
         locale={locale as Locale}
         dict={dict.journal.cta}
         href="/projects"
+        imageUrl="/images/cta-banner/cta-journal.png"
       />
     </>
   );

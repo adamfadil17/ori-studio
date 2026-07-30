@@ -11,13 +11,22 @@ interface ProcessStep {
 
 interface DesignProcessProps {
   steps: readonly ProcessStep[];
-  imageUrl?: string;
 }
 
-export default function DesignProcess({
-  steps,
-  imageUrl = "https://placehold.net/default.svg",
-}: DesignProcessProps) {
+const PLACEHOLDER = "https://placehold.net/default.svg";
+
+// One image per step, index-aligned with dict.studio.process.steps
+// (Discovery, Concept, Design, Construction, Deliver). Images aren't
+// translatable, so they live here.
+const PROCESS_IMAGES = [
+  "/images/studio/design-process/design-process-1.png",
+  "/images/studio/design-process/design-process-2.png",
+  "/images/studio/design-process/design-process-3.png",
+  "/images/studio/design-process/design-process-4.png",
+  "/images/studio/design-process/design-process-5.png",
+];
+
+export default function DesignProcess({ steps }: DesignProcessProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -38,9 +47,10 @@ export default function DesignProcess({
                 className={`relative w-full aspect-[3/4] overflow-hidden bg-background-alt transition-all duration-300`}
               >
                 <Image
-                  src={imageUrl}
+                  src={PROCESS_IMAGES[index] ?? PLACEHOLDER}
                   alt={step.title}
                   fill
+                  sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
                   className={`object-cover opacity-100 transition-opacity duration-300 ${
                     isActive
                       ? "lg:opacity-100"
