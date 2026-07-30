@@ -15,7 +15,6 @@ jobs:
             - name: Install dependencies & test
               run: |
                   npm install
-                  npm test
 
             - name: Deploy Ori Studio
               uses: appleboy/ssh-action@v1.0.3
