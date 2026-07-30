@@ -5,11 +5,14 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import CtaBanner from "@/components/public/layout/cta-banner";
-import { getPublicArticleDetail } from "@/lib/articles";
+import ArticleCardView from "@/components/public/journal/article-card-view";
+import {
+  getPublicArticleDetail,
+  getRelatedPublicArticles,
+} from "@/lib/articles";
 import type { Locale as DbLocale } from "@/lib/types";
 import SetHeaderMode from "@/components/public/layout/set-header-mode";
 import TiptapContent from "@/components/public/journal/tiptap-content";
-import { ar } from "zod/v4/locales";
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
@@ -87,7 +90,11 @@ export default async function ArticleDetailPage({
   if (!article) notFound();
 
   const dict = await getDictionary(locale as Locale);
-  const { labels, cta } = dict.articleDetail;
+  const { labels, cta, relatedArticles: relatedLabel } = dict.articleDetail;
+  const related = await getRelatedPublicArticles(
+    article.id,
+    locale.toUpperCase() as DbLocale,
+  );
 
   return (
     <>
@@ -157,6 +164,35 @@ export default async function ArticleDetailPage({
             </aside>
           </div>
         </section>
+
+        {/* ---------- RELATED ARTICLES ---------- */}
+        {related.length > 0 && (
+          <section className="bg-background-main px-6 pb-24 md:px-10">
+            <div className="mx-auto max-w-7xl">
+              <h2 className="font-serif text-3xl text-headline">
+                {relatedLabel}
+              </h2>
+              <span
+                className="mt-3 block h-px w-10 bg-headline/30"
+                aria-hidden="true"
+              />
+
+              <div className="mt-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                {related.map((item) => (
+                  <ArticleCardView
+                    key={item.slug}
+                    locale={locale as Locale}
+                    slug={item.slug}
+                    title={item.title}
+                    category={item.category}
+                    publishedLabel={item.publishedLabel}
+                    imageUrl={item.imageUrl ?? PLACEHOLDER}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </div>
 
       <CtaBanner

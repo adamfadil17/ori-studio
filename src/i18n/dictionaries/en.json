@@ -357,6 +357,7 @@
       "category": "Category",
       "publishedAt": "Published At"
     },
+    "relatedArticles": "Related Articles",
     "cta": {
       "heading": "Ready to start new project?",
       "button": "Start a Conversation"

@@ -261,17 +261,58 @@ export const getPublicProjectDetail = cache(async function (
 });
 
 /** Other published projects to show under a detail page. */
+/**
+ * "Related" projects for the detail page, driven by SECTOR:
+ *   1. same category as the current project (featured → newest first);
+ *   2. topped up with the most recent published projects not already shown,
+ *      so the section still fills when a sector has fewer than `limit` peers.
+ * Location isn't used — a Bali-focused studio's projects share it, so it
+ * wouldn't discriminate. The current project's category is looked up here so
+ * callers only pass its id.
+ */
 export async function getRelatedPublicProjects(
   excludeId: string,
   locale: Locale,
   limit = 3,
 ) {
-  const rows = await prisma.project.findMany({
-    where: { publishedAt: { not: null }, id: { not: excludeId } },
-    include: PROJECT_INCLUDE,
-    orderBy: [{ featured: "desc" }, { yearStart: "desc" }],
-    take: limit,
+  const orderBy: Prisma.ProjectOrderByWithRelationInput[] = [
+    { featured: "desc" },
+    { yearStart: "desc" },
+    { createdAt: "desc" }, // stable tie-breaker
+  ];
+
+  const current = await prisma.project.findUnique({
+    where: { id: excludeId },
+    select: { categoryId: true },
   });
+
+  // Tier 1 — same sector.
+  const sameSector = current
+    ? await prisma.project.findMany({
+        where: {
+          publishedAt: { not: null },
+          id: { not: excludeId },
+          categoryId: current.categoryId,
+        },
+        include: PROJECT_INCLUDE,
+        orderBy,
+        take: limit,
+      })
+    : [];
+
+  // Tier 2 — top up with recent published projects not already shown.
+  let rows = sameSector;
+  if (rows.length < limit) {
+    const alreadyShown = [excludeId, ...rows.map((r) => r.id)];
+    const fill = await prisma.project.findMany({
+      where: { publishedAt: { not: null }, id: { notIn: alreadyShown } },
+      include: PROJECT_INCLUDE,
+      orderBy,
+      take: limit - rows.length,
+    });
+    rows = [...rows, ...fill];
+  }
+
   return rows.map((row) => toPublicListItem(row, locale));
 }
 

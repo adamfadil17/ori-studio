@@ -177,18 +177,57 @@ export const getPublicArticleDetail = cache(async function (
   };
 });
 
-/** Other published articles to show under a detail page. */
+/**
+ * "Related" articles for the detail page, driven by CATEGORY (topic):
+ *   1. same category as the current article (featured → newest first);
+ *   2. topped up with the most recent published articles not already shown,
+ *      so the section still fills when a category has fewer than `limit` peers.
+ * Mirrors getRelatedPublicProjects. The current article's category is looked up
+ * here so callers only pass its id.
+ */
 export async function getRelatedPublicArticles(
   excludeId: string,
   locale: Locale,
   limit = 3,
 ) {
-  const rows = await prisma.article.findMany({
-    where: { publishedAt: { not: null }, id: { not: excludeId } },
-    include: ARTICLE_INCLUDE,
-    orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
-    take: limit,
+  const orderBy: Prisma.ArticleOrderByWithRelationInput[] = [
+    { featured: "desc" },
+    { publishedAt: "desc" },
+    { createdAt: "desc" }, // stable tie-breaker
+  ];
+
+  const current = await prisma.article.findUnique({
+    where: { id: excludeId },
+    select: { categoryId: true },
   });
+
+  // Tier 1 — same category.
+  const sameCategory = current
+    ? await prisma.article.findMany({
+        where: {
+          publishedAt: { not: null },
+          id: { not: excludeId },
+          categoryId: current.categoryId,
+        },
+        include: ARTICLE_INCLUDE,
+        orderBy,
+        take: limit,
+      })
+    : [];
+
+  // Tier 2 — top up with recent published articles not already shown.
+  let rows = sameCategory;
+  if (rows.length < limit) {
+    const alreadyShown = [excludeId, ...rows.map((r) => r.id)];
+    const fill = await prisma.article.findMany({
+      where: { publishedAt: { not: null }, id: { notIn: alreadyShown } },
+      include: ARTICLE_INCLUDE,
+      orderBy,
+      take: limit - rows.length,
+    });
+    rows = [...rows, ...fill];
+  }
+
   return rows.map((row) => toPublicArticleListItem(row, locale));
 }
 
