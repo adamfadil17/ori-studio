@@ -1,0 +1,31 @@
+name: Deploying Ori Studio to VPS
+
+on:
+    push:
+        branches:
+            - main # trigger deploy on push to main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install dependencies & test
+              run: |
+                  npm install
+
+            - name: Deploy Ori Studio
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_SSH_KEY }}
+                  port: ${{ secrets.VPS_PORT }}
+                  script: |
+                      cd /home/oristudio/oristudioapp
+                      git pull origin main
+                      rm -rf .next
+                      npm run build
+                      pm2 restart oristudio
