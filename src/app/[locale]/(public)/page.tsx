@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  ArrowLeft,
   PencilRuler,
   Sofa,
   Trees,
@@ -19,9 +18,8 @@ import {
   listPublishedProjects,
 } from "@/lib/projects";
 import { listPublishedArticles } from "@/lib/articles";
+import { SERVICE_SLUGS } from "@/lib/service-slugs";
 import type { Locale as DbLocale } from "@/lib/types";
-
-const PLACEHOLDER = "https://placehold.net/default.svg";
 
 // Icon per service, urutannya mengikuti urutan dict.home.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management).
@@ -145,6 +143,9 @@ export default async function HomePage({
           <div className="mt-8 grid gap-10 bg-background-alt p-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
             {services.items.map((service, index) => {
               const Icon = SERVICE_ICONS[index] ?? PencilRuler;
+              // Deep-link to this service's accordion item on /studio; the
+              // accordion reads the hash on mount and opens + scrolls to it.
+              const slug = SERVICE_SLUGS[index];
               return (
                 <div key={service.title}>
                   <Icon
@@ -159,7 +160,11 @@ export default async function HomePage({
                     {service.description}
                   </p>
                   <Link
-                    href={`/${locale}/studio`}
+                    href={
+                      slug
+                        ? `/${locale}/studio#${slug}`
+                        : `/${locale}/studio`
+                    }
                     className="mt-4 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
                   >
                     {services.cta}

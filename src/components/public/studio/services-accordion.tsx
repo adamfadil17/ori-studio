@@ -9,6 +9,7 @@ import {
   Trees,
   ClipboardList,
 } from "lucide-react";
+import { SERVICE_SLUGS } from "@/lib/service-slugs";
 
 interface ServiceItem {
   title: string;
@@ -21,18 +22,13 @@ interface ServicesAccordionProps {
 
 const PLACEHOLDER = "https://placehold.net/default.svg";
 
-// Icon, slug, and image all follow the order of dict.studio.services.items
+// Icon and image follow the order of dict.studio.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management)
 // — same icon set as the homepage Services section, for consistency.
-// Slug ini HARUS sama persis dengan anchor link Services di Footer
-// (mis. "/studio#architecture-design").
 const ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
-const SLUGS = [
-  "architecture-design",
-  "interior-design",
-  "landscape-design",
-  "project-management",
-];
+// Anchor slugs come from the shared source so the home "Learn More" links,
+// the footer, and these ids never drift apart.
+const SLUGS = SERVICE_SLUGS;
 // One image per service. Images aren't translatable, so they live here.
 const SERVICE_IMAGES = [
   "/images/studio/services/services-1.png",

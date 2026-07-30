@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
+import { SERVICE_SLUGS } from "@/lib/service-slugs";
 
 interface FooterDictionary {
   description: string;
@@ -30,12 +31,16 @@ export default function Footer({ locale, dict }: FooterProps) {
     { label: "Career", href: "/contact?tab=career#contact-form" },
   ];
 
-  const serviceLinks = [
-    { label: "Architecture Design", href: "/studio#architecture-design" },
-    { label: "Interior Design", href: "/studio#interior-design" },
-    { label: "Landscape Design", href: "/studio#landscape-design" },
-    { label: "Project Management", href: "/studio#project-management" },
-  ];
+  // Built from the shared slug source so the footer, the home "Learn More"
+  // links, and the accordion ids never drift. The label is the slug in Title
+  // Case (matching the English service names).
+  const serviceLinks = SERVICE_SLUGS.map((slug) => ({
+    slug,
+    label: slug
+      .split("-")
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join(" "),
+  }));
 
   return (
     <footer className="bg-background-alt text-body">
@@ -77,9 +82,9 @@ export default function Footer({ locale, dict }: FooterProps) {
           </h3>
           <ul className="mt-4 flex flex-col gap-3 text-sm">
             {serviceLinks.map((link) => (
-              <li key={link.href}>
+              <li key={link.slug}>
                 <Link
-                  href={`/${locale}${link.href}`}
+                  href={`/${locale}/studio#${link.slug}`}
                   className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
                 >
                   {link.label}
