@@ -50,6 +50,11 @@ export default function FeaturedProjectCarousel({
           fill
           className="img-editorial object-cover"
         />
+        {/* Warm editorial wash over the photo. */}
+        <div
+          className="editorial-warm pointer-events-none absolute inset-0"
+          aria-hidden="true"
+        />
       </div>
 
       <div className="flex flex-col justify-center px-6 py-16 md:px-16">
