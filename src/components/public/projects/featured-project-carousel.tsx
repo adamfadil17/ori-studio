@@ -48,7 +48,7 @@ export default function FeaturedProjectCarousel({
           src={active.imageUrl ?? PLACEHOLDER}
           alt={active.name}
           fill
-          className="object-cover"
+          className="img-editorial object-cover"
         />
       </div>
 

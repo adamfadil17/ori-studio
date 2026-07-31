@@ -24,3 +24,10 @@ body {
   color: var(--body);
   font-family: var(--font-sans);
 }
+
+/* Subtle warm, muted "editorial" grade for photographic images (heroes,
+   project/article photos, galleries). Apply to the <Image> only — never to
+   icons/logos. Tune here to adjust site-wide. */
+@utility img-editorial {
+  filter: sepia(0.18) saturate(0.9) contrast(0.96) brightness(1.02);
+}
