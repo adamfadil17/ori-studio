@@ -29,5 +29,6 @@ body {
    project/article photos, galleries). Apply to the <Image> only — never to
    icons/logos. Tune here to adjust site-wide. */
 @utility img-editorial {
-  filter: sepia(0.18) saturate(0.9) contrast(0.96) brightness(1.02);
+  filter: sepia(0.32) saturate(0.95) contrast(0.95) brightness(1.02)
+    hue-rotate(-6deg);
 }
