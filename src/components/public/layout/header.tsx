@@ -68,14 +68,11 @@ export default function Header({ locale, nav }: HeaderProps) {
     );
   }
 
-  // Warna bar gelap disamakan dengan bar © di footer: bg-eyebrow + teks
-  // background-main. Karena eyebrow (#646651) jauh lebih terang dari headline
-  // (#33271f), teks di sini dibiarkan opacity penuh — begitu diredupkan,
-  // kontrasnya jatuh di bawah WCAG AA. Footer pun tidak meredupkan apa pun di
-  // dalam bar gelapnya.
+  // Warna bar gelap disamakan dengan bar © di footer: #1C1C1C + teks
+  // background-main (near-white), kontras tinggi. Teks dibiarkan opacity penuh.
   const bgClass =
     mode === "solid" || isScrolled || mobileOpen
-      ? "bg-eyebrow shadow-sm"
+      ? "bg-[#1C1C1C] shadow-sm"
       : "bg-transparent";
   const textColor = "text-background-main";
   // Ring eyebrow akan lenyap di atas bg-eyebrow, jadi fokusnya pakai warna teks.
@@ -183,7 +180,7 @@ export default function Header({ locale, nav }: HeaderProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <nav className="bg-eyebrow px-6 pb-8 lg:hidden">
+        <nav className="bg-[#1C1C1C] px-6 pb-8 lg:hidden">
           <ul className="flex flex-col gap-5 text-sm tracking-widest uppercase text-background-main">
             {navItems.map((item) => {
               const active = isActive(item.href);

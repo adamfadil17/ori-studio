@@ -2,6 +2,32 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { SERVICE_SLUGS } from "@/lib/service-slugs";
 
+// Social links. Icons are the SVG assets in public/icons. Instagram/Pinterest
+// use the studio handle "ori_studio"; the LinkedIn URL is a placeholder —
+// replace with the studio's real page.
+const SOCIALS = [
+  {
+    name: "Email",
+    href: "mailto:hello@oristudio.com",
+    icon: "/icons/email.svg",
+  },
+  {
+    name: "Instagram",
+    href: "https://instagram.com/ori_studio",
+    icon: "/icons/instagram.svg",
+  },
+  {
+    name: "Pinterest",
+    href: "https://pinterest.com/ori_studio",
+    icon: "/icons/pinterest.svg",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/ori-studio-architect",
+    icon: "/icons/linkedin.svg",
+  },
+];
+
 interface FooterDictionary {
   description: string;
   columns: {
@@ -54,6 +80,25 @@ export default function Footer({ locale, dict }: FooterProps) {
           <p className="mt-6 max-w-xs text-sm leading-relaxed opacity-80">
             {dict.description}
           </p>
+
+          {/* Social media */}
+          <div className="mt-6 flex items-center gap-4">
+            {SOCIALS.map(({ name, href, icon }) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={name}
+                className="inline-block transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
+              >
+                {/* Plain <img>, not next/image: the optimizer 400s on SVG
+                    because dangerouslyAllowSVG is off. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={icon} alt="" width={20} height={20} />
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Main Menu */}
@@ -66,7 +111,7 @@ export default function Footer({ locale, dict }: FooterProps) {
               <li key={link.href}>
                 <Link
                   href={`/${locale}${link.href}`}
-                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
                 >
                   {link.label}
                 </Link>
@@ -85,7 +130,7 @@ export default function Footer({ locale, dict }: FooterProps) {
               <li key={link.slug}>
                 <Link
                   href={`/${locale}/studio#${link.slug}`}
-                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
                 >
                   {link.label}
                 </Link>
@@ -104,7 +149,7 @@ export default function Footer({ locale, dict }: FooterProps) {
               <li key={link.href}>
                 <Link
                   href={`/${locale}${link.href}`}
-                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+                  className="transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
                 >
                   {link.label}
                 </Link>
@@ -119,13 +164,13 @@ export default function Footer({ locale, dict }: FooterProps) {
             </span>
             <a
               href="mailto:hello@oristudio.com"
-              className="hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+              className="hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
             >
               hello@oristudio.com
             </a>
             <a
               href="tel:+6281232667690"
-              className="hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eyebrow"
+              className="hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1C1C1C]"
             >
               +62 812 3266 7690
             </a>
@@ -133,7 +178,7 @@ export default function Footer({ locale, dict }: FooterProps) {
         </div>
       </div>
 
-      <div className="bg-eyebrow px-3 py-3 text-center text-xs tracking-widest text-background-main md:px-10">
+      <div className="bg-[#1C1C1C] px-3 py-3 text-center text-xs tracking-widest text-background-main md:px-10">
         © {new Date().getFullYear()} ORI STUDIO ARCHITECT
       </div>
     </footer>

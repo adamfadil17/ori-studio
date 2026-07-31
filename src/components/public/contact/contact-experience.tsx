@@ -6,7 +6,6 @@ import PartnershipForm from "./partnership-form";
 import CareerForm from "./career-form";
 import ProjectInquiryForm from "./project-inquiry";
 import FaqAccordion from "./faq-accordion";
-import Image from "next/image";
 import type { PublicPosition } from "@/lib/types";
 
 export type ContactTab = "inquiry" | "partnership" | "career";
@@ -20,6 +19,7 @@ interface ContactExperienceDict {
     phone: string;
     instagram: string;
     pinterest: string;
+    linkedin: string;
   };
   inquiry: React.ComponentProps<typeof ProjectInquiryForm>["dict"];
   partnership: React.ComponentProps<typeof PartnershipForm>["dict"];
@@ -115,12 +115,9 @@ export default function ContactExperience({
                   href={`mailto:${dict.sidebar.email}`}
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <Image
-                    src="/icons/email.svg"
-                    width={16}
-                    height={16}
-                    alt="Email"
-                  />
+                  {/* Plain <img>: next/image 400s on local SVG (dangerouslyAllowSVG off). */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/email.svg" width={16} height={16} alt="" />
                   {dict.sidebar.email}
                 </a>
                 <a
@@ -129,12 +126,8 @@ export default function ContactExperience({
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <Image
-                    src="/icons/whatsapp.svg"
-                    width={16}
-                    height={16}
-                    alt="Email"
-                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/whatsapp.svg" width={16} height={16} alt="" />
                   {dict.sidebar.phone}
                 </a>
                 <a
@@ -143,12 +136,8 @@ export default function ContactExperience({
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <Image
-                    src="/icons/instagram.svg"
-                    width={16}
-                    height={16}
-                    alt="Email"
-                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/instagram.svg" width={16} height={16} alt="" />
                   {dict.sidebar.instagram}
                 </a>
                 <a
@@ -157,13 +146,19 @@ export default function ContactExperience({
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 hover:opacity-70"
                 >
-                  <Image
-                    src="/icons/pinterest.svg"
-                    width={16}
-                    height={16}
-                    alt="Email"
-                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/pinterest.svg" width={16} height={16} alt="" />
                   {dict.sidebar.pinterest}
+                </a>
+                <a
+                  href={`https://www.linkedin.com/company/${dict.sidebar.linkedin.replace(/^@/, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 hover:opacity-70"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/linkedin.svg" width={16} height={16} alt="" />
+                  {dict.sidebar.linkedin}
                 </a>
               </div>
             </div>
