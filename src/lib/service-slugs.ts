@@ -13,4 +13,5 @@ export const SERVICE_SLUGS: readonly string[] = [
   "interior-design",
   "landscape-design",
   "project-management",
+  "consultation",
 ];

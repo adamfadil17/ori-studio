@@ -38,6 +38,10 @@
         {
           "title": "Manajemen Proyek",
           "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
+        },
+        {
+          "title": "Konsultasi",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf."
         }
       ],
       "cta": "Selengkapnya",
@@ -259,6 +263,10 @@
         },
         {
           "title": "Manajemen Proyek",
+          "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf sejak tahun 1966."
+        },
+        {
+          "title": "Konsultasi",
           "description": "Lorem Ipsum adalah teks dummy standar industri percetakan dan penataan huruf sejak tahun 1966."
         }
       ]

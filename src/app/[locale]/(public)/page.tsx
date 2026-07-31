@@ -6,6 +6,7 @@ import {
   Sofa,
   Trees,
   ClipboardList,
+  MessageSquare,
 } from "lucide-react";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isValidLocale, type Locale } from "@/i18n/config";
@@ -23,7 +24,7 @@ import type { Locale as DbLocale } from "@/lib/types";
 
 // Icon per service, urutannya mengikuti urutan dict.home.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management).
-const SERVICE_ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
+const SERVICE_ICONS = [PencilRuler, Sofa, Trees, ClipboardList, MessageSquare];
 
 // Featured projects (3) dan journal preview (4) dibaca langsung dari database.
 export const dynamic = "force-dynamic";
@@ -140,14 +141,43 @@ export default async function HomePage({
             <span className="h-px w-10 bg-eyebrow" aria-hidden="true" />
           </p>
 
-          <div className="mt-8 grid gap-10 bg-background-alt p-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
+          {/* Ruled grid: 5 services as 3 + 2 on desktop, with hairline dividers
+              between every cell. On lg it's a 6-column grid — the top 3 each
+              span 2 (⅓ width), the bottom 2 each span 3 (½ width), so the
+              bottom row stretches to fill the container instead of leaving a
+              gap. Columns are 1 / 2 / 3 across breakpoints, so each cell toggles
+              its left (vertical) and top (horizontal) borders per breakpoint,
+              with explicit resets so a lower breakpoint's border doesn't leak up. */}
+          <div className="mt-8 grid grid-cols-1 bg-background-alt sm:grid-cols-2 lg:grid-cols-6">
             {services.items.map((service, index) => {
               const Icon = SERVICE_ICONS[index] ?? PencilRuler;
               // Deep-link to this service's accordion item on /studio; the
               // accordion reads the hash on mount and opens + scrolls to it.
               const slug = SERVICE_SLUGS[index];
+              // Desktop (6-col): row 1 (first 3) → ⅓ each; row 2 (last 2) → ½.
+              // Tablet (2-col): an odd last item would sit alone, so let it span
+              // both columns to fill the row instead of leaving a gap.
+              const lastOrphanAtSm =
+                services.items.length % 2 === 1 &&
+                index === services.items.length - 1;
+              const span = [
+                index < 3 ? "lg:col-span-2" : "lg:col-span-3",
+                lastOrphanAtSm && "sm:col-span-2",
+              ]
+                .filter(Boolean)
+                .join(" ");
+              const dividers = [
+                index % 2 !== 0 ? "sm:border-l" : "sm:border-l-0",
+                index % 3 !== 0 ? "lg:border-l" : "lg:border-l-0",
+                index >= 1 ? "border-t" : "",
+                index >= 2 ? "sm:border-t" : "sm:border-t-0",
+                index >= 3 ? "lg:border-t" : "lg:border-t-0",
+              ].join(" ");
               return (
-                <div key={service.title}>
+                <div
+                  key={service.title}
+                  className={`border-headline/15 p-8 ${span} ${dividers}`}
+                >
                   <Icon
                     className="h-7 w-7 text-headline"
                     strokeWidth={1.2}

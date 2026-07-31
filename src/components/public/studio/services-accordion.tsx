@@ -8,6 +8,7 @@ import {
   Sofa,
   Trees,
   ClipboardList,
+  MessageSquare,
 } from "lucide-react";
 import { SERVICE_SLUGS } from "@/lib/service-slugs";
 
@@ -25,7 +26,7 @@ const PLACEHOLDER = "https://placehold.net/default.svg";
 // Icon and image follow the order of dict.studio.services.items
 // (Architecture Design, Interior Design, Landscape Design, Project Management)
 // — same icon set as the homepage Services section, for consistency.
-const ICONS = [PencilRuler, Sofa, Trees, ClipboardList];
+const ICONS = [PencilRuler, Sofa, Trees, ClipboardList, MessageSquare];
 // Anchor slugs come from the shared source so the home "Learn More" links,
 // the footer, and these ids never drift apart.
 const SLUGS = SERVICE_SLUGS;
@@ -35,6 +36,7 @@ const SERVICE_IMAGES = [
   "/images/studio/services/services-2.png",
   "/images/studio/services/services-3.png",
   "/images/studio/services/services-4.png",
+  "/images/studio/services/services-5.png",
 ];
 
 export default function ServicesAccordion({

@@ -38,6 +38,10 @@
         {
           "title": "Project Management",
           "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        },
+        {
+          "title": "Consultation",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
         }
       ],
       "cta": "Learn More",
@@ -259,6 +263,10 @@
         },
         {
           "title": "Project Management",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966."
+        },
+        {
+          "title": "Consultation",
           "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966."
         }
       ]

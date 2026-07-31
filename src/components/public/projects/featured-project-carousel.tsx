@@ -82,24 +82,24 @@ export default function FeaturedProjectCarousel({
           )}
         </div>
 
-        <h2 className="mt-4 font-serif text-3xl text-headline md:text-4xl">
+        <h2 className="mt-6 font-serif text-4xl text-headline md:text-5xl">
           {active.name}
         </h2>
-        <span className="mt-4 h-px w-10 bg-headline/30" aria-hidden="true" />
+        <span className="mt-6 h-px w-10 bg-headline/30" aria-hidden="true" />
 
         {active.description && (
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-body">
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-body">
             {active.description}
           </p>
         )}
 
-        <p className="mt-5 text-sm text-body">
+        <p className="mt-6 text-sm text-body">
           {active.location} <span aria-hidden="true">—</span> {active.yearLabel}
         </p>
 
         <Link
           href={`/${locale}/projects/${active.slug}`}
-          className="mt-6 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
+          className="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase text-eyebrow hover:opacity-70"
         >
           {ctaLabel}
           <ArrowRight className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden="true" />
