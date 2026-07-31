@@ -48,12 +48,7 @@ export default function FeaturedProjectCarousel({
           src={active.imageUrl ?? PLACEHOLDER}
           alt={active.name}
           fill
-          className="img-editorial object-cover"
-        />
-        {/* Warm editorial wash over the photo. */}
-        <div
-          className="editorial-warm pointer-events-none absolute inset-0"
-          aria-hidden="true"
+          className="object-cover"
         />
       </div>
 

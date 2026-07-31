@@ -24,19 +24,3 @@ body {
   color: var(--body);
   font-family: var(--font-sans);
 }
-
-/* Warm, muted, faded "editorial" grade for photographic images (heroes,
-   project/article photos, galleries). Apply to the <Image> only — never to
-   icons/logos. Pair with a warm soft-light overlay (see `.editorial-warm`) for
-   the full look; the filter mutes + fades, the overlay carries the warmth. */
-@utility img-editorial {
-  filter: saturate(0.85) contrast(0.9) brightness(1.04) sepia(0.14);
-}
-
-/* Warm wash layered over an image (absolute inset-0, pointer-events-none).
-   soft-light keeps it gentle — warms mid/highlights without muddying. */
-@utility editorial-warm {
-  background-color: #b98a53;
-  opacity: 0.2;
-  mix-blend-mode: soft-light;
-}
