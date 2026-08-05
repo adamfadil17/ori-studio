@@ -236,7 +236,7 @@ export default function CareerForm({
             <div>
               <FieldSectionLabel>{dict.fields.uploadCv}</FieldSectionLabel>
               <div className="mt-4 flex items-center gap-4">
-                <label className="flex cursor-pointer items-center gap-2 bg-eyebrow px-6 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90">
+                <label className="flex cursor-pointer items-center gap-2 bg-[#1C1C1C] px-6 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90">
                   <Upload size={14} strokeWidth={1.4} aria-hidden="true" />
                   {dict.upload}
                   <input
@@ -264,7 +264,7 @@ export default function CareerForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-eyebrow px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
+          className="bg-[#1C1C1C] px-8 py-3 text-xs tracking-widest uppercase text-background-main transition-opacity hover:opacity-90 hover:cursor-pointer disabled:opacity-60"
         >
           {isSubmitting ? "Sending..." : dict.submit}
         </button>
